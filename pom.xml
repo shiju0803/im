@@ -16,8 +16,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.11</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.7.14</version>
+        <relativePath/>
     </parent>
 
     <properties>
@@ -35,6 +35,7 @@
         <springboot.version>2.3.2.RELEASE</springboot.version>
         <netty.version>4.1.35.Final</netty.version>
         <feign.version>8.18.0</feign.version>
+        <mysql.version>8.0.30</mysql.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -102,6 +103,13 @@
                 <version>${fastjson.version}</version>
             </dependency>
 
+            <!--MySQL -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+
             <!-- redis -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -127,12 +135,6 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-
-            <!--            <dependency>-->
-            <!--                <groupId>com.baomidou</groupId>-->
-            <!--                <artifactId>mybatis-plus-generator</artifactId>-->
-            <!--                <version>${mybatis-plus.version}</version>-->
-            <!--            </dependency>-->
 
             <!-- 参数校验 -->
             <dependency>
