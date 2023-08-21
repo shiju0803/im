@@ -1,9 +1,9 @@
 package com.sj.im.common.exception;
 
 /**
- * 全局异常处理类
- *
- * @author shiju
+ * @author ShiJu
+ * @version 1.0
+ * @description: 全局异常处理类
  */
 public class ApplicationException extends RuntimeException {
     /**

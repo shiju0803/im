@@ -6,13 +6,20 @@ spring:
     password: shiju1283
     url: jdbc:mysql://106.52.219.98:3306/im?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=UTF8
     username: root
+  mvc:
+    path match:
+      matching-strategy: ANT_PATH_MATCHER
+  application:
+    name: im-core
 
- #logger配置
+#logger配置
 logging:
   config: classpath:logback-spring.xml
 
 server:
   port: 8000
+  servlet:
+    context-path: /im
 
 mybatis-plus:
   configuration:

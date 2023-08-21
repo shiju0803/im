@@ -4,9 +4,11 @@
 
 package com.sj.im.service.user.exception;
 
+import cn.hutool.core.util.StrUtil;
 import com.sj.im.common.enums.BaseErrorCode;
 import com.sj.im.common.enums.ResponseVO;
 import com.sj.im.common.exception.ApplicationException;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -19,89 +21,92 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.Objects;
 import java.util.Set;
 
 /**
- * @description: 全局异常处理类
  * @author ShiJu
  * @version 1.0
+ * @description: 全局异常处理类
  */
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(value=Exception.class)
+    /**
+     * Exception 未知异常处理
+     *
+     * @param e 未知异常
+     * @return
+     */
+    @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public ResponseVO unknowException(Exception e){
-        e.printStackTrace();
-        ResponseVO resultBean =new ResponseVO();
-        resultBean.setCode(BaseErrorCode.SYSTEM_ERROR.getCode());
-        resultBean.setMsg(BaseErrorCode.SYSTEM_ERROR.getError());
-        /**
-         * 未知异常的话，这里写逻辑，发邮件，发短信都可以、、
-         */
-        return resultBean;
+    public Object unknownException(Exception e) {
+        log.error("未知异常:", e);
+        // 未知异常的话，这里写逻辑，发邮件，发短信都可以、、
+        return ResponseVO.errorResponse(BaseErrorCode.SYSTEM_ERROR.getCode(), BaseErrorCode.SYSTEM_ERROR.getError());
     }
 
 
     /**
-     * Validator 参数校验异常处理
+     * ConstraintViolationException 参数校验异常处理
      *
-     * @param ex
+     * @param ex 参数校验异常
      * @return
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
     public Object handleMethodArgumentNotValidException(ConstraintViolationException ex) {
-
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
-        ResponseVO resultBean =new ResponseVO();
-        resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
         for (ConstraintViolation<?> constraintViolation : constraintViolations) {
             PathImpl pathImpl = (PathImpl) constraintViolation.getPropertyPath();
             // 读取参数字段，constraintViolation.getMessage() 读取验证注解中的message值
             String paramName = pathImpl.getLeafNode().getName();
             String message = "参数{".concat(paramName).concat("}").concat(constraintViolation.getMessage());
-            resultBean.setMsg(message);
 
-            return resultBean;
+            return ResponseVO.errorResponse(BaseErrorCode.PARAMETER_ERROR.getCode(), message);
         }
-        resultBean.setMsg(BaseErrorCode.PARAMETER_ERROR.getError() + ex.getMessage());
-        return resultBean;
+        return ResponseVO.errorResponse(BaseErrorCode.PARAMETER_ERROR.getCode(), BaseErrorCode.PARAMETER_ERROR.getError() + ex.getMessage());
     }
 
+    /**
+     * ApplicationException 自定义异常处理
+     *
+     * @param e 自定义异常
+     * @return
+     */
     @ExceptionHandler(ApplicationException.class)
     @ResponseBody
     public Object applicationExceptionHandler(ApplicationException e) {
         // 使用公共的结果类封装返回结果, 这里我指定状态码为
-        ResponseVO resultBean =new ResponseVO();
-        resultBean.setCode(e.getCode());
-        resultBean.setMsg(e.getError());
-        return resultBean;
+        return ResponseVO.errorResponse(e.getCode(), e.getError());
     }
 
     /**
-     * Validator 参数校验异常处理
+     * BindException 绑定异常处理
      *
-     * @param ex
+     * @param ex 绑定异常
      * @return
      */
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
-    public Object  handleException2(BindException ex) {
+    public Object handleException2(BindException ex) {
         FieldError err = ex.getFieldError();
-        String message = "参数{".concat(err.getField()).concat("}").concat(err.getDefaultMessage());
-        ResponseVO resultBean =new ResponseVO();
-        resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
-        resultBean.setMsg(message);
-        return resultBean;
-
-
+        String message = StrUtil.EMPTY;
+        if (err != null) {
+            message = "参数{".concat(err.getField()).concat("}").concat(Objects.requireNonNull(err.getDefaultMessage()));
+        }
+        return ResponseVO.errorResponse(BaseErrorCode.PARAMETER_ERROR.getCode(), message);
     }
 
-    //json格式
+    /**
+     * MethodArgumentNotValidException 方法参数无效异常处理
+     *
+     * @param ex 方法参数无效异常
+     * @return
+     */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public Object  handleException1(MethodArgumentNotValidException ex) {
+    public Object handleException1(MethodArgumentNotValidException ex) {
         StringBuilder errorMsg = new StringBuilder();
         BindingResult re = ex.getBindingResult();
         for (ObjectError error : re.getAllErrors()) {
@@ -109,9 +114,6 @@ public class GlobalExceptionHandler {
         }
         errorMsg.delete(errorMsg.length() - 1, errorMsg.length());
 
-        ResponseVO resultBean =new ResponseVO();
-        resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
-        resultBean.setMsg(BaseErrorCode.PARAMETER_ERROR.getError() + " : " + errorMsg.toString());
-        return resultBean;
+        return ResponseVO.errorResponse(BaseErrorCode.PARAMETER_ERROR.getCode(), BaseErrorCode.PARAMETER_ERROR.getError() + " : " + errorMsg);
     }
 }

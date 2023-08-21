@@ -3,9 +3,9 @@ package com.sj.im.common.enums;
 import com.sj.im.common.exception.ApplicationExceptionEnum;
 
 /**
- * 公共返回错误码
- *
- * @author shiju
+ * @author ShiJu
+ * @version 1.0
+ * @description: 公共返回错误码
  */
 public enum BaseErrorCode implements ApplicationExceptionEnum {
     /**
@@ -31,7 +31,7 @@ public enum BaseErrorCode implements ApplicationExceptionEnum {
     }
 
     @Override
-    public Integer getCode() {
+    public int getCode() {
         return code;
     }
 

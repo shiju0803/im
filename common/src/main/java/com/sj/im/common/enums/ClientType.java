@@ -1,9 +1,9 @@
 package com.sj.im.common.enums;
 
 /**
- * 链接类型枚举
- *
- * @author shiju
+ * @author ShiJu
+ * @version 1.0
+ * @description: 链接类型枚举
  */
 public enum ClientType {
     /**

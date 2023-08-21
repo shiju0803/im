@@ -5,24 +5,27 @@
 package com.sj.im.service.user.model.req;
 
 import com.sj.im.common.model.RequestBase;
-import com.sj.im.service.user.dao.ImUserDataEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 导入用户接口入参
+ * @description: 登录的请求
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("导入用户接口入参")
-public class ImportUserReq extends RequestBase {
+@ApiModel("登录请求接口入参")
+public class LoginReq extends RequestBase {
 
-    @ApiModelProperty(value = "用户信息集合", required = true)
-    private List<ImUserDataEntity> userData;
+    @NotNull(message = "用户id不能位空")
+    @ApiModelProperty(value = "用户id", required = true)
+    private String userId;
+
+    @ApiModelProperty(value = "连接类型", required = true)
+    private Integer clientType;
 }

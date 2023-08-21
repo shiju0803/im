@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * @description: 数据库用户数据实体类
  * @author ShiJu
  * @version 1.0
+ * @description: 数据库用户数据实体类
  */
 @Data
 @TableName("im_user_data")

@@ -5,7 +5,6 @@
 package com.sj.im.service.user.model.req;
 
 import com.sj.im.common.model.RequestBase;
-import com.sj.im.service.user.dao.ImUserDataEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,13 +15,13 @@ import java.util.List;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 导入用户接口入参
+ * @description: 用户信息的请求
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("导入用户接口入参")
-public class ImportUserReq extends RequestBase {
+@ApiModel("用户信息的请求")
+public class UserBatchReq extends RequestBase {
 
-    @ApiModelProperty(value = "用户信息集合", required = true)
-    private List<ImUserDataEntity> userData;
+    @ApiModelProperty(value = "用户id集合", required = true)
+    private List<String> userIds;
 }

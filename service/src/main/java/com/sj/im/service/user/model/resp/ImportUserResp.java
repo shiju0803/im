@@ -4,18 +4,24 @@
 
 package com.sj.im.service.user.model.resp;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
 
 /**
- * @description: 导入用户接口响应类
  * @author ShiJu
  * @version 1.0
+ * @description: 导入用户接口响应类
  */
 @Data
+@ApiModel("导入用户接口响应类")
 public class ImportUserResp {
+
+    @ApiModelProperty(value = "导入成功的用户id集合")
     private List<String> successId;
 
+    @ApiModelProperty(value = "导入失败的用户id集合")
     private List<String> errorId;
 }
