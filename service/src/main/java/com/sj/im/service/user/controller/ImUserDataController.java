@@ -5,9 +5,11 @@
 package com.sj.im.service.user.controller;
 
 import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.model.req.ModifyUserInfoReq;
 import com.sj.im.service.user.model.req.UserBatchReq;
 import com.sj.im.service.user.model.req.UserSingleReq;
+import com.sj.im.service.user.model.resp.GetUserInfoResp;
 import com.sj.im.service.user.service.ImUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,19 +30,19 @@ public class ImUserDataController {
 
     @ApiOperation(value = "批量获取用户信息的方法")
     @GetMapping("/getBatchUserInfo")
-    public ResponseVO getBatchUserInfo(@RequestBody UserBatchReq req){
+    public ResponseVO<GetUserInfoResp> getBatchUserInfo(@RequestBody UserBatchReq req){
         return imUserService.getUserInfo(req);
     }
 
     @ApiOperation(value = "单独获取用户信息的方法")
     @GetMapping("/getSingleUserInfo")
-    public ResponseVO getSingleUserInfo(@RequestBody UserSingleReq req){
+    public ResponseVO<ImUserDataEntity> getSingleUserInfo(@RequestBody UserSingleReq req){
         return imUserService.getSingleUserInfo(req);
     }
 
     @ApiOperation(value = "修改用户信息的方法")
     @PutMapping("/modifyUserInfo")
-    public ResponseVO modifyUserInfo(@RequestBody ModifyUserInfoReq req){
+    public ResponseVO<String> modifyUserInfo(@RequestBody ModifyUserInfoReq req){
         return imUserService.modifyUserInfo(req);
     }
 }

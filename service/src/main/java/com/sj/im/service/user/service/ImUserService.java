@@ -57,5 +57,5 @@ public interface ImUserService {
      * @param req 修改的用户信息
      * @return 操作结果
      */
-    ResponseVO modifyUserInfo(ModifyUserInfoReq req);
+    ResponseVO<String> modifyUserInfo(ModifyUserInfoReq req);
 }
