@@ -6,24 +6,23 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 删除标识枚举类
- */
 @Getter
-public enum DelFlagEnum {
-    /**
-     * 0 正常；1 删除。
-     */
-    NORMAL(0),
+public enum AllowFriendTypeEnum {
 
-    DELETE(1),
+    /**
+     * 验证
+     */
+    NEED(2),
+
+    /**
+     * 不需要验证
+     */
+    NOT_NEED(1),
     ;
 
     private final int code;
 
-    DelFlagEnum(int code) {
+    AllowFriendTypeEnum(int code) {
         this.code = code;
     }
 }

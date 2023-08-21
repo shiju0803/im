@@ -15,7 +15,6 @@ import com.sj.im.service.user.dao.mapper.ImUserDataMapper;
 import com.sj.im.service.user.model.req.ImportUserReq;
 import com.sj.im.service.user.model.req.ModifyUserInfoReq;
 import com.sj.im.service.user.model.req.UserBatchReq;
-import com.sj.im.service.user.model.req.UserSingleReq;
 import com.sj.im.service.user.model.resp.GetUserInfoResp;
 import com.sj.im.service.user.model.resp.ImportUserResp;
 import com.sj.im.service.user.service.ImUserService;
@@ -25,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,6 +55,7 @@ public class ImUserServiceImpl implements ImUserService {
         for (ImUserDataEntity user : req.getUserData()) {
             try {
                 user.setAppId(req.getAppId());
+                user.setCreateTime(new Date());
                 int insert = imUserDataMapper.insert(user);
                 if (insert == 1) {
                     successId.add(user.getUserId());
@@ -114,14 +115,15 @@ public class ImUserServiceImpl implements ImUserService {
     /**
      * 获取单个用户信息
      *
-     * @param req 用户参数
+     * @param userId 用户id
+     * @param appId  appId
      * @return ImUserDataEntity 用户信息
      */
     @Override
-    public ResponseVO<ImUserDataEntity> getSingleUserInfo(UserSingleReq req) {
+    public ResponseVO<ImUserDataEntity> getSingleUserInfo(String userId, Integer appId) {
         LambdaQueryWrapper<ImUserDataEntity> qw = new LambdaQueryWrapper<>();
-        qw.eq(ImUserDataEntity::getAppId, req.getAppId());
-        qw.eq(ImUserDataEntity::getUserId, req.getUserId());
+        qw.eq(ImUserDataEntity::getAppId, userId);
+        qw.eq(ImUserDataEntity::getUserId, appId);
         qw.eq(ImUserDataEntity::getDelFlag, DelFlagEnum.NORMAL.getCode());
 
         ImUserDataEntity data = imUserDataMapper.selectOne(qw);
@@ -145,6 +147,7 @@ public class ImUserServiceImpl implements ImUserService {
         // ，不用delete语句，使用的是update语句，所以下面这个就是为了update使用的
         ImUserDataEntity data = new ImUserDataEntity();
         data.setDelFlag(DelFlagEnum.DELETE.getCode());
+        data.setUpdateTime(new Date());
 
         // 删除成功和失败的情况，返回给客户端
         List<String> errorId = new ArrayList<>();
@@ -204,6 +207,7 @@ public class ImUserServiceImpl implements ImUserService {
         // 这里不需要修改AppId和userId，如果要修改这两个的话，还不如新建一个用户
         update.setAppId(null);
         update.setUserId(null);
+        update.setUpdateTime(new Date());
         int update1 = imUserDataMapper.update(update, qw);
 
         if (update1 == 1) {

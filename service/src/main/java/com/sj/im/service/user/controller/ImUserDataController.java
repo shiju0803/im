@@ -8,12 +8,14 @@ import com.sj.im.common.enums.ResponseVO;
 import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.model.req.ModifyUserInfoReq;
 import com.sj.im.service.user.model.req.UserBatchReq;
-import com.sj.im.service.user.model.req.UserSingleReq;
 import com.sj.im.service.user.model.resp.GetUserInfoResp;
 import com.sj.im.service.user.service.ImUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -36,8 +38,8 @@ public class ImUserDataController {
 
     @ApiOperation(value = "单独获取用户信息的方法")
     @GetMapping("/getSingleUserInfo")
-    public ResponseVO<ImUserDataEntity> getSingleUserInfo(@RequestBody UserSingleReq req){
-        return imUserService.getSingleUserInfo(req);
+    public ResponseVO<ImUserDataEntity> getSingleUserInfo(String userId, Integer appId){
+        return imUserService.getSingleUserInfo(userId, appId);
     }
 
     @ApiOperation(value = "修改用户信息的方法")

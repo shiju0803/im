@@ -9,7 +9,6 @@ import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.model.req.ImportUserReq;
 import com.sj.im.service.user.model.req.ModifyUserInfoReq;
 import com.sj.im.service.user.model.req.UserBatchReq;
-import com.sj.im.service.user.model.req.UserSingleReq;
 import com.sj.im.service.user.model.resp.GetUserInfoResp;
 import com.sj.im.service.user.model.resp.ImportUserResp;
 
@@ -38,10 +37,11 @@ public interface ImUserService {
     /**
      * 获取单个用户信息
      *
-     * @param req 用户参数
+     * @param userId 用户id
+     * @param appId appId
      * @return ImUserDataEntity 用户信息
      */
-    ResponseVO<ImUserDataEntity> getSingleUserInfo(UserSingleReq req);
+    ResponseVO<ImUserDataEntity> getSingleUserInfo(String userId, Integer appId);
 
     /**
      * 批量删除用户信息
