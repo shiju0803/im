@@ -9,12 +9,15 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.github.jeffreyning.mybatisplus.anno.AutoMap;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @AutoMap
 @TableName("im_friendship")
-public class ImFriendShipEntity {
+public class ImFriendShipEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @TableField(value = "app_id")
     private Integer appId;

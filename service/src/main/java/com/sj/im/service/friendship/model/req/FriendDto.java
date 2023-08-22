@@ -23,6 +23,6 @@ public class FriendDto {
     @ApiModelProperty(value = "拓展参数")
     private String extra;
 
-    @ApiModelProperty(value = "职位")
+    @ApiModelProperty(value = "好友申请附带信息")
     private String addWorking;
 }

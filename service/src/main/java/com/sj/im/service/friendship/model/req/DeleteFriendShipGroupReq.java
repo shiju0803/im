@@ -12,27 +12,22 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 检查好友关系请求
+ * @description: 删除好友分组请求
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("检查好友关系请求")
-public class CheckFriendShipReq extends RequestBase {
+@ApiModel("删除好友分组请求")
+public class DeleteFriendShipGroupReq extends RequestBase {
     @NotBlank(message = "fromId不能为空")
-    @ApiModelProperty(value = "用户id", required = true)
+    @ApiModelProperty(value = "fromId", required = true)
     private String fromId;
 
-    @NotEmpty(message = "请选择要检查的好友")
-    @ApiModelProperty(value = "好友id集合", required = true)
-    private List<String> toIds;
-
-    @NotNull(message = "请选择检查类型")
-    @ApiModelProperty(value = "检查类型", required = true)
-    private Integer checkType;
+    @NotEmpty(message = "分组名称不能为空")
+    @ApiModelProperty(value = "groupName", required = true)
+    private List<String> groupName;
 }

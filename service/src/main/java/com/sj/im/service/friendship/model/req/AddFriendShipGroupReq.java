@@ -11,20 +11,25 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 处理好友关系请求
+ * @description: 新建好友分组请求
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("处理好友关系请求")
-public class FriendShipReq extends RequestBase {
+@ApiModel("新建好友分组请求")
+public class AddFriendShipGroupReq extends RequestBase {
     @NotBlank(message = "fromId不能为空")
-    @ApiModelProperty(value = "用户id", required = true)
-    private String fromId;
+    @ApiModelProperty(value = "fromId", required = true)
+    public String fromId;
 
-    @ApiModelProperty(value = "添加的好友id", required = true)
-    private FriendDto toItem;
+    @NotBlank(message = "分组名称不能为空")
+    @ApiModelProperty(value = "groupName", required = true)
+    private String groupName;
+
+    @ApiModelProperty(value = "toIds")
+    private List<String> toIds;
 }

@@ -33,6 +33,10 @@ public class ResponseVO<T> {
         return new ResponseVO<>(code, msg);
     }
 
+    public static <T> ResponseVO<T> errorResponse(T data) {
+        return new ResponseVO<>(501, "参数错误", data);
+    }
+
     public static <T> ResponseVO<T> errorResponse(ApplicationExceptionEnum enums) {
         return new ResponseVO<>(enums.getCode(), enums.getError());
     }

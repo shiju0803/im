@@ -10,22 +10,20 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 获取好友关系请求
+ * @description: 审批好友申请请求
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("获取好友关系请求")
-public class GetRelationReq extends RequestBase {
-    @NotBlank(message = "fromId不能为空")
-    @ApiModelProperty(value = "用户id", required = true)
-    private String fromId;
+@ApiModel("审批好友申请请求")
+public class ApproveFriendRequestReq extends RequestBase {
 
-    @NotBlank(message = "toId不能为空")
-    @ApiModelProperty(value = "好友id", required = true)
-    private String toId;
+    @ApiModelProperty(value = "id", required = true)
+    private Long id;
+
+    //1同意 2拒绝
+    @ApiModelProperty(value = "status", required = true)
+    private Integer status;
 }

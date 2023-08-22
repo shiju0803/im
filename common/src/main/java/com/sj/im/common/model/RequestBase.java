@@ -21,4 +21,13 @@ public class RequestBase {
     @NotNull(message = "appId不能为空")
     @ApiModelProperty(value = "appId", required = true)
     private Integer appId;
+
+    @ApiModelProperty(value = "operator")
+    private String operator;
+
+    @ApiModelProperty(value = "clientType")
+    private Integer clientType;
+
+    @ApiModelProperty(value = "imei")
+    private String imei;
 }
