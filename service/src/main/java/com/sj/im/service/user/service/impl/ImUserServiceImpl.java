@@ -21,6 +21,7 @@ import com.sj.im.service.user.service.ImUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -188,6 +189,7 @@ public class ImUserServiceImpl implements ImUserService {
      * @return 操作结果
      */
     @Override
+    @Transactional
     public ResponseVO<String> modifyUserInfo(ModifyUserInfoReq req) {
         // 先查询要修改的用户是否合法
         LambdaQueryWrapper<ImUserDataEntity> qw = new LambdaQueryWrapper<>();

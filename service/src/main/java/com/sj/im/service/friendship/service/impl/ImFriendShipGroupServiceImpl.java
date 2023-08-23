@@ -6,7 +6,6 @@ package com.sj.im.service.friendship.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sj.im.common.enums.DelFlagEnum;
 import com.sj.im.common.enums.FriendShipErrorCode;
 import com.sj.im.common.enums.ResponseVO;
@@ -134,10 +133,10 @@ public class ImFriendShipGroupServiceImpl implements ImFriendShipGroupService {
      */
     @Override
     public Long updateSeq(String fromId, String groupName, Integer appId) {
-        QueryWrapper<ImFriendShipGroupEntity> query = new QueryWrapper<>();
-        query.eq("group_name", groupName);
-        query.eq("app_id", appId);
-        query.eq("from_id", fromId);
+        LambdaQueryWrapper<ImFriendShipGroupEntity> query = new LambdaQueryWrapper<>();
+        query.eq(ImFriendShipGroupEntity::getGroupName, groupName);
+        query.eq(ImFriendShipGroupEntity::getAppId, appId);
+        query.eq(ImFriendShipGroupEntity::getFromId, fromId);
 
         ImFriendShipGroupEntity entity = imFriendShipGroupMapper.selectOne(query);
 

@@ -474,7 +474,7 @@ public class ImFriendShipServiceImpl implements ImFriendShipService {
      * 添加黑名单逻辑
      */
     @Transactional
-    public ResponseVO doAddFriendSipBlack(String fromId, String toId, Integer appId, RelationReq req) {
+    public ResponseVO<String> doAddFriendSipBlack(String fromId, String toId, Integer appId, RelationReq req) {
         LambdaQueryWrapper<ImFriendShipEntity> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ImFriendShipEntity::getAppId, appId);
         lqw.eq(ImFriendShipEntity::getFromId, fromId);

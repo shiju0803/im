@@ -5,6 +5,7 @@
 package com.sj.im.service.friendship.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sj.im.common.enums.FriendShipErrorCode;
 import com.sj.im.common.enums.ResponseVO;
 import com.sj.im.service.friendship.dao.ImFriendShipGroupEntity;
 import com.sj.im.service.friendship.dao.ImFriendShipGroupMemberEntity;
@@ -47,7 +48,7 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
         // 判断该组是否合法
         ResponseVO<ImFriendShipGroupEntity> group = imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
         if (!group.isOk()) {
-            return ResponseVO.errorResponse("分组不存在");
+            return ResponseVO.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
         }
 
         List<String> successId = new ArrayList<>();
@@ -76,7 +77,7 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
     public ResponseVO<Object> delGroupMember(DeleteFriendShipGroupMemberReq req) {
         ResponseVO<ImFriendShipGroupEntity> group = imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
         if (!group.isOk()) {
-            return ResponseVO.errorResponse("分组不存在");
+            return ResponseVO.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
         }
 
         List<String> successId = new ArrayList<>();

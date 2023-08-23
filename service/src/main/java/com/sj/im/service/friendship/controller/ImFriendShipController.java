@@ -15,6 +15,7 @@ import com.sj.im.service.friendship.model.req.RelationReq;
 import com.sj.im.service.friendship.model.resp.CheckFriendShipResp;
 import com.sj.im.service.friendship.model.resp.ImportFriendShipResp;
 import com.sj.im.service.friendship.service.ImFriendShipService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ import java.util.List;
  * @version 1.0
  * @description: 好友业务接口
  */
+@Api(tags = "FriendShip")
 @RestController("/v1/friendship")
 public class ImFriendShipController {
     @Resource
