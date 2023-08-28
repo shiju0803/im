@@ -26,6 +26,9 @@ public class TcpConstants {
      */
     public static final String READTIME = "readTime";
 
+    /**
+     * 设备编号
+     */
     public static final String IMEI = "imei";
 
 

@@ -13,9 +13,7 @@ import lombok.Getter;
  */
 @Getter
 public enum DelFlagEnum {
-    /**
-     * 0 正常；1 删除。
-     */
+
     NORMAL(0),
 
     DELETE(1),

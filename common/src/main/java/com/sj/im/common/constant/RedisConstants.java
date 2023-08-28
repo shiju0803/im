@@ -33,7 +33,7 @@ public class RedisConstants {
     /**
      * 用户上线通知channel
      */
-    public static final String UserLoginChannel = "signal/channel/LOGIN_USER_INNER_QUEUE";
+    public static final String USER_LOGIN_CHANNEL = "signal/channel/LOGIN_USER_INNER_QUEUE";
 
     /**
      * 缓存客户端消息防重，格式： appId + :cacheMessage: + messageId

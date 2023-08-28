@@ -5,6 +5,7 @@
 package com.sj.im.tcp.redis;
 
 import com.sj.im.codec.config.BootstrapConfig;
+import com.sj.im.tcp.listener.RedisUserLoginMessageListener;
 import lombok.Getter;
 import org.redisson.api.RedissonClient;
 
@@ -21,5 +22,9 @@ public class RedisManager {
     public static void init(BootstrapConfig config) {
         RedissonClientStrategy redissonClientStrategy = new RedissonClientStrategy();
         redissonClient = redissonClientStrategy.getRedissonClient(config.getLim().getRedis());
+
+        // 开启用户登录信息监听
+        RedisUserLoginMessageListener userLoginMessageListener = new RedisUserLoginMessageListener(config.getLim().getLoginModel());
+        userLoginMessageListener.listenerUserLogin();
     }
 }

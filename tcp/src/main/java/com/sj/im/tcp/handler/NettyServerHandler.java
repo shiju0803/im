@@ -12,6 +12,7 @@ import com.sj.im.common.constant.RedisConstants;
 import com.sj.im.common.constant.TcpConstants;
 import com.sj.im.common.enums.ImConnectStatusEnum;
 import com.sj.im.common.enums.command.SystemCommand;
+import com.sj.im.common.model.UserClientDto;
 import com.sj.im.common.model.UserSession;
 import com.sj.im.tcp.redis.RedisManager;
 import com.sj.im.tcp.util.SessionSocketHolder;
@@ -21,6 +22,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RMap;
+import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 
 /**
@@ -37,22 +39,36 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         // 登录command
         if (ObjectUtil.equal(command, SystemCommand.LOGIN.getCommand())) {
             LoginPack loginPack = JSONUtil.toBean(JSONUtil.toJsonStr(msg.getMessagePack()), LoginPack.class, true);
-            ctx.channel().attr(AttributeKey.valueOf(TcpConstants.USERID)).set(loginPack.getUserId());
-            ctx.channel().attr(AttributeKey.valueOf(TcpConstants.APPID)).set(msg.getMessageHeader().getAppId());
-            ctx.channel().attr(AttributeKey.valueOf(TcpConstants.CLIENT_TYPE)).set(msg.getMessageHeader().getClientType());
+            String userId = loginPack.getUserId();
+            Integer appId = msg.getMessageHeader().getAppId();
+            Integer clientType = msg.getMessageHeader().getClientType();
+            String imei = msg.getMessageHeader().getImei();
+
+            ctx.channel().attr(AttributeKey.valueOf(TcpConstants.USERID)).set(userId);
+            ctx.channel().attr(AttributeKey.valueOf(TcpConstants.APPID)).set(appId);
+            ctx.channel().attr(AttributeKey.valueOf(TcpConstants.CLIENT_TYPE)).set(clientType);
+            ctx.channel().attr(AttributeKey.valueOf(TcpConstants.IMEI)).set(imei);
 
             // 将channel存起来
             UserSession userSession = new UserSession();
-            userSession.setAppId(msg.getMessageHeader().getAppId());
-            userSession.setClientType(msg.getMessageHeader().getClientType());
-            userSession.setUserId(loginPack.getUserId());
+            userSession.setAppId(appId);
+            userSession.setClientType(clientType);
+            userSession.setUserId(userId);
             userSession.setConnectState(ImConnectStatusEnum.ONLINE_STATUS.getCode());
             // 存到redis
             RedissonClient redissonClient = RedisManager.getRedissonClient();
-            RMap<Integer, String> map = redissonClient.getMap(msg.getMessageHeader().getAppId() + RedisConstants.USER_SESSION + loginPack.getUserId());
-            map.put(msg.getMessageHeader().getClientType(), JSONUtil.toJsonStr(userSession));
+            RMap<String, String> map = redissonClient.getMap(appId + RedisConstants.USER_SESSION + userId);
+            map.put(clientType + ":" + imei, JSONUtil.toJsonStr(userSession));
+            SessionSocketHolder.put(appId, userId, clientType, imei, (NioSocketChannel) ctx.channel());
 
-            SessionSocketHolder.put(msg.getMessageHeader().getAppId(), loginPack.getUserId(), msg.getMessageHeader().getClientType(), (NioSocketChannel) ctx.channel());
+            UserClientDto dto = new UserClientDto();
+            dto.setUserId(userId);
+            dto.setAppId(appId);
+            dto.setImei(imei);
+            dto.setClientType(clientType);
+            // 通过redis将用户信息广播给其他服务，通知其他服务该用户已登录
+            RTopic topic = redissonClient.getTopic(RedisConstants.USER_LOGIN_CHANNEL);
+            topic.publish(JSONUtil.toJsonStr(dto));
         }
 
         // 退出登录command

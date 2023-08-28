@@ -9,6 +9,7 @@ import lombok.Getter;
 
 @Getter
 public enum FriendShipErrorCode implements ApplicationExceptionEnum {
+
     IMPORT_SIZE_BEYOND(30000, "导入數量超出上限"),
 
     ADD_FRIEND_ERROR(30001, "添加好友失败"),

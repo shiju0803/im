@@ -8,9 +8,7 @@ import com.sj.im.common.exception.ApplicationExceptionEnum;
  * @description: 公共返回错误码
  */
 public enum BaseErrorCode implements ApplicationExceptionEnum {
-    /**
-     * success
-     */
+
     SUCCESS(200, "success"),
     /**
      * 服务器内部错误

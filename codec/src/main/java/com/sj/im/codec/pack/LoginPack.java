@@ -9,7 +9,7 @@ import lombok.Data;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: TODO
+ * @description: 登录数据包
  */
 @Data
 public class LoginPack {

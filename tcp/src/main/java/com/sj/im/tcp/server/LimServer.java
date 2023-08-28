@@ -5,6 +5,7 @@
 package com.sj.im.tcp.server;
 
 import com.sj.im.codec.MessageDecoder;
+import com.sj.im.codec.MessageEncoder;
 import com.sj.im.codec.config.BootstrapConfig;
 import com.sj.im.tcp.handler.HeartBeatHandler;
 import com.sj.im.tcp.handler.NettyServerHandler;
@@ -15,7 +16,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -48,10 +48,10 @@ public class LimServer {
                         // 私有协议 解码器
                         ch.pipeline().addLast(new MessageDecoder());
                         // 编码器
-
+                        ch.pipeline().addLast(new MessageEncoder());
                         // 心跳检测
-                        ch.pipeline().addLast(new IdleStateHandler(
-                                0, 0, 1));
+//                        ch.pipeline().addLast(new IdleStateHandler(
+//                                0, 0, 1));
                         ch.pipeline().addLast(new HeartBeatHandler(config.getHeartBeatTime()));
                         ch.pipeline().addLast(new NettyServerHandler());
                     }

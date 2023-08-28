@@ -9,10 +9,13 @@ import lombok.Getter;
 @Getter
 public enum CheckFriendShipTypeEnum {
     /**
-     * 1 单方校验；2双方校验。
+     * 单方校验
      */
     SINGLE(1),
 
+    /**
+     * 双方校验
+     */
     BOTH(2),
     ;
 
