@@ -11,6 +11,8 @@
     <modules>
         <module>common</module>
         <module>service</module>
+        <module>tcp</module>
+        <module>codec</module>
     </modules>
 
     <parent>

@@ -13,26 +13,43 @@ import lombok.Data;
  */
 @Data
 public class UserSession {
-    // 用户Id
+    /**
+     * 用户Id
+     */
     private String userId;
 
-    // 应用id
+    /**
+     * 应用id
+     */
     private Integer appId;
 
-    // 端的标识
+    /**
+     * 端的标识
+     */
     private Integer clientType;
 
-    // sdk 版本号
+    /**
+     * sdk 版本号
+     */
     private Integer version;
 
-    // 连接状态 1在线 2离线
+    /**
+     * 连接状态 1在线 2离线
+     */
     private Integer connectState;
 
-    // brokerId
+    /**
+     * brokerId
+     */
     private Integer brokerId;
 
-    // brokerHost
+    /**
+     * brokerHost
+     */
     private String brokerHost;
 
+    /**
+     * 设备编号
+     */
     private String imei;
 }
