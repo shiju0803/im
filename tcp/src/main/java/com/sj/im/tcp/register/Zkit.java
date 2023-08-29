@@ -21,26 +21,21 @@ public class Zkit {
     }
 
     public void createRootNode() {
-        boolean exists = zkClient.exists(TcpConstants.IM_CORE_ZK_ROOT);
-        if (!exists) {
-            zkClient.createPersistent(TcpConstants.IM_CORE_ZK_ROOT);
-        }
-
-        boolean tcpExists = zkClient.exists(TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_TCP);
+        boolean tcpExists = zkClient.exists(TcpConstants.IM_CORE_ZK_ROOT_TCP);
         if (!tcpExists) {
-            zkClient.createPersistent(TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_TCP);
+            zkClient.createPersistent(TcpConstants.IM_CORE_ZK_ROOT_TCP, true);
         }
 
-        boolean webExists = zkClient.exists(TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_WEB);
+        boolean webExists = zkClient.exists(TcpConstants.IM_CORE_ZK_ROOT_WEB);
         if (!webExists) {
-            zkClient.createPersistent(TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_WEB);
+            zkClient.createPersistent(TcpConstants.IM_CORE_ZK_ROOT_WEB, true);
         }
     }
 
     // ip + port
     public void createNode(String path) {
         if (!zkClient.exists(path)) {
-            zkClient.createPersistent(path);
+            zkClient.createEphemeral(path);
         }
     }
 }

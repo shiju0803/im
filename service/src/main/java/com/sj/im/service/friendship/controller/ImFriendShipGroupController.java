@@ -23,7 +23,7 @@ import javax.annotation.Resource;
  * @version 1.0
  * @description: 好友分组业务接口
  */
-@Api(tags = "FriendGroup")
+@Api(tags = "V1/FriendGroup")
 @RestController
 @RequestMapping("/v1/friendship/group")
 public class ImFriendShipGroupController {

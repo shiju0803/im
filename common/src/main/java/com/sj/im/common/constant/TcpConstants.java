@@ -31,10 +31,7 @@ public class TcpConstants {
      */
     public static final String IMEI = "imei";
 
+    public static final String IM_CORE_ZK_ROOT_TCP = "/im-coreRoot/tcp";
 
-    public static final String IM_CORE_ZK_ROOT = "/im-coreRoot";
-
-    public static final String IM_CORE_ZK_ROOT_TCP = "/tcp";
-
-    public static final String IM_CORE_ZK_ROOT_WEB = "/web";
+    public static final String IM_CORE_ZK_ROOT_WEB = "/im-coreRoot/web";
 }

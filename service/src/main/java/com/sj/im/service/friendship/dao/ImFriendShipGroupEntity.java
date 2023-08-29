@@ -5,6 +5,7 @@
 package com.sj.im.service.friendship.dao;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -23,39 +24,39 @@ public class ImFriendShipGroupEntity implements Serializable {
     @TableId(value = "group_id",type = IdType.AUTO)
     private Long groupId;
 
-    @TableId(value = "from_id")
+    @TableField(value = "from_id")
     private String fromId;
 
-    @TableId(value = "app_id")
+    @TableField(value = "app_id")
     private Integer appId;
 
     /**
      * 分组名称
      */
-    @TableId(value = "group_name")
+    @TableField(value = "group_name")
     private String groupName;
 
     /**
      * 序列号
      */
-    @TableId(value = "sequence")
+    @TableField(value = "sequence")
     private Long sequence;
 
     /**
      * 删除标识 0-未删除 1-已删除
      */
-    @TableId(value = "del_flag")
+    @TableField(value = "del_flag")
     private int delFlag;
 
     /**
      * 创建时间
      */
-    @TableId(value = "create_time")
+    @TableField(value = "create_time")
     private Long createTime;
 
     /**
      * 更新时间
      */
-    @TableId(value = "update_time")
+    @TableField(value = "update_time")
     private Long updateTime;
 }

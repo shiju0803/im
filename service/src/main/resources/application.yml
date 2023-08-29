@@ -3,16 +3,18 @@ spring:
     active: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: shiju1283
     url: jdbc:mysql://106.52.219.98:3306/im?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=UTF8
     username: root
+    password: shiju1283
   mvc:
     path match:
       matching-strategy: ANT_PATH_MATCHER
   application:
     name: im-core
+  main:
+    allow-circular-references: true
 
-#logger配置
+# logger配置
 logging:
   config: classpath:logback-spring.xml
 
@@ -28,3 +30,10 @@ mybatis-plus:
   global-config:
     db-config:
       update-strategy: not_empty
+
+#应用配置
+appConfig:
+  zkAddr: 106.52.219.98:2181,106.52.219.98:2182,106.52.219.98:2183 # zk连接地址
+  zkConnectTimeOut: 10000 # zk超时时间
+  imRouteWay: 3 # 路由策略 1随机 2轮循 3一致性hash
+  consistentHashWay: 1 # 如果选用一致性hash的话具体hash算法 1 TreeMap 2 自定义Map

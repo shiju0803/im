@@ -17,7 +17,6 @@ public class ApplicationException extends RuntimeException {
     private final String error;
 
     public ApplicationException(Integer code, String message) {
-        super(message);
         this.code = code;
         this.error = message;
     }

@@ -23,7 +23,7 @@ import java.util.List;
  * @version 1.0
  * @description: 群组接口
  */
-@Api(tags = "Group")
+@Api(tags = "V1/Group")
 @RestController
 @RequestMapping("/v1/group")
 public class ImGroupController {

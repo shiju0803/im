@@ -7,6 +7,7 @@ package com.sj.im.service.user.service;
 import com.sj.im.common.enums.ResponseVO;
 import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.model.req.ImportUserReq;
+import com.sj.im.service.user.model.req.LoginReq;
 import com.sj.im.service.user.model.req.ModifyUserInfoReq;
 import com.sj.im.service.user.model.req.UserBatchReq;
 import com.sj.im.service.user.model.resp.GetUserInfoResp;
@@ -58,4 +59,12 @@ public interface ImUserService {
      * @return 操作结果
      */
     ResponseVO<String> modifyUserInfo(ModifyUserInfoReq req);
+
+    /**
+     * 用户登录
+     *
+     * @param req 登录参数
+     * @return 操作结果
+     */
+    ResponseVO<String> login(LoginReq req);
 }

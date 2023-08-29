@@ -2,9 +2,9 @@
  * Copyright (c) ShiJu  2023 - 2023. 适度编码益脑，沉迷编码伤身，合理安排时间，享受快乐生活。
  */
 
-package com.sj.im.service.user.exception;
+package com.sj.im.service.exception;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import com.sj.im.common.enums.BaseErrorCode;
 import com.sj.im.common.enums.ResponseVO;
 import com.sj.im.common.exception.ApplicationException;
@@ -29,33 +29,30 @@ import java.util.Set;
  * @version 1.0
  * @description: 全局异常处理类
  */
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     /**
      * Exception 未知异常处理
      *
      * @param e 未知异常
-     * @return
      */
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public Object unknownException(Exception e) {
+    public ResponseVO<Object> unknownException(Exception e) {
         log.error("未知异常:", e);
         // 未知异常的话，这里写逻辑，发邮件，发短信都可以、、
         return ResponseVO.errorResponse(BaseErrorCode.SYSTEM_ERROR.getCode(), BaseErrorCode.SYSTEM_ERROR.getError());
     }
 
-
     /**
      * ConstraintViolationException 参数校验异常处理
      *
      * @param ex 参数校验异常
-     * @return
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
-    public Object handleMethodArgumentNotValidException(ConstraintViolationException ex) {
+    public ResponseVO<Object> handleMethodArgumentNotValidException(ConstraintViolationException ex) {
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         for (ConstraintViolation<?> constraintViolation : constraintViolations) {
             PathImpl pathImpl = (PathImpl) constraintViolation.getPropertyPath();
@@ -72,11 +69,10 @@ public class GlobalExceptionHandler {
      * ApplicationException 自定义异常处理
      *
      * @param e 自定义异常
-     * @return
      */
     @ExceptionHandler(ApplicationException.class)
     @ResponseBody
-    public Object applicationExceptionHandler(ApplicationException e) {
+    public ResponseVO<Object> applicationExceptionHandler(ApplicationException e) {
         // 使用公共的结果类封装返回结果, 这里我指定状态码为
         return ResponseVO.errorResponse(e.getCode(), e.getError());
     }
@@ -85,13 +81,12 @@ public class GlobalExceptionHandler {
      * BindException 绑定异常处理
      *
      * @param ex 绑定异常
-     * @return
      */
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
-    public Object handleException2(BindException ex) {
+    public ResponseVO<Object> handleException2(BindException ex) {
         FieldError err = ex.getFieldError();
-        String message = StrUtil.EMPTY;
+        String message = CharSequenceUtil.EMPTY;
         if (err != null) {
             message = "参数{".concat(err.getField()).concat("}").concat(Objects.requireNonNull(err.getDefaultMessage()));
         }
@@ -102,11 +97,10 @@ public class GlobalExceptionHandler {
      * MethodArgumentNotValidException 方法参数无效异常处理
      *
      * @param ex 方法参数无效异常
-     * @return
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public Object handleException1(MethodArgumentNotValidException ex) {
+    public ResponseVO<Object> handleException1(MethodArgumentNotValidException ex) {
         StringBuilder errorMsg = new StringBuilder();
         BindingResult re = ex.getBindingResult();
         for (ObjectError error : re.getAllErrors()) {

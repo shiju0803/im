@@ -12,10 +12,7 @@ import com.sj.im.service.user.model.resp.GetUserInfoResp;
 import com.sj.im.service.user.service.ImUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -24,8 +21,9 @@ import javax.annotation.Resource;
  * @version 1.0
  * @description: 用户数据处理
  */
-@Api(tags = "UserDate")
-@RestController("/v1/user/data")
+@Api(tags = "V1/UserDate")
+@RestController
+@RequestMapping("/v1/user/data")
 public class ImUserDataController {
     @Resource
     private ImUserService imUserService;

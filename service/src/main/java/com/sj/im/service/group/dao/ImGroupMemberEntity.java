@@ -22,58 +22,58 @@ public class ImGroupMemberEntity implements Serializable {
     @TableId(value = "group_member_id", type = IdType.AUTO)
     private Long groupMemberId;
 
-    @TableId(value = "app_id")
+    @TableField(value = "app_id")
     private Integer appId;
 
-    @TableId(value = "group_id")
+    @TableField(value = "group_id")
     private String groupId;
 
     /**
      * 成员id
      */
-    @TableId(value = "member_id")
+    @TableField(value = "member_id")
     private String memberId;
 
     /**
      * 群成员类型，0 普通成员, 1 管理员, 2 群主， 3 禁言，4 已经移除的成员
      */
-    @TableId(value = "role")
+    @TableField(value = "role")
     private Integer role;
 
     /**
      * 禁言到期时间
      */
-    @TableId(value = "speak_date")
+    @TableField(value = "speak_date")
     private Date speakDate;
 
     /**
      * 群昵称
      */
-    @TableId(value = "alias")
+    @TableField(value = "alias")
     private String alias;
 
     /**
      * 加入时间
      */
-    @TableId(value = "join_time")
+    @TableField(value = "join_time")
     private Date joinTime;
 
     /**
      * 离开时间
      */
-    @TableId(value = "leave_time")
+    @TableField(value = "leave_time")
     private Date leaveTime;
 
     /**
      * 进入方式
      */
-    @TableId(value = "join_type")
+    @TableField(value = "join_type")
     private String joinType;
 
     /**
      * 拓展参数
      */
-    @TableId(value = "extra")
+    @TableField(value = "extra")
     private String extra;
 
     /**

@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,11 +21,11 @@ import java.util.List;
  * @version 1.0
  * @description: 群组成员接口
  */
-@Api(tags = "GroupMember")
+@Api(tags = "V1/GroupMember")
 @RestController
 @RequestMapping("/v1/group/member")
 public class ImGroupMemberController {
-    @Autowired
+    @Resource
     private ImGroupMemberService imGroupMemberService;
 
     @ApiOperation("导入群组成员")

@@ -4,7 +4,7 @@
 
 package com.sj.im.service.friendship.dao;
 
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -19,12 +19,12 @@ public class ImFriendShipGroupMemberEntity implements Serializable {
     /**
      * 分组编号
      */
-    @TableId(value = "group_id")
+    @TableField(value = "group_id")
     private Long groupId;
 
     /**
      * 好友id
      */
-    @TableId(value = "to_id")
+    @TableField(value = "to_id")
     private String toId;
 }

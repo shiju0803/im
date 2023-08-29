@@ -13,6 +13,7 @@ import com.sj.im.common.exception.ApplicationException;
 import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.dao.mapper.ImUserDataMapper;
 import com.sj.im.service.user.model.req.ImportUserReq;
+import com.sj.im.service.user.model.req.LoginReq;
 import com.sj.im.service.user.model.req.ModifyUserInfoReq;
 import com.sj.im.service.user.model.req.UserBatchReq;
 import com.sj.im.service.user.model.resp.GetUserInfoResp;
@@ -221,5 +222,16 @@ public class ImUserServiceImpl implements ImUserService {
             return ResponseVO.successResponse();
         }
         throw new ApplicationException(UserErrorCode.MODIFY_USER_ERROR);
+    }
+
+    /**
+     * 用户登录
+     *
+     * @param req 登录参数
+     * @return 操作结果
+     */
+    @Override
+    public ResponseVO<String> login(LoginReq req) {
+        return ResponseVO.successResponse();
     }
 }

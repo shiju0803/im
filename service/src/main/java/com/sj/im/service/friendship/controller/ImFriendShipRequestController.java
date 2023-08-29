@@ -22,7 +22,7 @@ import java.util.List;
  * @version 1.0
  * @description: 好友申请接口
  */
-@Api(tags = "FriendRequest")
+@Api(tags = "V1/FriendRequest")
 @RestController
 @RequestMapping("/v1/friendshipRequest")
 public class ImFriendShipRequestController {

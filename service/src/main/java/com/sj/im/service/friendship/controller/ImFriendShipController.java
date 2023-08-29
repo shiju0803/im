@@ -27,8 +27,9 @@ import java.util.List;
  * @version 1.0
  * @description: 好友业务接口
  */
-@Api(tags = "FriendShip")
-@RestController("/v1/friendship")
+@Api(tags = "V1/FriendShip")
+@RestController
+@RequestMapping("/v1/friendship")
 public class ImFriendShipController {
     @Resource
     private ImFriendShipService imFriendShipService;

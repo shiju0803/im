@@ -25,13 +25,15 @@ import java.net.UnknownHostException;
 @Slf4j
 public class ImTcpServerStarter {
     public static void main(String[] args) {
-        start();
+        if(args.length > 0){
+            start(args[0]);
+        }
     }
 
-    private static void start() {
+    private static void start(String path) {
         try {
             Yaml yaml = new Yaml();
-            InputStream inputStream = ResourceUtil.getStreamSafe("classpath:application.yml");
+            InputStream inputStream = ResourceUtil.getStreamSafe(path);
             BootstrapConfig config = yaml.loadAs(inputStream, BootstrapConfig.class);
 
             new LimServer(config.getLim()).start();
@@ -56,7 +58,6 @@ public class ImTcpServerStarter {
                 config.getLim().getZkConfig().getZkConnectTimeOut());
         Zkit zkit = new Zkit(zkClient);
         RegistryZk registryZk = new RegistryZk(zkit, hostAddress, config.getLim());
-        Thread thread = new Thread(registryZk);
-        thread.start();
+        new Thread(registryZk).start();
     }
 }
