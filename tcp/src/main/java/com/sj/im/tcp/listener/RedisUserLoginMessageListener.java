@@ -9,7 +9,7 @@ import cn.hutool.json.JSONUtil;
 import com.sj.im.codec.pack.MessagePack;
 import com.sj.im.common.constant.RedisConstants;
 import com.sj.im.common.constant.TcpConstants;
-import com.sj.im.common.enums.ClientType;
+import com.sj.im.common.ClientType;
 import com.sj.im.common.enums.DeviceMultiLoginEnum;
 import com.sj.im.common.enums.command.SystemCommand;
 import com.sj.im.common.model.UserClientDto;

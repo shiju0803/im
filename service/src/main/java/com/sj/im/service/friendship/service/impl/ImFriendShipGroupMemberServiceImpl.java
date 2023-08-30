@@ -5,8 +5,12 @@
 package com.sj.im.service.friendship.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sj.im.codec.pack.friendship.AddFriendGroupMemberPack;
+import com.sj.im.codec.pack.friendship.DeleteFriendGroupMemberPack;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.common.enums.FriendShipErrorCode;
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.enums.command.FriendshipEventCommand;
+import com.sj.im.common.model.ClientInfo;
 import com.sj.im.service.friendship.dao.ImFriendShipGroupEntity;
 import com.sj.im.service.friendship.dao.ImFriendShipGroupMemberEntity;
 import com.sj.im.service.friendship.dao.mapper.ImFriendShipGroupMemberMapper;
@@ -14,6 +18,7 @@ import com.sj.im.service.friendship.model.req.AddFriendShipGroupMemberReq;
 import com.sj.im.service.friendship.model.req.DeleteFriendShipGroupMemberReq;
 import com.sj.im.service.friendship.service.ImFriendShipGroupMemberService;
 import com.sj.im.service.friendship.service.ImFriendShipGroupService;
+import com.sj.im.service.helper.MessageHelper;
 import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.service.ImUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +44,8 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
     private ImUserService imUserService;
     @Resource
     private ImFriendShipGroupMemberService thisService;
+    @Resource
+    private MessageHelper messageHelper;
 
     /**
      * 添加组内成员
@@ -64,8 +71,14 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
         }
 
         Long seq = imFriendShipGroupService.updateSeq(req.getFromId(), req.getGroupName(), req.getAppId());
-
-        //TODO TCP通知
+        // TCP通知
+        AddFriendGroupMemberPack pack = new AddFriendGroupMemberPack();
+        pack.setFromId(req.getFromId());
+        pack.setGroupName(req.getGroupName());
+        pack.setToIds(successId);
+        pack.setSequence(seq);
+        messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_MEMBER_ADD,
+                pack,new ClientInfo(req.getAppId(),req.getClientType(),req.getImei()));
 
         return ResponseVO.successResponse(successId);
     }
@@ -91,6 +104,13 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
                 }
             }
         }
+        // TCP通知
+        DeleteFriendGroupMemberPack pack = new DeleteFriendGroupMemberPack();
+        pack.setFromId(req.getFromId());
+        pack.setGroupName(req.getGroupName());
+        pack.setToIds(successId);
+        messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_MEMBER_DELETE,
+                pack,new ClientInfo(req.getAppId(),req.getClientType(),req.getImei()));
         return ResponseVO.successResponse(successId);
     }
 

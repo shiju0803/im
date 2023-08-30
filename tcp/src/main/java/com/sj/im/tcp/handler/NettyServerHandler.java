@@ -38,23 +38,27 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         Integer command = msg.getMessageHeader().getCommand();
         // 登录command
         if (ObjectUtil.equal(command, SystemCommand.LOGIN.getCommand())) {
+            // 从messagepacke中解析出来
             LoginPack loginPack = JSONUtil.toBean(JSONUtil.toJsonStr(msg.getMessagePack()), LoginPack.class, true);
             String userId = loginPack.getUserId();
             Integer appId = msg.getMessageHeader().getAppId();
             Integer clientType = msg.getMessageHeader().getClientType();
             String imei = msg.getMessageHeader().getImei();
 
+            // 给channel设置一下属性，方便于后面退出登录
             ctx.channel().attr(AttributeKey.valueOf(TcpConstants.USERID)).set(userId);
             ctx.channel().attr(AttributeKey.valueOf(TcpConstants.APPID)).set(appId);
             ctx.channel().attr(AttributeKey.valueOf(TcpConstants.CLIENT_TYPE)).set(clientType);
             ctx.channel().attr(AttributeKey.valueOf(TcpConstants.IMEI)).set(imei);
 
-            // 将channel存起来
+            // redis map
             UserSession userSession = new UserSession();
             userSession.setAppId(appId);
             userSession.setClientType(clientType);
             userSession.setUserId(userId);
             userSession.setConnectState(ImConnectStatusEnum.ONLINE_STATUS.getCode());
+            userSession.setImei(imei);
+
             // 存到redis
             RedissonClient redissonClient = RedisManager.getRedissonClient();
             RMap<String, String> map = redissonClient.getMap(appId + RedisConstants.USER_SESSION + userId);

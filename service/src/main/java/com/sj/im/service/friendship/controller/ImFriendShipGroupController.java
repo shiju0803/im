@@ -4,7 +4,7 @@
 
 package com.sj.im.service.friendship.controller;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.service.friendship.dao.ImFriendShipGroupEntity;
 import com.sj.im.service.friendship.model.req.AddFriendShipGroupMemberReq;
 import com.sj.im.service.friendship.model.req.AddFriendShipGroupReq;
@@ -14,6 +14,7 @@ import com.sj.im.service.friendship.service.ImFriendShipGroupMemberService;
 import com.sj.im.service.friendship.service.ImFriendShipGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,13 +35,13 @@ public class ImFriendShipGroupController {
 
     @ApiOperation("新增好友分组")
     @PostMapping("/add")
-    public ResponseVO<String> add(@RequestBody AddFriendShipGroupReq req)  {
+    public ResponseVO<String> add(@RequestBody @Validated AddFriendShipGroupReq req)  {
         return imFriendShipGroupService.addGroup(req);
     }
 
     @ApiOperation("删除好友分组")
     @DeleteMapping("/del")
-    public ResponseVO<String> del(@RequestBody DeleteFriendShipGroupReq req)  {
+    public ResponseVO<String> del(@RequestBody @Validated DeleteFriendShipGroupReq req)  {
         return imFriendShipGroupService.deleteGroup(req);
     }
 
@@ -52,13 +53,13 @@ public class ImFriendShipGroupController {
 
     @ApiOperation("添加组内成员")
     @PostMapping("/member/add")
-    public ResponseVO<Object> addMember(@RequestBody AddFriendShipGroupMemberReq req)  {
+    public ResponseVO<Object> addMember(@RequestBody @Validated AddFriendShipGroupMemberReq req)  {
         return imFriendShipGroupMemberService.addGroupMember(req);
     }
 
     @ApiOperation("删除组内成员")
     @DeleteMapping("/member/del")
-    public ResponseVO<Object> delMember(@RequestBody DeleteFriendShipGroupMemberReq req)  {
+    public ResponseVO<Object> delMember(@RequestBody @Validated DeleteFriendShipGroupMemberReq req)  {
         return imFriendShipGroupMemberService.delGroupMember(req);
     }
 

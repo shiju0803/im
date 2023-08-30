@@ -4,7 +4,7 @@
 
 package com.sj.im.service.user.controller;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.model.req.ModifyUserInfoReq;
 import com.sj.im.service.user.model.req.UserBatchReq;
@@ -12,6 +12,7 @@ import com.sj.im.service.user.model.resp.GetUserInfoResp;
 import com.sj.im.service.user.service.ImUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,7 +31,7 @@ public class ImUserDataController {
 
     @ApiOperation(value = "批量获取用户信息的方法")
     @GetMapping("/getBatchUserInfo")
-    public ResponseVO<GetUserInfoResp> getBatchUserInfo(@RequestBody UserBatchReq req){
+    public ResponseVO<GetUserInfoResp> getBatchUserInfo(@RequestBody @Validated UserBatchReq req){
         return imUserService.getUserInfo(req);
     }
 
@@ -42,7 +43,7 @@ public class ImUserDataController {
 
     @ApiOperation(value = "修改用户信息的方法")
     @PutMapping("/modifyUserInfo")
-    public ResponseVO<String> modifyUserInfo(@RequestBody ModifyUserInfoReq req){
+    public ResponseVO<String> modifyUserInfo(@RequestBody @Validated ModifyUserInfoReq req){
         return imUserService.modifyUserInfo(req);
     }
 }

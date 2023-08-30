@@ -4,7 +4,7 @@
 
 package com.sj.im.service.group.service;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.service.group.model.req.*;
 import com.sj.im.service.group.model.resp.AddMemberResp;
 import com.sj.im.service.group.model.resp.GetRoleInGroupResp;

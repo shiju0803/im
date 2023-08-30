@@ -4,7 +4,7 @@
 
 package com.sj.im.service.friendship.service;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.service.friendship.model.req.AddFriendShipGroupMemberReq;
 import com.sj.im.service.friendship.model.req.DeleteFriendShipGroupMemberReq;
 

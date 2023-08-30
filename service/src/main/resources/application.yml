@@ -3,16 +3,88 @@ spring:
     active: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://106.52.219.98:3306/im?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=UTF8
+    url: jdbc:mysql://106.52.219.98:3306/im?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
     username: root
     password: shiju1283
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      connection-timeout: 30000
+      idle-timeout: 30000 #连接空闲时间需要比最大生命周期时间短一些
+      max-lifetime: 1800000 #连接最大生命周期需要比MYSQL连接空闲时间10分钟短一些
+      maximum-pool-size: 100
+      minimum-idle: 5
+      pool-name: im_HikariCP
+
+  redis:
+    cluster:
+      nodes: 106.52.219.98:7361,106.52.219.98:7362,106.52.219.98:7363,106.52.219.98:7364,106.52.219.98:7365,106.52.219.98:7366
+      max-redirects: 3
+    password: shiju1283
+    lettuce:
+      cluster:
+        refresh:
+          adaptive: true
+          period: 10
+
+  rabbitmq:
+    host: 106.52.219.98
+    port: 5672
+    virtual-host: /
+    addresses: 106.52.219.98
+    username: shiju1283
+    password: shiju1283
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 10
+        acknowledge-mode: manual
+        prefetch: 1
+    publisher-returns: true
+    template:
+      mandatory: true
+    cache:
+      connection:
+        mode: channel
+      channel:
+        size: 36
+        checkout-timeout: 0
+
+  application:
+    name: im-core
   mvc:
     path match:
       matching-strategy: ANT_PATH_MATCHER
-  application:
-    name: im-core
   main:
     allow-circular-references: true
+
+# 应用配置
+appConfig:
+  zkAddr: 106.52.219.98:2181,106.52.219.98:2182,106.52.219.98:2183 # zk连接地址
+  zkConnectTimeOut: 10000 # zk超时时间
+  imRouteWay: 3 # 路由策略 1随机 2轮循 3一致性hash
+  consistentHashWay: 1 # 如果选用一致性hash的话具体hash算法 1 TreeMap 2 自定义Map
+  callbackUrl: http://127.0.0.1:8000/im/callback
+  sendMessageCheckFriend: true # 发送消息是否校验关系链
+  sendMessageCheckBlack: true # 发送消息是否校验黑名单
+  modifyUserAfterCallback: true # 用户资料变更之后回调开关
+  addFriendAfterCallback: true # 添加好友之后回调开关
+  addFriendBeforeCallback: true # 添加好友之前回调开关
+  modifyFriendAfterCallback: true # 修改好友之后回调开关
+  deleteFriendAfterCallback: true # 删除好友之后回调开关
+  addFriendShipBlackAfterCallback: true #添加黑名单之后回调开关
+  deleteFriendShipBlackAfterCallback: true #删除黑名单之后回调开关
+  createGroupAfterCallback: true # 创建群聊之后回调开关
+  modifyGroupAfterCallback: true # 修改群聊之后回调开关
+  destroyGroupAfterCallback: true # 解散群聊之后回调开关
+  deleteGroupMemberAfterCallback: true # 删除群成员之后回调
+  addGroupMemberAfterCallback: true # 拉人入群之后回调
+  addGroupMemberBeforeCallback: true # 拉人入群之前回调
+  sendMessageAfterCallback: true # 发送单聊消息之后
+  sendMessageBeforeCallback: true # 发送单聊消息之前
+  sendGroupMessageAfterCallback: true # 发送群聊消息之后
+  sendGroupMessageBeforeCallback: true # 发送群聊消息之前
 
 # logger配置
 logging:
@@ -31,9 +103,11 @@ mybatis-plus:
     db-config:
       update-strategy: not_empty
 
-#应用配置
-appConfig:
-  zkAddr: 106.52.219.98:2181,106.52.219.98:2182,106.52.219.98:2183 # zk连接地址
-  zkConnectTimeOut: 10000 # zk超时时间
-  imRouteWay: 3 # 路由策略 1随机 2轮循 3一致性hash
-  consistentHashWay: 1 # 如果选用一致性hash的话具体hash算法 1 TreeMap 2 自定义Map
+# httpclient配置
+httpclient:
+  maxTotal: 100
+  defaultMaxPerRoute: 50
+  connectTimeout: 2000
+  connectionRequestTimeout: 2000
+  socketTimeout: 5000
+  staleConnectionCheckEnabled: true

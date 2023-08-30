@@ -2,11 +2,11 @@
  * Copyright (c) ShiJu  2023 - 2023. 适度编码益脑，沉迷编码伤身，合理安排时间，享受快乐生活。
  */
 
-package com.sj.im.service.util;
+package com.sj.im.service.helper;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.sj.im.common.constant.TcpConstants;
-import com.sj.im.common.enums.ClientType;
+import com.sj.im.common.ClientType;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.stereotype.Component;
 

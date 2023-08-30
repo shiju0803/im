@@ -42,7 +42,7 @@ public class ModifyUserInfoReq extends RequestBase {
     private String photo;
 
     @ApiModelProperty(value = "性别")
-    private String userSex;
+    private Integer userSex;
 
     @ApiModelProperty(value = "个性签名")
     private String selfSignature;

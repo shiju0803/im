@@ -5,8 +5,8 @@
 package com.sj.im.service.exception;
 
 import cn.hutool.core.text.CharSequenceUtil;
-import com.sj.im.common.enums.BaseErrorCode;
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.BaseErrorCode;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.common.exception.ApplicationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.engine.path.PathImpl;

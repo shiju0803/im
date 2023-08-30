@@ -4,12 +4,20 @@
 
 package com.sj.im.service.user.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sj.im.codec.pack.user.UserModifyPack;
+import com.sj.im.common.ResponseVO;
+import com.sj.im.common.config.AppConfig;
+import com.sj.im.common.constant.CallbackCommandConstants;
 import com.sj.im.common.enums.DelFlagEnum;
-import com.sj.im.common.enums.ResponseVO;
 import com.sj.im.common.enums.UserErrorCode;
+import com.sj.im.common.enums.command.UserEventCommand;
 import com.sj.im.common.exception.ApplicationException;
+import com.sj.im.service.helper.CallbackHelper;
+import com.sj.im.service.helper.MessageHelper;
 import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.dao.mapper.ImUserDataMapper;
 import com.sj.im.service.user.model.req.ImportUserReq;
@@ -20,7 +28,6 @@ import com.sj.im.service.user.model.resp.GetUserInfoResp;
 import com.sj.im.service.user.model.resp.ImportUserResp;
 import com.sj.im.service.user.service.ImUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +46,13 @@ import java.util.List;
 @Slf4j
 public class ImUserServiceImpl implements ImUserService {
     @Resource
-    ImUserDataMapper imUserDataMapper;
+    private ImUserDataMapper imUserDataMapper;
+    @Resource
+    private AppConfig appConfig;
+    @Resource
+    private CallbackHelper callBackHelper;
+    @Resource
+    private MessageHelper messageHelper;
 
     // 导入用户
     @Override
@@ -205,20 +218,24 @@ public class ImUserServiceImpl implements ImUserService {
         }
 
         ImUserDataEntity update = new ImUserDataEntity();
-        BeanUtils.copyProperties(req, update);
+        BeanUtil.copyProperties(req, update);
 
         // 这里不需要修改AppId和userId，如果要修改这两个的话，还不如新建一个用户
         update.setAppId(null);
         update.setUserId(null);
-        update.setUpdateTime(new Date());
         int update1 = imUserDataMapper.update(update, qw);
 
         if (update1 == 1) {
-            // TODO 通知
+            // TCP通知其他端
+            UserModifyPack pack = new UserModifyPack();
+            BeanUtil.copyProperties(req, pack);
+            messageHelper.sendToUser(req.getUserId(), req.getClientType(), req.getImei(),
+                    UserEventCommand.USER_MODIFY, pack, req.getAppId());
 
-
-            // TODO 回调
-
+            // 修改用户之后回调
+            if (appConfig.isModifyUserAfterCallback()) {
+                callBackHelper.callback(req.getAppId(), CallbackCommandConstants.MODIFY_USER_AFTER, JSONUtil.toJsonStr(req));
+            }
             return ResponseVO.successResponse();
         }
         throw new ApplicationException(UserErrorCode.MODIFY_USER_ERROR);

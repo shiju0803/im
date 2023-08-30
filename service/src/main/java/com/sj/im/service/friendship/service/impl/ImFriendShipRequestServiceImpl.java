@@ -4,11 +4,15 @@
 
 package com.sj.im.service.friendship.service.impl;
 
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.sj.im.codec.pack.friendship.ApproverFriendRequestPack;
+import com.sj.im.codec.pack.friendship.ReadAllFriendRequestPack;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.common.enums.ApproveFriendRequestStatusEnum;
 import com.sj.im.common.enums.FriendShipErrorCode;
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.enums.command.FriendshipEventCommand;
 import com.sj.im.common.exception.ApplicationException;
 import com.sj.im.service.friendship.dao.ImFriendShipRequestEntity;
 import com.sj.im.service.friendship.dao.mapper.ImFriendShipRequestMapper;
@@ -16,8 +20,9 @@ import com.sj.im.service.friendship.model.req.ApproveFriendRequestReq;
 import com.sj.im.service.friendship.model.req.FriendDto;
 import com.sj.im.service.friendship.model.req.FriendShipReq;
 import com.sj.im.service.friendship.service.ImFriendShipRequestService;
+import com.sj.im.service.friendship.service.ImFriendShipService;
+import com.sj.im.service.helper.MessageHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +40,10 @@ import java.util.List;
 public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestService {
     @Resource
     private ImFriendShipRequestMapper imFriendShipRequestMapper;
+    @Resource
+    private ImFriendShipService imFriendShipService;
+    @Resource
+    private MessageHelper messageHelper;
 
     /**
      * 添加好友请求
@@ -42,6 +51,7 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
      * @param req 请求参数
      */
     @Override
+    @Transactional
     public ResponseVO<String> addFriendshipRequest(FriendShipReq req) {
         LambdaQueryWrapper<ImFriendShipRequestEntity> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ImFriendShipRequestEntity::getAppId, req.getAppId());
@@ -67,17 +77,15 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
             if (insert != 1) {
                 return ResponseVO.errorResponse();
             }
-        }
-        // 有这条好友请求的记录，就更新
-        else {
-            // 修改记录内容和时间
-            if (StringUtils.isNotEmpty(dto.getAddSource())) {
+        } else {
+            // 有这条好友请求的记录，就更新记录内容和时间
+            if (CharSequenceUtil.isNotBlank(dto.getAddSource())) {
                 entity.setAddSource(dto.getAddSource());
             }
-            if (StringUtils.isNotEmpty(dto.getRemark())) {
+            if (CharSequenceUtil.isNotBlank(dto.getRemark())) {
                 entity.setRemark(dto.getRemark());
             }
-            if (StringUtils.isNotEmpty(dto.getAddWorking())) {
+            if (CharSequenceUtil.isNotBlank(dto.getAddWorking())) {
                 entity.setAddWording(dto.getAddWorking());
             }
 
@@ -86,7 +94,9 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
             imFriendShipRequestMapper.updateById(entity);
         }
 
-        //TODO 发送好友申请的tcp给接收方
+        // 发送好友申请的tcp给接收方
+        messageHelper.sendToUser(dto.getToId(), null, "",
+                FriendshipEventCommand.FRIEND_REQUEST, entity, req.getAppId());
 
         return ResponseVO.successResponse();
     }
@@ -109,7 +119,6 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
             throw new ApplicationException(FriendShipErrorCode.NOT_APPROVAL_OTHER_MAN_REQUEST);
         }
 
-
         ImFriendShipRequestEntity update = new ImFriendShipRequestEntity();
         // 这里审批是指同意或者拒绝，所以要写活
         update.setApproveStatus(req.getStatus());
@@ -125,15 +134,19 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
             dto.setAddWorking(imFriendShipRequestEntity.getAddWording());
             dto.setRemark(imFriendShipRequestEntity.getRemark());
             dto.setToId(imFriendShipRequestEntity.getToId());
-            /*ResponseVO responseVO = imFriendShipService.doAddFriend(req
+            ResponseVO<String> responseVO = imFriendShipService.doAddFriend(req
                     , imFriendShipRequestEntity.getFromId(), dto, req.getAppId());
             if(!responseVO.isOk() && responseVO.getCode() != FriendShipErrorCode.TO_IS_YOUR_FRIEND.getCode()){
                 return responseVO;
-            }*/
+            }
         }
 
-        // TODO TCP通知
         // 通知审批人的其他端
+        ApproverFriendRequestPack approverFriendRequestPack = new ApproverFriendRequestPack();
+        approverFriendRequestPack.setStatus(req.getStatus());
+        approverFriendRequestPack.setId(req.getId());
+        messageHelper.sendToUser(imFriendShipRequestEntity.getToId(), req.getClientType(), req.getImei(),
+                FriendshipEventCommand.FRIEND_REQUEST_APPROVER, approverFriendRequestPack, req.getAppId());
 
         return ResponseVO.successResponse();
     }
@@ -144,6 +157,7 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
      * @param req 请求参数
      */
     @Override
+    @Transactional
     public ResponseVO<String> readFriendShipRequestReq(FriendShipReq req) {
         LambdaQueryWrapper<ImFriendShipRequestEntity> query = new LambdaQueryWrapper<>();
         query.eq(ImFriendShipRequestEntity::getAppId, req.getAppId());
@@ -153,6 +167,11 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
         update.setReadStatus(1);
 
         imFriendShipRequestMapper.update(update, query);
+        // TCP通知
+        ReadAllFriendRequestPack readAllFriendRequestPack = new ReadAllFriendRequestPack();
+        readAllFriendRequestPack.setFromId(req.getFromId());
+        messageHelper.sendToUser(req.getFromId(), req.getClientType(), req.getImei(),
+                FriendshipEventCommand.FRIEND_REQUEST_READ, readAllFriendRequestPack, req.getAppId());
 
         return ResponseVO.successResponse();
     }

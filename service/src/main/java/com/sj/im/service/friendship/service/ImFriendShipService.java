@@ -4,14 +4,12 @@
 
 package com.sj.im.service.friendship.service;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
+import com.sj.im.common.model.RequestBase;
 import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
 import com.sj.im.service.friendship.dao.ImFriendShipEntity;
-import com.sj.im.service.friendship.model.req.CheckFriendShipReq;
-import com.sj.im.service.friendship.model.req.FriendShipReq;
-import com.sj.im.service.friendship.model.req.ImportFriendShipReq;
-import com.sj.im.service.friendship.model.req.RelationReq;
+import com.sj.im.service.friendship.model.req.*;
 import com.sj.im.service.friendship.model.resp.CheckFriendShipResp;
 import com.sj.im.service.friendship.model.resp.ImportFriendShipResp;
 
@@ -31,7 +29,12 @@ public interface ImFriendShipService {
     /**
      * 添加好友
      */
-    ResponseVO<String> addFriendShip(FriendShipReq req);
+    ResponseVO<String> addFriend(FriendShipReq req);
+
+    /**
+     * 添加好友具体逻辑
+     */
+    ResponseVO<String> doAddFriend(RequestBase requestBase, String fromId, FriendDto dto, Integer appId);
 
     /**
      * 修改好友
@@ -41,7 +44,7 @@ public interface ImFriendShipService {
     /**
      * 删除好友
      */
-    ResponseVO<String> deleteFriend(FriendShipReq req);
+    ResponseVO<String> deleteFriend(RelationReq req);
 
     /**
      * 删除所有好友
@@ -66,12 +69,12 @@ public interface ImFriendShipService {
     /**
      * 加入黑名单
      */
-    ResponseVO<String> addFriendSipBlack(RelationReq req);
+    ResponseVO<String> addBlack(RelationReq req);
 
     /**
      * 拉出黑名单
      */
-    ResponseVO<String> deleteFriendSipBlack(RelationReq req);
+    ResponseVO<String> deleteBlack(RelationReq req);
 
     /**
      * 校验黑名单

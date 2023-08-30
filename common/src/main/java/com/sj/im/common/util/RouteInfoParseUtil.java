@@ -4,7 +4,7 @@
 
 package com.sj.im.common.util;
 
-import com.sj.im.common.enums.BaseErrorCode;
+import com.sj.im.common.BaseErrorCode;
 import com.sj.im.common.exception.ApplicationException;
 import com.sj.im.common.route.RouteInfo;
 

@@ -4,7 +4,7 @@
 
 package com.sj.im.service.friendship.service;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.service.friendship.dao.ImFriendShipRequestEntity;
 import com.sj.im.service.friendship.model.req.ApproveFriendRequestReq;
 import com.sj.im.service.friendship.model.req.FriendShipReq;

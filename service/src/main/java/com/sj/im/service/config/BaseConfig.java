@@ -14,12 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -49,40 +43,27 @@ public class BaseConfig {
      */
     @Bean
     public RouteHandle routeHandle() throws Exception {
+        // 获取配置文件中使用的哪个路由策略
         Integer imRouteWay = appConfig.getImRouteWay();
+        // 通过配置文件中的路由策略的代表值去Enum获取到具体路径的类
         ImUrlRouteWayEnum handler = ImUrlRouteWayEnum.getHandler(imRouteWay);
+        // 使用的路由策略的具体的路径
         String routeWay = Objects.requireNonNull(handler).getClazz();
-
+        // 通过反射拿到路由策略的类
         RouteHandle routeHandle = (RouteHandle) Class.forName(routeWay).newInstance();
-        if (ObjectUtil.equal(handler, ImUrlRouteWayEnum.HASH)) {
-            Method setHash = Class.forName(routeWay).getMethod("setHash", AbstractConsistentHash.class);
-            Integer consistentHashWay = appConfig.getConsistentHashWay();
 
+        // 如果是hash策略的话，还要搞一个具体的hash算法
+        if (ObjectUtil.equal(handler, ImUrlRouteWayEnum.HASH)) {
+            // 通过反射拿到ConsistentHashHandle中的方法
+            Method setHash = Class.forName(routeWay).getMethod("setHash", AbstractConsistentHash.class);
+            // 从配置文件中拿到指定hash算法的代表值
+            Integer consistentHashWay = appConfig.getConsistentHashWay();
+            // 具体hash算法的类的路径
             String hashWay = Objects.requireNonNull(RouteHashMethodEnum.getHandler(consistentHashWay)).getClazz();
+            // 通过反射拿到hash算法
             AbstractConsistentHash consistentHash = (AbstractConsistentHash) Class.forName(hashWay).newInstance();
             setHash.invoke(routeHandle, consistentHash);
         }
         return routeHandle;
-    }
-
-    /**
-     * Swagger配置
-     */
-    @Bean
-    public Docket createRestApi() {
-        log.info("---------------------------开启Swagger---------------------------");
-        return new Docket(DocumentationType.OAS_30)
-                .apiInfo(new ApiInfoBuilder()
-                        .title("IM即时通讯")
-                        .description("IM即时通讯服务接口文档")
-                        .license("ShiJu 2023/08/21")
-                        .version("v1.0")
-                        .contact(new Contact("ShiJu", "https://github.com/shiju0803/im.git", "shiju1283@163.com"))
-                        .build()) // 用来展示该 API 的基本信息
-                .groupName("用户数据")
-                .select() // 返回一个 ApiSelectorBuilder 实例，用来控制哪些接口暴露给 Swagger 来展现
-                .apis(RequestHandlerSelectors.basePackage("com.sj.im.service.user.controller")) // 配置包扫描路径（根据自己项目调整，通常配置为控制器路径）
-                .paths(PathSelectors.any())
-                .build();
     }
 }

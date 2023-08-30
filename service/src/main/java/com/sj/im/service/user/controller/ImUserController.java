@@ -4,7 +4,7 @@
 
 package com.sj.im.service.user.controller;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.common.route.RouteHandle;
 import com.sj.im.common.route.RouteInfo;
 import com.sj.im.common.util.RouteInfoParseUtil;
@@ -13,7 +13,7 @@ import com.sj.im.service.user.model.req.LoginReq;
 import com.sj.im.service.user.model.req.UserBatchReq;
 import com.sj.im.service.user.model.resp.ImportUserResp;
 import com.sj.im.service.user.service.ImUserService;
-import com.sj.im.service.util.ZookeeperHelper;
+import com.sj.im.service.helper.ZookeeperHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +40,7 @@ public class ImUserController {
 
     @ApiOperation(value = "导入用户的方法")
     @PutMapping("/importUser")
-    public ResponseVO<ImportUserResp> importUser(@RequestBody ImportUserReq req) {
+    public ResponseVO<ImportUserResp> importUser(@RequestBody @Validated ImportUserReq req) {
         return imUserService.importUser(req);
     }
 

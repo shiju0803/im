@@ -4,7 +4,7 @@
 
 package com.sj.im.service.friendship.controller;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.service.friendship.dao.ImFriendShipRequestEntity;
 import com.sj.im.service.friendship.model.req.ApproveFriendRequestReq;
 import com.sj.im.service.friendship.model.req.FriendShipReq;
@@ -31,19 +31,19 @@ public class ImFriendShipRequestController {
 
     @ApiOperation("新增好友请求")
     @PostMapping("/addFriendRequest")
-    public ResponseVO<String> addFriendRequest(@RequestBody FriendShipReq req) {
+    public ResponseVO<String> addFriendRequest(@RequestBody @Validated FriendShipReq req) {
         return imFriendShipRequestService.addFriendshipRequest(req);
     }
 
     @ApiOperation("审批好友请求")
     @PutMapping("/approveFriendRequest")
-    public ResponseVO<String> approveFriendRequest(@RequestBody ApproveFriendRequestReq req) {
+    public ResponseVO<String> approveFriendRequest(@RequestBody @Validated ApproveFriendRequestReq req) {
         return imFriendShipRequestService.approveFriendRequest(req);
     }
 
     @ApiOperation("已读请求")
     @PutMapping("/readFriendShipRequestReq")
-    public ResponseVO readFriendShipRequestReq(@RequestBody FriendShipReq req) {
+    public ResponseVO readFriendShipRequestReq(@RequestBody @Validated FriendShipReq req) {
         return imFriendShipRequestService.readFriendShipRequestReq(req);
     }
 

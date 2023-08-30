@@ -4,7 +4,7 @@
 
 package com.sj.im.service.user.service;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.service.user.dao.ImUserDataEntity;
 import com.sj.im.service.user.model.req.ImportUserReq;
 import com.sj.im.service.user.model.req.LoginReq;

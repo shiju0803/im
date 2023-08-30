@@ -4,13 +4,13 @@
 
 package com.sj.im.service.group.controller;
 
-import com.sj.im.common.enums.ResponseVO;
+import com.sj.im.common.ResponseVO;
 import com.sj.im.service.group.model.req.*;
 import com.sj.im.service.group.model.resp.AddMemberResp;
 import com.sj.im.service.group.service.ImGroupMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,7 +30,7 @@ public class ImGroupMemberController {
 
     @ApiOperation("导入群组成员")
     @PostMapping("/importGroupMember")
-    public ResponseVO<List<AddMemberResp>> importGroupMember(@RequestBody ImportGroupMemberReq req) {
+    public ResponseVO<List<AddMemberResp>> importGroupMember(@RequestBody @Validated ImportGroupMemberReq req) {
         return imGroupMemberService.importGroupMember(req);
     }
 
@@ -48,31 +48,31 @@ public class ImGroupMemberController {
 
     @ApiOperation("拉人入群")
     @RequestMapping("/addMember")
-    public ResponseVO<Object> addMember(@RequestBody AddGroupMemberReq req) {
+    public ResponseVO<Object> addMember(@RequestBody @Validated AddGroupMemberReq req) {
         return imGroupMemberService.addMember(req);
     }
 
     @ApiOperation("踢人")
     @RequestMapping("/removeMember")
-    public ResponseVO<String> removeMember(@RequestBody RemoveGroupMemberReq req) {
+    public ResponseVO<String> removeMember(@RequestBody @Validated RemoveGroupMemberReq req) {
         return imGroupMemberService.removeMember(req);
     }
 
     @ApiOperation("退出群聊")
     @RequestMapping("/exitGroup")
-    public ResponseVO<String> exitGroup(@RequestBody ExitGroupReq req) {
+    public ResponseVO<String> exitGroup(@RequestBody @Validated ExitGroupReq req) {
         return imGroupMemberService.exitGroup(req);
     }
 
     @ApiOperation("修改群成员信息")
     @RequestMapping("/updateGroupMember")
-    public ResponseVO<String> updateGroupMember(@RequestBody UpdateGroupMemberReq req) {
+    public ResponseVO<String> updateGroupMember(@RequestBody @Validated UpdateGroupMemberReq req) {
         return imGroupMemberService.updateGroupMember(req);
     }
 
     @ApiOperation("禁言群组成员")
     @RequestMapping("/speak")
-    public ResponseVO<String> speak(@RequestBody SpeakMemberReq req) {
+    public ResponseVO<String> speak(@RequestBody @Validated SpeakMemberReq req) {
         return imGroupMemberService.speak(req);
     }
 }
