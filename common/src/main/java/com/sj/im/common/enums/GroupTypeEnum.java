@@ -6,6 +6,11 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 群类型枚举类
+ */
 @Getter
 public enum GroupTypeEnum {
 
@@ -22,7 +27,6 @@ public enum GroupTypeEnum {
      * 不能用 默认的 enumType b= enumType.values()[i]; 因为本枚举是类形式封装
      */
     public static GroupTypeEnum getEnum(Integer ordinal) {
-
         if (ordinal == null) {
             return null;
         }

@@ -8,26 +8,24 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @author ShiJu
  * @version 1.0
  * @description: 公共基础请求参数类
  */
 @Data
-@ApiModel("基础请求参数类")
+@ApiModel("请求基础信息")
 public class RequestBase {
-    @NotNull(message = "appId不能为空")
-    @ApiModelProperty(value = "appId", required = true)
+
+    @ApiModelProperty(value = "应用id", example = "123")
     private Integer appId;
 
-    @ApiModelProperty(value = "operator")
+    @ApiModelProperty(value = "操作者", example = "1")
     private String operator;
 
-    @ApiModelProperty(value = "clientType")
+    @ApiModelProperty(value = "客户端类型", example = "1")
     private Integer clientType;
 
-    @ApiModelProperty(value = "imei")
+    @ApiModelProperty(value = "设备IMEI号", example = "123456789")
     private String imei;
 }

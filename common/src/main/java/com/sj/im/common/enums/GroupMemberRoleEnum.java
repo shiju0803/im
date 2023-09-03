@@ -6,6 +6,11 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 群成员角色枚举类
+ */
 @Getter
 public enum GroupMemberRoleEnum {
     /**
@@ -26,7 +31,9 @@ public enum GroupMemberRoleEnum {
     /**
      * 离开
      */
-    LEAVE(3);;
+    LEAVE(3),
+
+    ;
 
 
     private final int code;

@@ -9,7 +9,7 @@ import lombok.Getter;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 连接类型枚举
+ * @description: 客户端类型枚举
  */
 @Getter
 public enum ClientType {
@@ -25,6 +25,7 @@ public enum ClientType {
     WINDOWS(4, "windows"),
 
     MAC(5, "mac"),
+
     ;
 
     private final Integer code;

@@ -4,37 +4,35 @@
 
 package com.sj.im.common.enums.command;
 
+import lombok.Getter;
+
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 用户事件命令枚举类
+ */
+@Getter
 public enum UserEventCommand implements Command {
 
-    //用户修改command 4000
-    USER_MODIFY(4000),
+    USER_MODIFY(0xFA0, "用户修改command 4000"),
 
-    //4001
-    USER_ONLINE_STATUS_CHANGE(4001),
+    USER_ONLINE_STATUS_CHANGE(0xFA1, "用户在线状态改变 4001"),
 
-    //4004 用户在线状态通知报文
-    USER_ONLINE_STATUS_CHANGE_NOTIFY(4004),
+    USER_ONLINE_STATUS_CHANGE_NOTIFY(0xFA2, "用户在线状态通知报文 4002"),
 
-    //4005 用户在线状态通知同步报文
-    USER_ONLINE_STATUS_CHANGE_NOTIFY_SYNC(4005),
+    USER_ONLINE_STATUS_CHANGE_NOTIFY_SYNC(0xFA3, "用户在线状态通知同步报文 4003"),
 
-    // 4006 用户自定义状态通知报文
-    USER_ONLINE_STATUS_SET_CHANGE_NOTIFY(4006),
+    USER_ONLINE_STATUS_SET_CHANGE_NOTIFY(0xFA4, "用户自定义状态通知报文 4004"),
 
-    // 4006 用户自定义状态通知同步报文
-    USER_ONLINE_STATUS_SET_CHANGE_NOTIFY_SYNC(4007),
+    USER_ONLINE_STATUS_SET_CHANGE_NOTIFY_SYNC(0xFA5, "用户自定义状态通知同步报文 4005"),
 
     ;
 
     private final int command;
+    private final String desc;
 
-    UserEventCommand(int command){
-        this.command=command;
-    }
-
-
-    @Override
-    public int getCommand() {
-        return command;
+    UserEventCommand(int command, String desc) {
+        this.command = command;
+        this.desc = desc;
     }
 }

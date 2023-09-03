@@ -6,6 +6,11 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 检查好友关系枚举类
+ */
 @Getter
 public enum CheckFriendShipTypeEnum {
     /**
@@ -17,6 +22,7 @@ public enum CheckFriendShipTypeEnum {
      * 双方校验
      */
     BOTH(2),
+
     ;
 
     private final int type;

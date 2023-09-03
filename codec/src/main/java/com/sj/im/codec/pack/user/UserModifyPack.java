@@ -9,7 +9,7 @@ import lombok.Data;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: TODO
+ * @description: 用户修改通知报文
  */
 @Data
 public class UserModifyPack {

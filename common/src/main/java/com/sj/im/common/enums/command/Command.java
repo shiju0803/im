@@ -11,4 +11,6 @@ package com.sj.im.common.enums.command;
  */
 public interface Command {
     int getCommand();
+
+    String getDesc();
 }

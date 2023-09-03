@@ -9,9 +9,16 @@ import java.util.List;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: TODO
+ * @description: 服务器路由接口，定义了路由服务器的方法。
  */
 public interface RouteHandle {
 
+    /**
+     * 根据给定的服务器列表和键，选择一个服务器进行路由。
+     *
+     * @param values 服务器列表
+     * @param key    用于路由选择的键
+     * @return 被选中的服务器
+     */
     String routeServer(List<String> values, String key);
 }

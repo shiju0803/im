@@ -6,6 +6,11 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 服务器地址获取策略枚举类
+ */
 @Getter
 public enum ImUrlRouteWayEnum {
 

@@ -4,42 +4,33 @@
 
 package com.sj.im.common.enums.command;
 
+import lombok.Getter;
+
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 指令枚举
+ * @description: 系统命令枚举
  */
+@Getter
 public enum SystemCommand implements Command {
 
-    /**
-     * 登录 9000
-     */
-    LOGIN(0x2328),
+    LOGIN(0x2328, "登录 9000"),
 
-    /**
-     * 下线通知 用于多端互斥 9002
-     */
-    MUTUAL_LOGIN(0x232a),
+    LOGIN_ACK(0x2329, "登录ack 9001"),
 
-    /**
-     * 退出登录 9003
-     */
-    LOGOUT(0x232b),
+    MUTUAL_LOGIN(0x232A, "下线通知 用于多端互斥 9002"),
 
-    /**
-     * 心跳 9999
-     */
-    PING(0x270f),
+    LOGOUT(0x232B, "退出登录 9003"),
+
+    PING(0x270F, "心跳 9999"),
+
     ;
 
     private final int command;
+    private final String desc;
 
-    SystemCommand(int command) {
+    SystemCommand(int command, String desc) {
         this.command = command;
-    }
-
-    @Override
-    public int getCommand() {
-        return command;
+        this.desc = desc;
     }
 }

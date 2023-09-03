@@ -48,7 +48,9 @@ public class GlobalHttpClientConfig {
     PoolingHttpClientConnectionManager manager = null;
     HttpClientBuilder httpClientBuilder = null;
 
-    // 定义httpClient链接池
+    /**
+     * 定义httpClient链接池
+     */
     @Bean(name = "httpClientConnectionManager")
     public PoolingHttpClientConnectionManager getPoolingHttpClientConnectionManager() {
         return getManager();
@@ -72,7 +74,6 @@ public class GlobalHttpClientConfig {
      */
     @Bean(name = "httpClientBuilder")
     public HttpClientBuilder getHttpClientBuilder(@Qualifier("httpClientConnectionManager") PoolingHttpClientConnectionManager httpClientConnectionManager) {
-
         // HttpClientBuilder中的构造方法被protected修饰，所以这里不能直接使用new来实例化一个HttpClientBuilder,可以使用HttpClientBuilder提供的静态方法create()来获取HttpClientBuilder对象
         httpClientBuilder = HttpClientBuilder.create();
         httpClientBuilder.setConnectionManager(httpClientConnectionManager);
@@ -85,7 +86,6 @@ public class GlobalHttpClientConfig {
      */
     @Bean
     public CloseableHttpClient getCloseableHttpClient(@Qualifier("httpClientBuilder") HttpClientBuilder httpClientBuilder) {
-
         return httpClientBuilder.build();
     }
 

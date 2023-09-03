@@ -9,11 +9,23 @@ import lombok.Data;
 @Data
 public class UserClientDto {
 
+    /**
+     * 应用id
+     */
     private Integer appId;
 
+    /**
+     * 客户端类型
+     */
     private Integer clientType;
 
+    /**
+     * 用户id
+     */
     private String userId;
 
+    /**
+     * 设备imei号
+     */
     private String imei;
 }

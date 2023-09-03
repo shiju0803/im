@@ -17,6 +17,7 @@ public enum DelFlagEnum {
     NORMAL(0),
 
     DELETE(1),
+
     ;
 
     private final int code;

@@ -6,12 +6,18 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 同意好友枚举类
+ */
 @Getter
 public enum AllowFriendTypeEnum {
 
     NEED(2),
 
     NOT_NEED(1),
+
     ;
 
     private final int code;

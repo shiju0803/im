@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: HttpRequest请求类
+ * @description: Http请求工具类
  */
 @Slf4j
 @Component
@@ -37,16 +37,29 @@ public class HttpRequestUtil {
     @Resource
     private RequestConfig requestConfig;
 
+    private HttpRequestUtil() {
+    }
+
+    /**
+     * 发起GET请求，返回响应体的字符串形式
+     *
+     * @param url     请求的URL
+     * @param params  请求参数
+     * @param charset 字符集
+     * @return 响应体的字符串形式
+     */
     public String doGet(String url, Map<String, Object> params, String charset) throws Exception {
         return doGet(url, params, null, charset);
     }
 
     /**
-     * 通过给的url地址，获取服务器数据
+     * 发起GET请求，返回响应体的字符串形式
      *
-     * @param url     服务器地址
-     * @param params  封装用户参数
-     * @param charset 设定字符编码
+     * @param url     请求的URL
+     * @param params  请求参数
+     * @param header  请求头
+     * @param charset 字符集
+     * @return 响应体的字符串形式
      */
     public String doGet(String url, Map<String, Object> params, Map<String, Object> header, String charset) throws Exception {
         if (CharSequenceUtil.isBlank(charset)) {
@@ -89,34 +102,48 @@ public class HttpRequestUtil {
     }
 
     /**
-     * GET请求， 含URL 参数
+     * 发起GET请求，返回响应体的字符串形式
      *
-     * @param url    服务器地址
-     * @param params 封装用户参数
-     * @return 如果状态码为200，则返回body，如果不为200，则返回空字符串
+     * @param url    请求的URL
+     * @param params 请求参数
+     * @return 响应体的字符串形式
      */
     public String doGet(String url, Map<String, Object> params) throws Exception {
         return doGet(url, params, null);
     }
 
     /**
-     * GET 请求，不含URL参数
+     * 发起GET请求，返回响应体的字符串形式
      *
-     * @param url 服务器地址
-     * @return 如果状态码为200，则返回body，如果不为200，则返回空字符串
+     * @param url 请求的URL
+     * @return 响应体的字符串形式
      */
     public String doGet(String url) throws Exception {
         return doGet(url, null, null);
     }
 
+    /**
+     * 发起POST请求，返回响应体的字符串形式
+     *
+     * @param url      请求的URL
+     * @param params   请求参数
+     * @param jsonBody 请求体（JSON格式）
+     * @param charset  字符集
+     * @return 响应体的字符串形式
+     */
     public String doPost(String url, Map<String, Object> params, String jsonBody, String charset) throws Exception {
         return doPost(url, params, null, jsonBody, charset);
     }
 
     /**
-     * 带参数的post请求
+     * 发起POST请求，返回响应体的字符串形式
      *
-     * @param url 服务器地址
+     * @param url      请求的URL
+     * @param params   请求参数
+     * @param header   请求头
+     * @param jsonBody 请求体（JSON格式）
+     * @param charset  字符集
+     * @return 响应体的字符串形式
      */
     public String doPost(String url, Map<String, Object> params, Map<String, Object> header, String jsonBody, String charset) throws Exception {
 
@@ -155,8 +182,7 @@ public class HttpRequestUtil {
         }
 
         String result = CharSequenceUtil.EMPTY;
-//		CloseableHttpClient httpClient = HttpClients.createDefault(); // 单个
-        CloseableHttpResponse response = null;
+        CloseableHttpResponse response;
         try {
             // 发起请求
             response = httpClientConfig.getCloseableHttpClient().execute(httpPost);
@@ -174,21 +200,24 @@ public class HttpRequestUtil {
     }
 
     /**
-     * 不带参数post请求
+     * 发起POST请求，返回响应体的字符串形式
      *
-     * @param url 服务器地址
+     * @param url 请求的URL
+     * @return 响应体的字符串形式
      */
     public String doPost(String url) throws Exception {
         return doPost(url, null, null, null);
     }
 
     /**
-     * get 方法调用的通用方式
+     * 发起GET请求，返回响应体的对象形式
      *
-     * @param url     服务器地址
-     * @param tClass  返回对象类型
-     * @param map     参数
-     * @param charSet 编码
+     * @param url     请求的URL
+     * @param tClass  响应体的类型
+     * @param map     请求参数
+     * @param charSet 字符集
+     * @param <T>     响应体的类型
+     * @return 响应体的对象形式
      */
     public <T> T doGet(String url, Class<T> tClass, Map<String, Object> map, String charSet) throws Exception {
         String result = doGet(url, map, charSet);
@@ -199,12 +228,15 @@ public class HttpRequestUtil {
     }
 
     /**
-     * get 方法调用的通用方式
+     * 发起GET请求，返回响应体的对象形式
      *
-     * @param url     服务器地址
-     * @param tClass  返回对象类型
-     * @param map     参数
-     * @param charSet 编码
+     * @param url     请求的URL
+     * @param tClass  响应体的类型
+     * @param map     请求参数
+     * @param header  请求头
+     * @param charSet 字符集
+     * @param <T>     响应体的类型
+     * @return 响应体的对象形式
      */
     public <T> T doGet(String url, Class<T> tClass, Map<String, Object> map, Map<String, Object> header, String charSet) throws Exception {
         String result = doGet(url, map, header, charSet);
@@ -215,13 +247,15 @@ public class HttpRequestUtil {
     }
 
     /**
-     * post 方法调用的通用方式
+     * 发起POST请求，返回响应体的对象形式
      *
-     * @param url      服务器地址
-     * @param tClass   返回对象类型
-     * @param map      参数
-     * @param jsonBody 请求体
-     * @param charSet  编码
+     * @param url      请求的URL
+     * @param tClass   响应体的类型
+     * @param map      请求参数
+     * @param jsonBody 请求体（JSON格式）
+     * @param charSet  字符集
+     * @param <T>      响应体的类型
+     * @return 响应体的对象形式
      */
     public <T> T doPost(String url, Class<T> tClass, Map<String, Object> map, String jsonBody, String charSet) throws Exception {
         String result = doPost(url, map, jsonBody, charSet);
@@ -231,6 +265,18 @@ public class HttpRequestUtil {
         return null;
     }
 
+    /**
+     * 发起POST请求，返回响应体的对象形式
+     *
+     * @param url      请求的URL
+     * @param tClass   响应体的类型
+     * @param map      请求参数
+     * @param header   请求头
+     * @param jsonBody 请求体（JSON格式）
+     * @param charSet  字符集
+     * @param <T>      响应体的类型
+     * @return 响应体的对象形式
+     */
     public <T> T doPost(String url, Class<T> tClass, Map<String, Object> map, Map<String, Object> header, String jsonBody, String charSet) throws Exception {
         String result = doPost(url, map, header, jsonBody, charSet);
         if (StringUtils.isNotEmpty(result)) {
@@ -240,24 +286,27 @@ public class HttpRequestUtil {
     }
 
     /**
-     * post 方法调用的通用方式
+     * 发起POST请求，返回响应体的字符串形式
      *
-     * @param url      服务器地址
-     * @param map      参数
-     * @param jsonBody 请求体
-     * @param charSet  编码
+     * @param url      请求的URL
+     * @param map      请求参数
+     * @param jsonBody 请求体（JSON格式）
+     * @param charSet  字符集
+     * @return 响应体的字符串形式
      */
     public String doPostString(String url, Map<String, Object> map, String jsonBody, String charSet) throws Exception {
         return doPost(url, map, jsonBody, charSet);
     }
 
     /**
-     * post 方法调用的通用方式
+     * 发起POST请求，返回响应体的字符串形式
      *
-     * @param url      服务器地址
-     * @param map      参数
-     * @param jsonBody 请求体
-     * @param charSet  编码
+     * @param url      请求的URL
+     * @param map      请求参数
+     * @param header   请求头
+     * @param jsonBody 请求体（JSON格式）
+     * @param charSet  字符集
+     * @return 响应体的字符串形式
      */
     public String doPostString(String url, Map<String, Object> map, Map<String, Object> header, String jsonBody, String charSet) throws Exception {
         return doPost(url, map, header, jsonBody, charSet);

@@ -4,21 +4,49 @@
 
 package com.sj.im.common.constant;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 序列常量配置类
+ */
 public class SeqConstants {
-    public static final String Message = "messageSeq";
+    /**
+     * 消息序列常量
+     */
+    public static final String MESSAGE_SEQ = "messageSeq";
 
-    public static final String GroupMessage = "groupMessageSeq";
+    /**
+     * 群组消息序列常量
+     */
+    public static final String GROUP_MESSAGE_SEQ = "groupMessageSeq";
 
+    /**
+     * 好友关系序列常量
+     */
+    public static final String FRIENDSHIP_SEQ = "friendshipSeq";
 
-    public static final String Friendship = "friendshipSeq";
+    /**
+     * 好友请求序列常量
+     */
+    public static final String FRIENDSHIP_REQUEST_SEQ = "friendshipRequestSeq";
 
-//        public static final String FriendshipBlack = "friendshipBlackSeq";
+    /**
+     * 好友群组序列常量
+     */
+    public static final String FRIENDSHIP_GROUP_SEQ = "friendshipGroupSeq";
 
-    public static final String FriendshipRequest = "friendshipRequestSeq";
+    /**
+     * 群组序列常量
+     */
+    public static final String GROUP_SEQ = "groupSeq";
 
-    public static final String FriendshipGroup = "friendshipGrouptSeq";
+    /**
+     * 会话序列常量
+     */
+    public static final String CONVERSATION_SEQ = "conversationSeq";
 
-    public static final String Group = "groupSeq";
-
-    public static final String Conversation = "conversationSeq";
+    /**
+     * 隐藏无参构造
+     */
+    private SeqConstants() {}
 }

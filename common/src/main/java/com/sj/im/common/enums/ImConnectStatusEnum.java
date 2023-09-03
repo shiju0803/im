@@ -6,6 +6,11 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 管道链接状态枚举类
+ */
 @Getter
 public enum ImConnectStatusEnum {
 
@@ -15,6 +20,7 @@ public enum ImConnectStatusEnum {
     ONLINE_STATUS(1),
 
     OFFLINE_STATUS(2),
+
     ;
 
     private final Integer code;

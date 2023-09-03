@@ -4,30 +4,38 @@
 
 package com.sj.im.common.enums;
 
+import lombok.Getter;
+
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 多设备登录枚举类
+ */
+@Getter
 public enum DeviceMultiLoginEnum {
 
     /**
      * 单端登录 仅允许 Windows、Web、Android 或 iOS 单端登录。
      */
-    ONE(1,"DeviceMultiLoginEnum_ONE"),
+    ONE(1, "DeviceMultiLoginEnum_ONE"),
 
     /**
      * 双端登录 允许 Windows、Mac、Android 或 iOS 单端登录，同时允许与 Web 端同时在线。
      */
-    TWO(2,"DeviceMultiLoginEnum_TWO"),
+    TWO(2, "DeviceMultiLoginEnum_TWO"),
 
     /**
      * 三端登录 允许 Android 或 iOS 单端登录(互斥)，Windows 或者 Mac 单聊登录(互斥)，同时允许 Web 端同时在线
      */
-    THREE(3,"DeviceMultiLoginEnum_THREE"),
+    THREE(3, "DeviceMultiLoginEnum_THREE"),
 
     /**
      * 多端同时在线 允许 Windows、Mac、Web、Android 或 iOS 多端或全端同时在线登录
      */
-    ALL(4,"DeviceMultiLoginEnum_ALL");
+    ALL(4, "DeviceMultiLoginEnum_ALL");
 
-    private int loginMode;
-    private String loginDesc;
+    private final int loginMode;
+    private final String loginDesc;
 
     /**
      * 不能用 默认的 enumType b= enumType.values()[i]; 因为本枚举是类形式封装
@@ -41,24 +49,8 @@ public enum DeviceMultiLoginEnum {
         return THREE;
     }
 
-    DeviceMultiLoginEnum(int loginMode, String loginDesc){
-        this.loginMode=loginMode;
-        this.loginDesc=loginDesc;
-    }
-
-    public int getLoginMode() {
-        return loginMode;
-    }
-
-    public void setLoginMode(int loginMode) {
+    DeviceMultiLoginEnum(int loginMode, String loginDesc) {
         this.loginMode = loginMode;
-    }
-
-    public String getLoginDesc() {
-        return loginDesc;
-    }
-
-    public void setLoginDesc(String loginDesc) {
         this.loginDesc = loginDesc;
     }
 }

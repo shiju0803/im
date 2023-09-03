@@ -8,7 +8,7 @@ import uuid
 imei = str(uuid.uuid1())
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(("127.0.0.1", 9000))
+s.connect(("127.0.0.1", 9001))
 
 # 基础数据
 command = 9000
@@ -17,7 +17,7 @@ clientType = 4
 messageType = 0x0
 appId = 10000
 name = "ShiJu"
-userId = "im00001"
+userId = "sj001"
 
 # 数据转换为bytes
 commandByte = command.to_bytes(4, "big")
@@ -28,8 +28,8 @@ appIdByte = appId.to_bytes(4, "big")
 imeiByte = bytes(imei, "utf-8")
 imeiLen = len(imeiByte)
 imeiLenByte = imeiLen.to_bytes(4, "big")
-# data = {"name": name, "appId": appId, "clientType": clientType, "imei": imei}
-data = {"userId": userId}
+data = {"userId": userId, "name": name, "appId": appId, "clientType": clientType, "imei": imei}
+# data = {"userId": userId}
 jsonData = json.dumps(data)
 body = bytes(jsonData, 'utf-8')
 bodyLen = len(body)

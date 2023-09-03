@@ -6,6 +6,11 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: 一致性hash实现类枚举类
+ */
 @Getter
 public enum RouteHashMethodEnum {
 
@@ -26,8 +31,6 @@ public enum RouteHashMethodEnum {
 
     /**
      * 不能用 默认的 enumType b= enumType.values()[i]; 因为本枚举是类形式封装
-     * @param ordinal
-     * @return
      */
     public static RouteHashMethodEnum getHandler(int ordinal) {
         for (int i = 0; i < RouteHashMethodEnum.values().length; i++) {

@@ -17,7 +17,7 @@ public class TcpConstants {
     public static final String APPID = "appId";
 
     /**
-     * 连接类型
+     * 客户端类型
      */
     public static final String CLIENT_TYPE = "clientType";
 
@@ -34,4 +34,10 @@ public class TcpConstants {
     public static final String IM_CORE_ZK_ROOT_TCP = "/im-coreRoot/tcp";
 
     public static final String IM_CORE_ZK_ROOT_WEB = "/im-coreRoot/web";
+
+
+    /**
+     * 隐藏无参构造
+     */
+    private TcpConstants() {}
 }

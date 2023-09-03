@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author ShiJu
  * @version 1.0
@@ -19,11 +21,11 @@ import lombok.EqualsAndHashCode;
 @ApiModel("基础请求参数类")
 public class SyncReq extends RequestBase {
 
-    //客户端最大seq
-    @ApiModelProperty(value = "lastSequence", required = true)
+    @NotNull(message = "lastSequence不能为空")
+    @ApiModelProperty("客户端最大seq")
     private Long lastSequence;
 
-    //一次拉取多少
-    @ApiModelProperty(value = "maxLimit", required = true)
+    @NotNull(message = "maxLimit不能为空")
+    @ApiModelProperty("一次拉取多少")
     private Integer maxLimit;
 }

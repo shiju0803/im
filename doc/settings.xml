@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <pluginGroups>
+        <!-- pluginGroup
+         | 指定用于插件查找的进一步组标识符。
+        <pluginGroup>com.your.plugins</pluginGroup>
+        -->
+    </pluginGroups>
+
+    <!-- proxies
+    | 这是可以用于此计算机连接网络的代理列表。除非另有指定（通过系统属性或命令行开关），否则此列表中标记为活动的第一个代理规范将被使用。
+    |-->
+    <proxies>
+        <!-- proxy
+         | 用于连接网络的一个代理规范。
+        -->
+    </proxies>
+
+    <!-- servers
+    | 这是一个认证配置列表，按照系统中使用的server-id进行键控。
+    | 认证配置可以在Maven需要连接到远程服务器时使用。
+    |-->
+    <servers>
+        <server>
+            <id>nexus</id>
+            <username>admin</username>
+            <password>123456</password>
+        </server>
+    </servers>
+
+    <!-- mirrors
+    | 这是一个镜像列表，用于从远程仓库下载构件。
+    |
+    | 它的工作原理如下：一个POM可以声明使用一个仓库来解决某些构件。然而，该仓库有时可能会出现
+    | 重负荷的问题，因此人们将其镜像到了几个地方。
+    |
+    | 那个仓库定义将具有唯一的ID，因此我们可以为该仓库创建一个镜像引用，用作替代下载站点。镜像站点
+    | 将成为该仓库的首选服务器。
+    |-->
+    <mirrors>
+
+        <mirror>
+            <id>nexus-aliyun</id>
+            <mirrorOf>central</mirrorOf>
+            <name>阿里私有库</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </mirror>
+
+        <mirror>
+            <id>nexus</id>
+            <name>我的私有库</name>
+            <mirrorOf>*</mirrorOf>
+            <url>http://localhost:8081/repository/maven-public/</url>
+        </mirror>
+
+    </mirrors>
+
+    <!-- profiles
+    | 这是一个配置文件列表，可以通过各种方式进行激活，并且可以修改构建过程。在settings.xml中提供的配置文件
+    | 旨在提供本地机器特定的路径和仓库位置，以使构建在本地环境中工作。
+    |
+    | 例如，如果您有一个集成测试插件（如cactus），需要知道您的Tomcat实例安装在哪里，那么您可以在此处提供一个变量，
+    | 以便在构建过程中对cactus插件进行配置时对该变量进行解引用。
+    |
+    | 如上所述，可以通过多种方式激活配置文件。一种方式是通过本文档（settings.xml）的activeProfiles部分进行激活，
+    | 这将在后面讨论。另一种方式基本上依赖于检测系统属性，可以匹配属性的特定值，也可以仅测试其存在性。还可以通过JDK版本前缀
+    | 激活配置文件，其中值“1.4”可能在执行构建时使用JDK版本“1.4.2_07”时激活配置文件。最后，可以直接从命令行指定活动配置文件列表。
+    |
+    | 注意：对于在settings.xml中定义的配置文件，您只能指定用作POM中插件的配置变量的构件仓库、插件仓库和自由形式属性。
+    |-->
+    <profiles>
+        <profile>
+            <id>nexus</id>
+            <repositories>
+                <repository>
+                    <id>nexus</id>
+                    <url>http://localhost:8081/repository/maven-releases/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <!-- activeProfiles
+     | 所有构建都激活的配置文件列表。
+    -->
+    <activeProfiles>
+        <activeProfile>nexus</activeProfile>
+    </activeProfiles>
+</settings>
