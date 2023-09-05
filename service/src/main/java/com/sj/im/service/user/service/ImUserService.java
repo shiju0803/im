@@ -4,67 +4,75 @@
 
 package com.sj.im.service.user.service;
 
-import com.sj.im.common.ResponseVO;
-import com.sj.im.service.user.dao.ImUserDataEntity;
-import com.sj.im.service.user.model.req.ImportUserReq;
-import com.sj.im.service.user.model.req.LoginReq;
-import com.sj.im.service.user.model.req.ModifyUserInfoReq;
-import com.sj.im.service.user.model.req.UserBatchReq;
-import com.sj.im.service.user.model.resp.GetUserInfoResp;
-import com.sj.im.service.user.model.resp.ImportUserResp;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.sj.im.common.route.RouteInfo;
+import com.sj.im.service.user.entry.ImUserDataEntity;
+import com.sj.im.service.user.web.req.*;
+import com.sj.im.service.user.web.resp.GetUserInfoResp;
+import com.sj.im.service.user.web.resp.ImportUserResp;
+
+import java.util.Map;
 
 /**
  * @author ShiJu
  * @version 1.0
  * @description: 用户相关接口
  */
-public interface ImUserService {
-    /**
-     * 导入用户的请求
-     *
-     * @param req 导入到用户数据
-     * @return ImportUserResp 返回给用户的结果
-     */
-    ResponseVO<ImportUserResp> importUser(ImportUserReq req);
+public interface ImUserService extends IService<ImUserDataEntity> {
 
     /**
-     * 批量获取用户信息
+     * 导入IM用户的方法
      *
-     * @param req 用户的id
-     * @return GetUserInfoResp 用户信息
+     * @param req 导入IM用户参数
+     * @return 导入结果
      */
-    ResponseVO<GetUserInfoResp> getUserInfo(UserBatchReq req);
+    ImportUserResp importUser(ImportUserReq req);
 
     /**
-     * 获取单个用户信息
+     * 删除IM用户的方法
      *
-     * @param userId 用户id
-     * @param appId appId
-     * @return ImUserDataEntity 用户信息
+     * @param req 删除IM用户参数
+     * @return 删除结果
      */
-    ResponseVO<ImUserDataEntity> getSingleUserInfo(String userId, Integer appId);
+    ImportUserResp deleteUser(DeleteUserReq req);
 
     /**
-     * 批量删除用户信息
+     * 获取IM用户信息的方法
      *
-     * @param req 要删除的用户id
-     * @return 操作结果
+     * @param req 获取IM用户信息参数
+     * @return IM用户信息
      */
-    ResponseVO<ImportUserResp> deleteUser(UserBatchReq req);
+    GetUserInfoResp getUserInfo(GetUserInfoReq req);
 
     /**
-     * 修改用户信息
+     * 获取单个IM用户信息的方法
      *
-     * @param req 修改的用户信息
-     * @return 操作结果
+     * @param userId 用户ID
+     * @param appId  应用ID
+     * @return 单个IM用户信息
      */
-    ResponseVO<String> modifyUserInfo(ModifyUserInfoReq req);
+    ImUserDataEntity getSingleUserInfo(String userId, Integer appId);
 
     /**
-     * 用户登录
+     * 修改IM用户信息的方法
+     *
+     * @param req 修改IM用户信息参数
+     */
+    void modifyUserInfo(ModifyUserInfoReq req);
+
+    /**
+     * IM用户登录方法
      *
      * @param req 登录参数
-     * @return 操作结果
+     * @return 路由信息
      */
-    ResponseVO<String> login(LoginReq req);
+    RouteInfo login(LoginReq req);
+
+    /**
+     * 获取用户序列
+     *
+     * @param req 用户信息
+     * @return 用户最大的序列号
+     */
+    Map<Object, Object> getUserSequence(GetUserSequenceReq req);
 }

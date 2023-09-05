@@ -4,14 +4,11 @@
 
 package com.sj.im.common.enums.exception;
 
-import lombok.Getter;
-
 /**
  * @author ShiJu
  * @version 1.0
  * @description: 好友错误枚举类
  */
-@Getter
 public enum FriendShipErrorCode implements BaseExceptionEnum {
 
     IMPORT_SIZE_BEYOND(30000, "导入數量超出上限"),
@@ -23,6 +20,8 @@ public enum FriendShipErrorCode implements BaseExceptionEnum {
     TO_IS_NOT_YOUR_FRIEND(30003, "对方不是你的好友"),
 
     FRIEND_IS_DELETED(30004, "好友已被删除"),
+
+    ADD_FRIEND_REQUEST_ERROR(30005, "添加好友申请失败"),
 
     FRIEND_IS_BLACK(30006, "好友已被拉黑"),
 
@@ -52,5 +51,21 @@ public enum FriendShipErrorCode implements BaseExceptionEnum {
     FriendShipErrorCode(int code, String msg) {
         this.code = code;
         this.msg = msg;
+    }
+
+    /**
+     * 错误代码
+     */
+    @Override
+    public int getCode() {
+        return this.code;
+    }
+
+    /**
+     * 错误提示信息
+     */
+    @Override
+    public String getMsg() {
+        return this.msg;
     }
 }

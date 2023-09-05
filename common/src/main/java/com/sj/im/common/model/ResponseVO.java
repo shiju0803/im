@@ -87,6 +87,10 @@ public class ResponseVO<T> {
         return new ResponseVO<>(code, DEFAULT_ERROR_MESSAGE, data);
     }
 
+    public static <T> ResponseVO<T> errorResponse(int code, String msg, T data) {
+        return new ResponseVO<>(code, msg, data);
+    }
+
     public static <T> ResponseVO<T> errorResponse(BaseExceptionEnum enums) {
         return new ResponseVO<>(enums.getCode(), enums.getMsg());
     }
@@ -95,4 +99,3 @@ public class ResponseVO<T> {
         return ObjectUtil.equal(this.code, DEFAULT_SUCCESS_CODE);
     }
 }
-

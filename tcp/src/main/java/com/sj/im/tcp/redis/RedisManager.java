@@ -4,7 +4,7 @@
 
 package com.sj.im.tcp.redis;
 
-import com.sj.im.codec.config.BootstrapConfig;
+import com.sj.im.common.config.BootstrapConfig;
 import com.sj.im.tcp.listener.RedisUserLoginMessageListener;
 import lombok.Getter;
 import org.redisson.api.RedissonClient;

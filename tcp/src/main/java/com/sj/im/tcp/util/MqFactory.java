@@ -8,7 +8,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.sj.im.codec.config.BootstrapConfig;
+import com.sj.im.common.config.BootstrapConfig;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,24 +22,22 @@ import java.util.concurrent.TimeoutException;
  */
 public class MqFactory {
 
-    private static ConnectionFactory FACTORY = null;
+    private static ConnectionFactory factory = null;
 
-    private static Channel DEFAULT_CHANNEL;
-
-    private static ConcurrentMap<String, Channel> CHANNEL_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, Channel> CHANNEL_MAP = new ConcurrentHashMap<>();
 
     private static Connection getConnection() throws IOException, TimeoutException {
-        return FACTORY.newConnection();
+        return factory.newConnection();
     }
 
     public static void init(BootstrapConfig.Rabbitmq rabbitmq) {
-        if (ObjectUtil.isNull(FACTORY)) {
-            FACTORY = new ConnectionFactory();
-            FACTORY.setHost(rabbitmq.getHost());
-            FACTORY.setPort(rabbitmq.getPort());
-            FACTORY.setUsername(rabbitmq.getUserName());
-            FACTORY.setPassword(rabbitmq.getPassword());
-            FACTORY.setVirtualHost(rabbitmq.getVirtualHost());
+        if (ObjectUtil.isNull(factory)) {
+            factory = new ConnectionFactory();
+            factory.setHost(rabbitmq.getHost());
+            factory.setPort(rabbitmq.getPort());
+            factory.setUsername(rabbitmq.getUserName());
+            factory.setPassword(rabbitmq.getPassword());
+            factory.setVirtualHost(rabbitmq.getVirtualHost());
         }
     }
 

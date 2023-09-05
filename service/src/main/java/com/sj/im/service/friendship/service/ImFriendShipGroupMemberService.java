@@ -4,21 +4,22 @@
 
 package com.sj.im.service.friendship.service;
 
-import com.sj.im.common.ResponseVO;
-import com.sj.im.service.friendship.model.req.AddFriendShipGroupMemberReq;
-import com.sj.im.service.friendship.model.req.DeleteFriendShipGroupMemberReq;
+import com.sj.im.service.friendship.web.req.AddFriendShipGroupMemberReq;
+import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupMemberReq;
+
+import java.util.List;
 
 public interface ImFriendShipGroupMemberService {
 
     /**
      * 添加组内成员
      */
-    ResponseVO<Object> addGroupMember(AddFriendShipGroupMemberReq req);
+    List<String> addGroupMember(AddFriendShipGroupMemberReq req);
 
     /**
      * 删除组内成员
      */
-    ResponseVO<Object> delGroupMember(DeleteFriendShipGroupMemberReq req);
+    List<String> delGroupMember(DeleteFriendShipGroupMemberReq req);
 
     /**
      * 添加组内成员具体逻辑
@@ -28,5 +29,5 @@ public interface ImFriendShipGroupMemberService {
     /**
      * 清空组内所有成员
      */
-    ResponseVO<Integer> clearGroupMember(Long groupId);
+    int clearGroupMember(Long groupId);
 }

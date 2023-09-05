@@ -4,74 +4,72 @@
 
 package com.sj.im.service.group.service;
 
-import com.sj.im.common.ResponseVO;
-import com.sj.im.service.group.model.req.*;
-import com.sj.im.service.group.model.resp.AddMemberResp;
-import com.sj.im.service.group.model.resp.GetRoleInGroupResp;
+import com.sj.im.service.group.web.req.*;
+import com.sj.im.service.group.web.resp.AddMemberResp;
+import com.sj.im.service.group.web.resp.GetRoleInGroupResp;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface ImGroupMemberService {
     /**
      * 导入群组成员
      */
-    ResponseVO<List<AddMemberResp>> importGroupMember(ImportGroupMemberReq req);
+    List<AddMemberResp> importGroupMember(ImportGroupMemberReq req);
 
     /**
      * 导入群组成员具体逻辑
      */
-    ResponseVO<String> addGroupMember(String groupId, Integer appId, GroupMemberDto dto);
+    void addGroupMember(String groupId, Integer appId, GroupMemberDto dto);
 
     /**
      * 获得群组中某成员的成员类型
      */
-    ResponseVO<GetRoleInGroupResp> getRoleInGroupOne(String groupId, String memberId, Integer appId);
+    GetRoleInGroupResp getRoleInGroupOne(String groupId, String memberId, Integer appId);
 
     /**
      * 获取群组中的所有成员信息
      */
-    ResponseVO<List<GroupMemberDto>> getGroupMember(String groupId, Integer appId);
+    List<GroupMemberDto> getGroupMember(String groupId, Integer appId);
 
     /**
      * 获取到指定用户加入的所有群的id
      */
-    ResponseVO<Collection<String>> getMemberJoinedGroup(GetJoinedGroupReq req);
+    List<String> getMemberJoinedGroup(GetJoinedGroupReq req);
 
     /**
      * 转让群主
      */
-    ResponseVO<String> transferGroupMember(String owner, String groupId, Integer appId);
+    void transferGroupMember(String owner, String groupId, Integer appId);
 
     /**
      * 拉人入群
      */
-    ResponseVO<Object> addMember(AddGroupMemberReq req);
+    List<AddMemberResp> addMember(AddGroupMemberReq req);
 
     /**
      * 踢人出群
      */
-    ResponseVO<String> removeMember(RemoveGroupMemberReq req);
+    void removeMember(RemoveGroupMemberReq req);
 
     /**
      * 踢人出群具体逻辑
      */
-    ResponseVO<String> removeGroupMember(String groupId, Integer appId, String memberId);
+    void removeGroupMember(String groupId, Integer appId, String memberId);
 
     /**
      * 退出群聊
      */
-    ResponseVO<String> exitGroup(ExitGroupReq req);
+    void exitGroup(ExitGroupReq req);
 
     /**
      * 修改群成员信息
      */
-    ResponseVO<String> updateGroupMember(UpdateGroupMemberReq req);
+    void updateGroupMember(UpdateGroupMemberReq req);
 
     /**
      * 禁言群成员
      */
-    ResponseVO<String> speak(SpeakMemberReq req);
+    void speak(SpeakMemberReq req);
 
     /**
      * 获取指定群组的所有的成员Id
@@ -86,5 +84,5 @@ public interface ImGroupMemberService {
     /**
      * 增量同步用户加入的群组
      */
-    ResponseVO<Collection<String>> syncMemberJoinedGroup(String operator, Integer appId);
+    List<String> syncMemberJoinedGroup(String operator, Integer appId);
 }

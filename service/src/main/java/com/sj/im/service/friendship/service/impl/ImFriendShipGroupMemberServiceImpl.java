@@ -4,22 +4,24 @@
 
 package com.sj.im.service.friendship.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sj.im.codec.pack.friendship.AddFriendGroupMemberPack;
 import com.sj.im.codec.pack.friendship.DeleteFriendGroupMemberPack;
-import com.sj.im.common.ResponseVO;
-import com.sj.im.common.enums.FriendShipErrorCode;
 import com.sj.im.common.enums.command.FriendshipEventCommand;
+import com.sj.im.common.enums.exception.FriendShipErrorCode;
+import com.sj.im.common.exception.BusinessException;
 import com.sj.im.common.model.ClientInfo;
-import com.sj.im.service.friendship.dao.ImFriendShipGroupEntity;
-import com.sj.im.service.friendship.dao.ImFriendShipGroupMemberEntity;
-import com.sj.im.service.friendship.dao.mapper.ImFriendShipGroupMemberMapper;
-import com.sj.im.service.friendship.model.req.AddFriendShipGroupMemberReq;
-import com.sj.im.service.friendship.model.req.DeleteFriendShipGroupMemberReq;
+import com.sj.im.service.friendship.entry.ImFriendShipGroupEntity;
+import com.sj.im.service.friendship.entry.ImFriendShipGroupMemberEntity;
+import com.sj.im.service.friendship.mapper.ImFriendShipGroupMemberMapper;
 import com.sj.im.service.friendship.service.ImFriendShipGroupMemberService;
 import com.sj.im.service.friendship.service.ImFriendShipGroupService;
+import com.sj.im.service.friendship.web.req.AddFriendShipGroupMemberReq;
+import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupMemberReq;
 import com.sj.im.service.helper.MessageHelper;
-import com.sj.im.service.user.dao.ImUserDataEntity;
+import com.sj.im.service.user.entry.ImUserDataEntity;
 import com.sj.im.service.user.service.ImUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemberService {
+public class ImFriendShipGroupMemberServiceImpl extends ServiceImpl<ImFriendShipGroupMemberMapper, ImFriendShipGroupMemberEntity> implements ImFriendShipGroupMemberService {
     @Resource
     private ImFriendShipGroupMemberMapper imFriendShipGroupMemberMapper;
     @Resource
@@ -51,19 +53,19 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
      * 添加组内成员
      */
     @Override
-    public ResponseVO<Object> addGroupMember(AddFriendShipGroupMemberReq req) {
+    public List<String> addGroupMember(AddFriendShipGroupMemberReq req) {
         // 判断该组是否合法
-        ResponseVO<ImFriendShipGroupEntity> group = imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
-        if (!group.isOk()) {
-            return ResponseVO.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
+        ImFriendShipGroupEntity group = imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
+        if (ObjectUtil.isNull(group)) {
+            throw new BusinessException(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
         }
 
         List<String> successId = new ArrayList<>();
         for (String toId : req.getToIds()) {
-            ResponseVO<ImUserDataEntity> singleUserInfo = imUserService.getSingleUserInfo(toId, req.getAppId());
+            ImUserDataEntity singleUserInfo = imUserService.getSingleUserInfo(toId, req.getAppId());
             // 新增组的成员的话，就要判断一下每个成员是否都合法
-            if (singleUserInfo.isOk()) {
-                int i = thisService.doAddGroupMember(group.getData().getGroupId(), toId);
+            if (ObjectUtil.isNull(singleUserInfo)) {
+                int i = thisService.doAddGroupMember(group.getGroupId(), toId);
                 if (i == 1) {
                     successId.add(toId);
                 }
@@ -78,27 +80,27 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
         pack.setToIds(successId);
         pack.setSequence(seq);
         messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_MEMBER_ADD,
-                pack,new ClientInfo(req.getAppId(),req.getClientType(),req.getImei()));
+                pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
 
-        return ResponseVO.successResponse(successId);
+        return successId;
     }
 
     /**
      * 删除组内成员
      */
     @Override
-    public ResponseVO<Object> delGroupMember(DeleteFriendShipGroupMemberReq req) {
-        ResponseVO<ImFriendShipGroupEntity> group = imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
-        if (!group.isOk()) {
-            return ResponseVO.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
+    public List<String> delGroupMember(DeleteFriendShipGroupMemberReq req) {
+        ImFriendShipGroupEntity group = imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
+        if (ObjectUtil.isNull(group)) {
+            throw new BusinessException(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
         }
 
         List<String> successId = new ArrayList<>();
         for (String toId : req.getToIds()) {
             // 删除组成员的时候，也要判断一下组成员的合法性
-            ResponseVO<ImUserDataEntity> singleUserInfo = imUserService.getSingleUserInfo(toId, req.getAppId());
-            if (singleUserInfo.isOk()) {
-                int i = deleteGroupMember(group.getData().getGroupId(), req.getToIds());
+            ImUserDataEntity singleUserInfo = imUserService.getSingleUserInfo(toId, req.getAppId());
+            if (ObjectUtil.isNull(singleUserInfo)) {
+                int i = deleteGroupMember(group.getGroupId(), req.getToIds());
                 if (i == 1) {
                     successId.add(toId);
                 }
@@ -110,8 +112,8 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
         pack.setGroupName(req.getGroupName());
         pack.setToIds(successId);
         messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_MEMBER_DELETE,
-                pack,new ClientInfo(req.getAppId(),req.getClientType(),req.getImei()));
-        return ResponseVO.successResponse(successId);
+                pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+        return successId;
     }
 
     /**
@@ -139,11 +141,10 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
      * @param groupId 分组id
      */
     @Override
-    public ResponseVO<Integer> clearGroupMember(Long groupId) {
+    public int clearGroupMember(Long groupId) {
         LambdaQueryWrapper<ImFriendShipGroupMemberEntity> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ImFriendShipGroupMemberEntity::getGroupId, groupId);
-        int delete = imFriendShipGroupMemberMapper.delete(lqw);
-        return ResponseVO.successResponse(delete);
+        return imFriendShipGroupMemberMapper.delete(lqw);
     }
 
     /**

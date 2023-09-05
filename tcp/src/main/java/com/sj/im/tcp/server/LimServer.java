@@ -6,7 +6,7 @@ package com.sj.im.tcp.server;
 
 import com.sj.im.codec.MessageDecoder;
 import com.sj.im.codec.MessageEncoder;
-import com.sj.im.codec.config.BootstrapConfig;
+import com.sj.im.common.config.BootstrapConfig;
 import com.sj.im.tcp.handler.HeartBeatHandler;
 import com.sj.im.tcp.handler.NettyServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -53,7 +53,7 @@ public class LimServer {
 //                        ch.pipeline().addLast(new IdleStateHandler(
 //                                0, 0, 1));
                         ch.pipeline().addLast(new HeartBeatHandler(config.getHeartBeatTime()));
-                        ch.pipeline().addLast(new NettyServerHandler());
+                        ch.pipeline().addLast(new NettyServerHandler(config.getBrokerId()));
                     }
                 });
     }

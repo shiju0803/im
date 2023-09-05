@@ -4,11 +4,16 @@
 
 package com.sj.im.tcp.listener;
 
+import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.json.JSONUtil;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import com.sj.im.codec.proto.MessagePack;
 import com.sj.im.common.constant.RabbitConstants;
+import com.sj.im.tcp.listener.process.BaseProcess;
+import com.sj.im.tcp.listener.process.ProcessFactory;
 import com.sj.im.tcp.util.MqFactory;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,18 +27,32 @@ import java.io.IOException;
 @Slf4j
 public class MqMessageListener {
 
-    private static void startListenerMessage(){
+    private static String brokerId;
+
+    private static void startListenerMessage() {
         try {
-            Channel channel = MqFactory.getChannel(RabbitConstants.MESSAGE_SERVICE_2_IM);
-            channel.queueDeclare(RabbitConstants.MESSAGE_SERVICE_2_IM, true, false, false, null);
-            channel.queueBind(RabbitConstants.MESSAGE_SERVICE_2_IM, RabbitConstants.MESSAGE_SERVICE_2_IM, "");
-            channel.basicConsume(RabbitConstants.MESSAGE_SERVICE_2_IM, false,
+            Channel channel = MqFactory.getChannel(RabbitConstants.MESSAGE_SERVICE_2_IM_QUEUE + "_" + brokerId);
+            // 绑定队列
+            channel.queueDeclare(RabbitConstants.MESSAGE_SERVICE_2_IM_QUEUE + "_" + brokerId,
+                    true, false, false, null);
+            // 绑定交换机
+            channel.queueBind(RabbitConstants.MESSAGE_SERVICE_2_IM_QUEUE + "_" + brokerId,
+                    RabbitConstants.IM_EXCHANGE, brokerId);
+            channel.basicConsume(RabbitConstants.MESSAGE_SERVICE_2_IM_QUEUE + "_" + brokerId, false,
                     new DefaultConsumer(channel) {
                         @Override
                         public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                            //TODO 消息服务发送的消息
-                            String msgStr = new String(body);
-                            log.info(msgStr);
+                            try {
+                                // 处理消息服务发送来的消息
+                                String msgStr = new String(body);
+                                MessagePack messagePack = JSONUtil.toBean(msgStr, MessagePack.class);
+                                BaseProcess messageProcess = ProcessFactory.getMessageProcess(messagePack.getCommand());
+                                messageProcess.process(messagePack);
+                                channel.basicAck(envelope.getDeliveryTag(), false);
+                            } catch (Exception e) {
+                                log.error("处理消息异常: {}", e.getMessage());
+                                channel.basicNack(envelope.getDeliveryTag(), false, false);
+                            }
                         }
                     });
         } catch (Exception e) {
@@ -42,6 +61,13 @@ public class MqMessageListener {
     }
 
     public static void init() {
+        startListenerMessage();
+    }
+
+    public static void init(String brokerId) {
+        if(CharSequenceUtil.isBlank(MqMessageListener.brokerId)){
+            MqMessageListener.brokerId = brokerId;
+        }
         startListenerMessage();
     }
 }

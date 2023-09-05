@@ -4,8 +4,8 @@
 
 package com.sj.im.service.helper;
 
-import com.sj.im.common.ResponseVO;
-import com.sj.im.common.config.AppConfig;
+import com.sj.im.common.model.ResponseVO;
+import com.sj.im.service.config.AppConfig;
 import com.sj.im.common.util.HttpRequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -37,7 +37,8 @@ public class CallbackHelper {
 
     public ResponseVO beforeCallback(Integer appId, String callbackCommand, String jsonBody) {
         try {
-            return httpRequestUtil.doPost(appConfig.getCallbackUrl(), ResponseVO.class, builderUrlParams(appId, callbackCommand), jsonBody, null);
+            return httpRequestUtil.doPost(appConfig.getCallbackUrl(), ResponseVO.class,
+                    builderUrlParams(appId, callbackCommand), jsonBody, null);
         } catch (Exception e) {
             log.error("callback 之前回调{} : {}出现异常 ： {} ",callbackCommand , appId, e.getMessage());
         }
