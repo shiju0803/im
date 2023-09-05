@@ -18,12 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 心跳检测处理类
+ * @description: 心跳处理器，用于处理客户端连接的空闲状态事件
  */
 @Slf4j
 public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
 
-    private Long heartBeatTime;
+    /**
+     * 客户端心跳间隔时间
+     */
+    private final Long heartBeatTime;
 
     public HeartBeatHandler(Long heartBeatTime) {
         this.heartBeatTime = heartBeatTime;

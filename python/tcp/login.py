@@ -5,20 +5,20 @@ import uuid
 
 # 自定义私有协议解码器测试脚本
 
-imei = str(uuid.uuid1())
+imei = "A1ABFA32-1C85-D6D8-5F3a-29Fc8ED7f14B"
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(("127.0.0.1", 9000))
 
 # 基础数据
-command = 199999
+command = 0x2328
 print(command)
 version = 1
-clientType = 4
+clientType = 1
 messageType = 0x0
 appId = 10000
 name = "ShiJu"
-userId = "sj001"
+userId = "29"
 
 # 数据转换为bytes
 commandByte = command.to_bytes(4, "big")

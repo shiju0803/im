@@ -5,9 +5,9 @@
 package com.sj.im.service.helper;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.sj.im.common.constant.TcpConstants;
+import com.github.zkclient.ZkClient;
 import com.sj.im.common.ClientType;
-import org.I0Itec.zkclient.ZkClient;
+import com.sj.im.common.constant.TcpConstants;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,9 +29,9 @@ public class ZookeeperHelper {
     public List<String> getAllNodeByClientType(Integer clientType) {
         List<String> nodes;
         if (ObjectUtil.equal(clientType, ClientType.WEB.getCode())) {
-            nodes = zkClient.getChildren(TcpConstants.IM_CORE_ZK_ROOT_WEB);
+            nodes = zkClient.getChildren(TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_WEB);
         } else {
-            nodes = zkClient.getChildren(TcpConstants.IM_CORE_ZK_ROOT_TCP);
+            nodes = zkClient.getChildren(TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_TCP);
         }
         return nodes;
     }

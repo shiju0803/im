@@ -23,5 +23,4 @@ public class DoStoreP2PMessageDto {
      * IM 消息体
      */
     private ImMessageBody messageBody;
-
 }

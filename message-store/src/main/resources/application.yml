@@ -1,0 +1,90 @@
+server:
+  port: 8100
+  servlet:
+    context-path: /store
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://106.52.219.98:3306/im?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: shiju1283
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      connection-timeout: 10000
+      idle-timeout: 30000 #连接空闲时间需要比最大生命周期时间短一些
+      max-lifetime: 400000 #连接最大生命周期需要比MYSQL连接空闲时间10分钟短一些
+      maximum-pool-size: 30
+      minimum-idle: 10
+      pool-name: im_HikariCP
+      validation-timeout: 1000
+
+  redis:
+    cluster:
+      nodes: 106.52.219.98:7361,106.52.219.98:7362,106.52.219.98:7363,106.52.219.98:7364,106.52.219.98:7365,106.52.219.98:7366
+      max-redirects: 3
+    password: shiju1283
+    timeout: 5000
+    jedis:
+      pool:
+        max-active: 50  # 允许最大连接数，默认8（负值表示没有限制）
+        max-idle: 8     # 最大空闲连接数，默认8
+        min-idle: 0     # 最小空闲连接数，默认0
+        max-wait: 3000ms    # 连接用完时，新的请求等待时间(s秒、ms毫秒)，超过该时间抛出异常JedisConnectionException，(默认-1，负值表示没有限制)
+
+  rabbitmq:
+    host: 106.52.219.98
+    port: 5672
+    virtual-host: /
+    username: shiju1283
+    password: shiju1283
+    connection-timeout: 2000
+    publisher-returns: true
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 10
+        acknowledge-mode: MANUAL
+        prefetch: 1
+    template:
+      mandatory: true
+    cache:
+      connection:
+        mode: CHANNEL
+      channel:
+        size: 36
+        checkout-timeout: 0
+
+  application:
+    name: store
+  mvc:
+    path match:
+      matching-strategy: ANT_PATH_MATCHER
+
+# logger配置
+logging:
+  config: classpath:logback-spring.xml
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) - %clr([%t]){faint} %X{traceId} %clr(%logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p - [%t] %X{traceId} %logger{39} : %m%n%wEx"
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/*.xml
+  global-config:
+    db-config:
+      update-strategy: NOT_EMPTY
+
+# httpclient配置
+httpclient:
+  maxTotal: 100
+  defaultMaxPerRoute: 50
+  connectTimeout: 2000
+  connectionRequestTimeout: 2000
+  socketTimeout: 5000
+  staleConnectionCheckEnabled: true

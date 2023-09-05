@@ -10,12 +10,13 @@ spring:
     hikari:
       auto-commit: true
       connection-test-query: SELECT 1
-      connection-timeout: 30000
+      connection-timeout: 10000
       idle-timeout: 30000 #连接空闲时间需要比最大生命周期时间短一些
-      max-lifetime: 1800000 #连接最大生命周期需要比MYSQL连接空闲时间10分钟短一些
-      maximum-pool-size: 100
-      minimum-idle: 5
+      max-lifetime: 400000 #连接最大生命周期需要比MYSQL连接空闲时间10分钟短一些
+      maximum-pool-size: 30
+      minimum-idle: 10
       pool-name: im_HikariCP
+      validation-timeout: 1000
 
   redis:
     cluster:
@@ -42,13 +43,13 @@ spring:
       simple:
         concurrency: 5
         max-concurrency: 10
-        acknowledge-mode: manual
+        acknowledge-mode: MANUAL
         prefetch: 1
     template:
       mandatory: true
     cache:
       connection:
-        mode: channel
+        mode: CHANNEL
       channel:
         size: 36
         checkout-timeout: 0
@@ -66,7 +67,7 @@ spring:
 appConfig:
   secretKey: ShiJu
   zkAddr: 106.52.219.98:2181,106.52.219.98:2182,106.52.219.98:2183 # zk连接地址
-  zkConnectTimeOut: 10000 # zk超时时间
+  zkConnectTimeOut: 40000 # zk超时时间
   imRouteWay: 3 # 路由策略 1随机 2轮循 3一致性hash
   consistentHashWay: 1 # 如果选用一致性hash的话具体hash算法 1 TreeMap 2 自定义Map
   callbackUrl: http://127.0.0.1:8000/im/v1/callback
@@ -108,7 +109,7 @@ mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   global-config:
     db-config:
-      update-strategy: not_empty
+      update-strategy: NOT_EMPTY
 
 # httpclient配置
 httpclient:

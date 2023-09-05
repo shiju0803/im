@@ -11,17 +11,21 @@ import com.sj.im.common.model.ResponseVO;
 import com.sj.im.common.model.message.MessageContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
 import com.sj.im.service.helper.MessageHelper;
+import com.sj.im.service.message.service.CheckSendMessageService;
 import com.sj.im.service.message.service.MessageStoreService;
+import com.sj.im.service.message.service.P2PMessageService;
 import com.sj.im.service.message.web.rep.SendMessageReq;
 import com.sj.im.service.message.web.resp.SendMessageResp;
-import com.sj.im.service.message.service.CheckSendMessageService;
-import com.sj.im.service.message.service.P2PMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author ShiJu
@@ -37,6 +41,24 @@ public class P2PMessageServiceImpl implements P2PMessageService {
     private MessageHelper messageHelper;
     @Resource
     private MessageStoreService messageStoreService;
+
+    private final ThreadPoolExecutor threadPoolExecutor;
+
+    {
+        /**
+         * 创建一个线程池，包含2个核心线程和4个最大线程，线程空闲时间为60秒，
+         * 等待队列容量为100，使用LinkedBlockingDeque作为等待队列，线程工厂使用匿名内部类实现，
+         * 通过AtomicInteger类保证线程名称的唯一性，线程为守护线程。
+         */
+        AtomicInteger num = new AtomicInteger(0);
+        threadPoolExecutor = new ThreadPoolExecutor(2, 4, Runtime.getRuntime().availableProcessors(), TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(100), r -> {
+                    Thread thread = new Thread(r);
+                    thread.setDaemon(true);
+                    thread.setName("message-process-thread-" + num.getAndIncrement());
+                    return thread;
+                });
+    }
 
     @Override
     public void process(MessageContent content) {

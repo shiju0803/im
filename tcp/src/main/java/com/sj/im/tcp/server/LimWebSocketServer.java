@@ -6,8 +6,11 @@ package com.sj.im.tcp.server;
 
 import com.sj.im.codec.WebSocketMessageDecoder;
 import com.sj.im.codec.WebSocketMessageEncoder;
-import com.sj.im.common.config.BootstrapConfig;
+import com.sj.im.tcp.config.TcpConfig;
+import com.sj.im.tcp.feign.FeignMessageService;
+import com.sj.im.tcp.handler.HeartBeatHandler;
 import com.sj.im.tcp.handler.NettyServerHandler;
+import com.sj.im.tcp.publish.MqMessageProducer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -21,6 +24,11 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RedissonClient;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 /**
  * @author ShiJu
@@ -28,16 +36,26 @@ import lombok.extern.slf4j.Slf4j;
  * @description: WebSocket网关服务
  */
 @Slf4j
+@Component
 public class LimWebSocketServer {
-    BootstrapConfig.TcpConfig config;
-    EventLoopGroup bossGroup;
-    EventLoopGroup workGroup;
-    ServerBootstrap server;
 
-    public LimWebSocketServer(BootstrapConfig.TcpConfig config) {
-        this.config = config;
-        bossGroup = new NioEventLoopGroup(config.getBossThreadSize());
-        workGroup = new NioEventLoopGroup(config.getWorkThreadSize());
+    @Resource
+    private TcpConfig tcpConfig;
+    @Resource
+    private RedissonClient redissonClient;
+    @Resource
+    private FeignMessageService feignMessageService;
+    @Resource
+    private MqMessageProducer mqMessageProducer;
+
+    private EventLoopGroup bossGroup;
+    private EventLoopGroup workGroup;
+    private ServerBootstrap server;
+
+    @PostConstruct
+    public void start() {
+        bossGroup = new NioEventLoopGroup(tcpConfig.getBossThreadSize());
+        workGroup = new NioEventLoopGroup(tcpConfig.getWorkThreadSize());
         server = new ServerBootstrap();
         server.group(bossGroup, workGroup)
                 .channel(NioServerSocketChannel.class)
@@ -53,7 +71,7 @@ public class LimWebSocketServer {
                         pipeline.addLast("http-codec", new HttpServerCodec());
                         // 对写大数据流的支持
                         pipeline.addLast("http-chunked", new ChunkedWriteHandler());
-                        // 几乎在netty中的编程，都会使用到此hanler
+                        // 几乎在netty中的编程，都会使用到此handler
                         pipeline.addLast("aggregator", new HttpObjectAggregator(65535));
                         /**
                          * websocket 服务器处理的协议，用于指定给客户端连接访问的路由 : /ws
@@ -62,14 +80,16 @@ public class LimWebSocketServer {
                          * 对于websocket来讲，都是以frames进行传输的，不同的数据类型对应的frames也不同
                          */
                         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
-                        pipeline.addLast(new WebSocketMessageDecoder());
-                        pipeline.addLast(new WebSocketMessageEncoder());
-                        pipeline.addLast(new NettyServerHandler(config.getBrokerId()));
+                        /**
+                         * 将 WebSocketMessageDecoder、WebSocketMessageEncoder 和 NettyServerHandler 添加到通道处理器链中
+                         */
+                        pipeline.addLast(new WebSocketMessageDecoder()); // 添加 WebSocket 消息解码器
+                        pipeline.addLast(new WebSocketMessageEncoder()); // 添加 WebSocket 消息编码器
+                        pipeline.addLast(new HeartBeatHandler(tcpConfig.getHeartBeatTime())); // 心跳处理器，用于处理客户端发来的心跳消息
+                        pipeline.addLast(new NettyServerHandler(redissonClient, feignMessageService, tcpConfig, mqMessageProducer)); // 添加 Netty 服务器处理器，用于处理客户端发送的消息
                     }
                 });
-    }
-
-    public void start() {
-        this.server.bind(config.getWebSocketPort());
+        server.bind(tcpConfig.getWebSocketPort());
+        log.info("WebSocket服务启动成功");
     }
 }

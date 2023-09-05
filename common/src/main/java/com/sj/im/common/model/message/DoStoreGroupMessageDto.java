@@ -23,5 +23,4 @@ public class DoStoreGroupMessageDto {
      * IM 消息体
      */
     private ImMessageBody messageBody;
-
 }

@@ -13,21 +13,22 @@
         <module>service</module>
         <module>tcp</module>
         <module>codec</module>
+        <module>message-store</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
-        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <hutool.version>5.8.20</hutool.version>
         <redisson.version>3.23.1</redisson.version>
         <snakeyaml.version>1.27</snakeyaml.version>
         <protostuff-api>1.0.10</protostuff-api>
-        <zkClient.version>0.1</zkClient.version>
-        <apache.httpclient.version>4.5.9</apache.httpclient.version>
+        <zookeeper.version>3.8.2</zookeeper.version>
+        <apache.httpclient.version>4.5.14</apache.httpclient.version>
         <rabbit.client.version>5.6.0</rabbit.client.version>
         <apache.commons.version>3.12.0</apache.commons.version>
         <springboot.version>2.7.15</springboot.version>
-        <feign.version>8.18.0</feign.version>
+        <feign.version>3.1.7</feign.version>
         <mysql.version>8.0.33</mysql.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -35,6 +36,11 @@
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <lombok.version>1.18.8</lombok.version>
         <fastjson.version>2.0.27</fastjson.version>
+        <snakeyaml.version>2.0</snakeyaml.version>
+        <guava.version>31.1-android</guava.version>
+        <knife4j.version>3.0.2</knife4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <swagger-annotations.version>1.6.11</swagger-annotations.version>
         <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
     </properties>
 
@@ -66,6 +72,31 @@
             </dependency>
             <!-- protostuff依赖包 end -->
 
+            <!-- yaml解析 -->
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
             <!-- commons -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -94,12 +125,6 @@
                 <version>${springboot.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-pool2</artifactId>
-                <version>${commons-pool2.version}</version>
-            </dependency>
-
             <!-- rabbitmq -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -111,6 +136,12 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
 
@@ -128,13 +159,6 @@
                 <version>${redisson.version}</version>
             </dependency>
 
-            <!-- yaml -->
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
-            </dependency>
-
             <!-- hutool -->
             <dependency>
                 <groupId>cn.hutool</groupId>
@@ -150,20 +174,15 @@
 
             <!--  zkClient -->
             <dependency>
-                <groupId>com.github.sgroschupf</groupId>
-                <artifactId>zkclient</artifactId>
-                <version>${zkClient.version}</version>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zookeeper.version}</version>
             </dependency>
 
             <!-- feign调用依赖 -->
             <dependency>
-                <groupId>com.netflix.feign</groupId>
-                <artifactId>feign-core</artifactId>
-                <version>${feign.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.netflix.feign</groupId>
-                <artifactId>feign-jackson</artifactId>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
                 <version>${feign.version}</version>
             </dependency>
             <!-- lombok -->

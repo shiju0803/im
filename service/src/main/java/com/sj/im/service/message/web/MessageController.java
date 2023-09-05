@@ -5,6 +5,7 @@
 package com.sj.im.service.message.web;
 
 import com.sj.im.common.model.ResponseVO;
+import com.sj.im.common.model.message.CheckSendMessageReq;
 import com.sj.im.service.message.service.P2PMessageService;
 import com.sj.im.service.message.web.rep.SendMessageReq;
 import com.sj.im.service.message.web.resp.SendMessageResp;
@@ -34,5 +35,12 @@ public class MessageController {
     @PostMapping("/send")
     public ResponseVO<SendMessageResp> send(@RequestBody @Validated SendMessageReq req) {
         return ResponseVO.successResponse(p2PMessageService.send(req));
+    }
+
+    @ApiOperation(value = "检查发送消息权限")
+    @PostMapping("/checkSend")
+    public ResponseVO<Object> checkSend(@RequestBody @Validated CheckSendMessageReq req) {
+        p2PMessageService.imServerPermissionCheck(req.getFromId(), req.getToId(), req.getAppId());
+        return ResponseVO.successResponse();
     }
 }

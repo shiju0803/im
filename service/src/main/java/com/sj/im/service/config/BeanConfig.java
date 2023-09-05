@@ -5,13 +5,13 @@
 package com.sj.im.service.config;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.github.zkclient.ZkClient;
 import com.sj.im.common.enums.ImUrlRouteWayEnum;
 import com.sj.im.common.enums.RouteHashMethodEnum;
 import com.sj.im.common.route.RouteHandle;
 import com.sj.im.common.route.algorithm.consistenthash.AbstractConsistentHash;
 import com.sj.im.service.util.SnowflakeIdWorker;
 import lombok.extern.slf4j.Slf4j;
-import org.I0Itec.zkclient.ZkClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -50,16 +50,6 @@ public class BeanConfig {
     @Bean
     public SnowflakeIdWorker buildSnowflakeSeq() {
         return new SnowflakeIdWorker(0);
-    }
-
-    /**
-     * 定义 EasySqlInjector Bean。
-     *
-     * @return EasySqlInjector 实例
-     */
-    @Bean
-    public EasySqlInjector easySqlInjector() {
-        return new EasySqlInjector();
     }
 
     /**

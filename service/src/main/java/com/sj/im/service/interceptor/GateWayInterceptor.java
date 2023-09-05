@@ -12,11 +12,11 @@ import com.sj.im.common.enums.exception.BaseExceptionEnum;
 import com.sj.im.common.enums.exception.GateWayErrorCode;
 import com.sj.im.common.model.ResponseVO;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +37,7 @@ public class GateWayInterceptor implements HandlerInterceptor {
     private String debug;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull Object handler) throws Exception {
         String dev = request.getParameter("debug");
         if (ObjectUtil.equal(debug, dev)) {
             return true;
