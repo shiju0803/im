@@ -26,12 +26,6 @@ public class BusinessException extends RuntimeException {
         this.msg = errorCode.getMsg();
     }
 
-    public BusinessException(Object data, BaseExceptionEnum errorCode) {
-        super(errorCode.getMsg());
-        this.code = errorCode.getCode();
-        this.msg = errorCode.getMsg();
-    }
-
     public BusinessException(Integer code, String msg) {
         super(msg);
         this.code = code;

@@ -4,7 +4,7 @@
 
 package com.sj.im.tcp.redis;
 
-import com.sj.im.codec.config.BootstrapConfig;
+import com.sj.im.common.config.BootstrapConfig;
 import com.sj.im.common.constant.RedisConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
@@ -92,6 +92,8 @@ public class RedissonClientStrategy {
         Config config = new Config();
         String address = redisConfig.getCluster().getNodes();
         ClusterServersConfig clusterServersConfig = config.useClusterServers()
+                .setKeepAlive(true)
+                .setPingConnectionInterval(redisConfig.getPingConnectionInterval())
                 .addNodeAddress(getNodes(address))
                 .setPassword(redisConfig.getPassword())
                 .setTimeout(redisConfig.getTimeout())

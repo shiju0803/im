@@ -39,7 +39,7 @@ public class UserSessionHelper {
             String str = (String) entry;
             UserSession userSession = JSONUtil.toBean(str, UserSession.class);
 
-            if (ObjectUtil.equal(userSession.getConnectState(), ImConnectStatusEnum.ONLINE_STATUS)) {
+            if (ObjectUtil.equal(userSession.getConnectState(), ImConnectStatusEnum.ONLINE_STATUS.getCode())) {
                 userSessions.add(userSession);
             }
         });

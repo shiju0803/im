@@ -6,7 +6,7 @@ package com.sj.im.tcp.listener;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
-import com.sj.im.codec.pack.MessagePack;
+import com.sj.im.codec.proto.MessagePack;
 import com.sj.im.common.constant.RedisConstants;
 import com.sj.im.common.constant.TcpConstants;
 import com.sj.im.common.ClientType;

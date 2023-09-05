@@ -9,15 +9,18 @@ lim:
   #            3 允许手机和电脑单设备 + web 同时在线 踢掉非本client+imei的同端设备
   #            4 允许所有端多设备登录 不踢任何设备
   loginModel: 1
+  brokerId: 1000
+  logicUrl: http://127.0.0.1:8000/im/v1
 
   redis:
     model: cluster # 单机模式：single 哨兵模式：sentinel 集群模式：cluster
     database: 1
     password: shiju1283
-    timeout: 4000 # 超时时间
+    timeout: 3000 # 超时时间
     poolMinIdle: 8 #最小空闲数
     poolConnTimeout: 3000 # 连接超时时间(毫秒)
     poolSize: 10 # 连接池大小
+    pingConnectionInterval: 60000
     single:
       address: 106.52.219.98:7361
     sentinel:
@@ -35,4 +38,4 @@ lim:
 
   zkConfig:
     zkAddr: 106.52.219.98:2181,106.52.219.98:2182,106.52.219.98:2183
-    zkConnectTimeOut: 10000
+    zkConnectTimeOut: 50000

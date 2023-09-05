@@ -22,26 +22,28 @@ spring:
       nodes: 106.52.219.98:7361,106.52.219.98:7362,106.52.219.98:7363,106.52.219.98:7364,106.52.219.98:7365,106.52.219.98:7366
       max-redirects: 3
     password: shiju1283
-    lettuce:
-      cluster:
-        refresh:
-          adaptive: true
-          period: 10
+    timeout: 5000
+    jedis:
+      pool:
+        max-active: 50  # 允许最大连接数，默认8（负值表示没有限制）
+        max-idle: 8     # 最大空闲连接数，默认8
+        min-idle: 0     # 最小空闲连接数，默认0
+        max-wait: 3000ms    # 连接用完时，新的请求等待时间(s秒、ms毫秒)，超过该时间抛出异常JedisConnectionException，(默认-1，负值表示没有限制)
 
   rabbitmq:
     host: 106.52.219.98
     port: 5672
     virtual-host: /
-    addresses: 106.52.219.98
     username: shiju1283
     password: shiju1283
+    connection-timeout: 2000
+    publisher-returns: true
     listener:
       simple:
         concurrency: 5
         max-concurrency: 10
         acknowledge-mode: manual
         prefetch: 1
-    publisher-returns: true
     template:
       mandatory: true
     cache:
@@ -58,14 +60,16 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
   main:
     allow-circular-references: true
+  debug: dev
 
 # 应用配置
 appConfig:
+  secretKey: ShiJu
   zkAddr: 106.52.219.98:2181,106.52.219.98:2182,106.52.219.98:2183 # zk连接地址
   zkConnectTimeOut: 10000 # zk超时时间
   imRouteWay: 3 # 路由策略 1随机 2轮循 3一致性hash
   consistentHashWay: 1 # 如果选用一致性hash的话具体hash算法 1 TreeMap 2 自定义Map
-  callbackUrl: http://127.0.0.1:8000/im/callback
+  callbackUrl: http://127.0.0.1:8000/im/v1/callback
   sendMessageCheckFriend: true # 发送消息是否校验关系链
   sendMessageCheckBlack: true # 发送消息是否校验黑名单
   modifyUserAfterCallback: true # 用户资料变更之后回调开关
@@ -89,6 +93,9 @@ appConfig:
 # logger配置
 logging:
   config: classpath:logback-spring.xml
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) - %clr([%t]){faint} %X{traceId} %clr(%logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p - [%t] %X{traceId} %logger{39} : %m%n%wEx"
 
 server:
   port: 8000

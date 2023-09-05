@@ -4,8 +4,11 @@
 
 package com.sj.im.tcp.publish;
 
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.rabbitmq.client.Channel;
+import com.sj.im.codec.proto.Message;
+import com.sj.im.common.constant.RabbitConstants;
 import com.sj.im.tcp.util.MqFactory;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,13 +22,20 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class MqMessageProducer {
 
-    public static void sendMessage(Object message) {
-        Channel channel = null;
-        String channelName = "";
+    private MqMessageProducer() {}
+
+    public static void sendMessage(Message message, Integer command) {
+        String channelName = RabbitConstants.IM_EXCHANGE;
 
         try {
-            channel = MqFactory.getChannel(channelName);
-            channel.basicPublish(channelName, "", null, JSONUtil.toJsonStr(message).getBytes(StandardCharsets.UTF_8));
+            Channel channel = MqFactory.getChannel(channelName);
+            JSONObject jsonObject = JSONUtil.parseObj(message.getMessagePack());
+            jsonObject.putOpt("command", command);
+            jsonObject.putOpt("clientType", message.getMessageHeader().getClientType());
+            jsonObject.putOpt("imei", message.getMessageHeader().getImei());
+            jsonObject.putOpt("appId", message.getMessageHeader().getAppId());
+
+            channel.basicPublish(channelName, "", null, jsonObject.toString().getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             log.error("发送消息出现异常：{}", e.getMessage());
         }

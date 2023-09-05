@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * @author ShiJu
+ * @version 1.0
+ * @description: MybatisPlus配置类（修复createTime、updateTime不自动更新）
+ */
 @Component
 public class MybatisMetaObjectHandler implements MetaObjectHandler {
     @Override
@@ -25,11 +30,13 @@ public class MybatisMetaObjectHandler implements MetaObjectHandler {
 
     private void insertOrUpdateFill(MetaObject metaObject, boolean isInsert) {
         if (isInsert) {
-            if (Objects.isNull(getFieldValByName("createTime",metaObject)))
-            this.setFieldValByName("createTime", new Date(), metaObject);
+            if (Objects.isNull(getFieldValByName("createTime", metaObject))) {
+                this.setFieldValByName("createTime", new Date(), metaObject);
+            }
         } else {
-            if (Objects.isNull(getFieldValByName("updateTime",metaObject)))
-            this.setFieldValByName("updateTime", new Date(), metaObject);
+            if (Objects.isNull(getFieldValByName("updateTime", metaObject))) {
+                this.setFieldValByName("updateTime", new Date(), metaObject);
+            }
         }
     }
 }

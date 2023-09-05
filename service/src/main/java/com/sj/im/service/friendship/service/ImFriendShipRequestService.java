@@ -4,10 +4,10 @@
 
 package com.sj.im.service.friendship.service;
 
-import com.sj.im.common.ResponseVO;
-import com.sj.im.service.friendship.dao.ImFriendShipRequestEntity;
-import com.sj.im.service.friendship.model.req.ApproveFriendRequestReq;
-import com.sj.im.service.friendship.model.req.FriendShipReq;
+import com.sj.im.service.friendship.entry.ImFriendShipRequestEntity;
+import com.sj.im.service.friendship.web.req.ApproveFriendRequestReq;
+import com.sj.im.service.friendship.web.req.FriendDto;
+import com.sj.im.service.friendship.web.req.ReadFriendShipRequestReq;
 
 import java.util.List;
 
@@ -17,23 +17,36 @@ import java.util.List;
  * @description: 好友申请业务接口
  */
 public interface ImFriendShipRequestService {
-    /**
-     * 添加好友请求
-     */
-    ResponseVO<String> addFriendshipRequest(FriendShipReq req);
 
     /**
-     * 审批好友请求
+     * 添加好友申请
+     *
+     * @param fromId 申请人ID
+     * @param dto    好友信息
+     * @param appId  应用ID
      */
-    ResponseVO<String> approveFriendRequest(ApproveFriendRequestReq req);
+    void addFriendshipRequest(String fromId, FriendDto dto, Integer appId);
 
     /**
-     * 已读好友请求
+     * 审批好友申请
+     *
+     * @param req 审批请求
      */
-    ResponseVO<String> readFriendShipRequestReq(FriendShipReq req);
+    void approveFriendRequest(ApproveFriendRequestReq req);
 
     /**
-     * 获得好友请求
+     * 标记好友申请为已读
+     *
+     * @param req 标记请求
      */
-    ResponseVO<List<ImFriendShipRequestEntity>> getFriendRequest(FriendShipReq req);
+    void readFriendShipRequestReq(ReadFriendShipRequestReq req);
+
+    /**
+     * 获取好友申请列表
+     *
+     * @param fromId 申请人ID
+     * @param appId  应用ID
+     * @return 好友申请列表
+     */
+    List<ImFriendShipRequestEntity> getFriendRequest(String fromId, Integer appId);
 }

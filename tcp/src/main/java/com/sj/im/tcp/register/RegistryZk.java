@@ -4,7 +4,7 @@
 
 package com.sj.im.tcp.register;
 
-import com.sj.im.codec.config.BootstrapConfig;
+import com.sj.im.common.config.BootstrapConfig;
 import com.sj.im.common.constant.TcpConstants;
 import lombok.extern.slf4j.Slf4j;
 

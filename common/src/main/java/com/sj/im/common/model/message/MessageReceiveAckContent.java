@@ -36,4 +36,9 @@ public class MessageReceiveAckContent extends ClientInfo {
      * 消息序列号
      */
     private Long messageSequence;
+
+    /**
+     * 是否是服务端发送
+     */
+    private Boolean serverSend;
 }

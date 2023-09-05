@@ -41,12 +41,13 @@ public class SessionSocketHolder {
         CHANNELS.put(dto, channel);
     }
 
-    public static NioSocketChannel get(Integer appId, String userId, Integer clientType) {
-        UserClientDto dto = new UserClientDto();
-        dto.setAppId(appId);
-        dto.setUserId(userId);
-        dto.setClientType(clientType);
-        return CHANNELS.get(dto);
+    public static NioSocketChannel get(Integer appId, String userId, Integer clientType, String imei){
+        UserClientDto userClientDto = new UserClientDto();
+        userClientDto.setAppId(appId);
+        userClientDto.setUserId(userId);
+        userClientDto.setClientType(clientType);
+        userClientDto.setImei(imei);
+        return CHANNELS.get(userClientDto);
     }
 
     public static List<NioSocketChannel> getAll(Integer appId, String userId) {
