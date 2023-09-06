@@ -164,4 +164,16 @@ public class AppConfig {
      */
     @Value("${appConfig.sendGroupMessageBeforeCallback}")
     private boolean sendGroupMessageBeforeCallback;
+
+    /**
+     * 删除会话同步模式 1多端同步
+     */
+    @Value("${appConfig.deleteConversationSyncMode}")
+    private Integer deleteConversationSyncMode;
+
+    /**
+     * 离线消息最大条数
+     */
+    @Value("${appConfig.offlineMessageCount}")
+    private Integer offlineMessageCount;
 }

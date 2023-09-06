@@ -11,7 +11,9 @@ import com.rabbitmq.client.Channel;
 import com.sj.im.common.constant.RabbitConstants;
 import com.sj.im.common.enums.command.GroupEventCommand;
 import com.sj.im.common.model.message.GroupChatMessageContent;
+import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.service.group.service.GroupMessageService;
+import com.sj.im.service.message.service.MessageSyncService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -36,7 +38,10 @@ import java.util.Map;
 @Component
 public class GroupChatOperateReceiver {
     @Resource
-    private GroupMessageService groupMessageService; // 自动注入群消息服务
+    private GroupMessageService groupMessageService;
+    @Resource
+    private MessageSyncService messageSyncService;
+
     // 监听RabbitMQ队列，接收消息
     @RabbitListener(
             bindings = @QueueBinding(
@@ -58,6 +63,10 @@ public class GroupChatOperateReceiver {
                 // 处理消息
                 GroupChatMessageContent messageContent = jsonObject.toBean(GroupChatMessageContent.class);
                 groupMessageService.process(messageContent);
+            }
+            if (ObjectUtil.equal(command, GroupEventCommand.MSG_GROUP_READ.getCommand())) {
+                MessageReadContent readContent = jsonObject.toBean(MessageReadContent.class);
+                messageSyncService.groupReadMark(readContent);
             }
             channel.basicAck(deliveryTag, false); // 手动确认消息已被消费
         } catch (Exception e) {

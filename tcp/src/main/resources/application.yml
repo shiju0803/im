@@ -79,11 +79,11 @@ redisson:
   model: cluster # 单机模式：single 哨兵模式：sentinel 集群模式：cluster
   database: 1
   password: shiju1283
-  timeout: 50000 # 超时时间
+  timeout: 2000 # 超时时间
   poolMinIdle: 8 #最小空闲数
   poolConnTimeout: 3000 # 连接超时时间(毫秒)
   poolSize: 10 # 连接池大小
-  pingConnectionInterval: 50000
+  pingConnectionInterval: 2000
   address: 106.52.219.98:7361
   nodes: 106.52.219.98:7361,106.52.219.98:7362,106.52.219.98:7363,106.52.219.98:7364,106.52.219.98:7365,106.52.219.98:7366
   masterName: redis-master

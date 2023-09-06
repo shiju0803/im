@@ -91,6 +91,8 @@ appConfig:
   sendMessageBeforeCallback: true # 发送单聊消息之前
   sendGroupMessageAfterCallback: true # 发送群聊消息之后
   sendGroupMessageBeforeCallback: true # 发送群聊消息之前
+  offlineMessageCount: 1000 # 离线消息存储条数
+  deleteConversationSyncMode: 1 # 1多端同步
 
 # logger配置
 logging:

@@ -15,6 +15,7 @@ import lombok.Getter;
 public enum ConversationEventCommand implements Command {
 
     CONVERSATION_DELETE(5000, "删除会话"),
+
     CONVERSATION_UPDATE(5001, "更新会话");
 
     private final int command;

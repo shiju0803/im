@@ -132,8 +132,7 @@ public class ImGroupServiceImpl implements ImGroupService {
             throw new BusinessException(GroupErrorCode.PUBLIC_GROUP_MUST_HAVE_OWNER);
         }
 
-        ImGroupEntity imGroupEntity = new ImGroupEntity();
-        BeanUtil.copyProperties(req, imGroupEntity);
+        ImGroupEntity imGroupEntity = BeanUtil.toBean(req, ImGroupEntity.class);
         imGroupEntity.setCreateTime(new Date());
         imGroupEntity.setStatus(GroupStatusEnum.NORMAL.getCode());
         imGroupMapper.insert(imGroupEntity);

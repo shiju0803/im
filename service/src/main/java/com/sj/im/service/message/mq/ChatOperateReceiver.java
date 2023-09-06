@@ -11,6 +11,7 @@ import com.rabbitmq.client.Channel;
 import com.sj.im.common.constant.RabbitConstants;
 import com.sj.im.common.enums.command.MessageCommand;
 import com.sj.im.common.model.message.MessageContent;
+import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
 import com.sj.im.service.message.service.MessageSyncService;
 import com.sj.im.service.message.service.impl.P2PMessageServiceImpl;
@@ -62,9 +63,14 @@ public class ChatOperateReceiver {
                 p2PMessageServiceImpl.process(messageContent);
             }
             // 处理消息接收确认
-            if (ObjectUtil.equal(command, MessageCommand.MSG_RECEIVE_ACK)) {
+            if (ObjectUtil.equal(command, MessageCommand.MSG_RECEIVE_ACK.getCommand())) {
                 MessageReceiveAckContent ackContent = jsonObject.toBean(MessageReceiveAckContent.class);
                 messageSyncService.receiveMark(ackContent);
+            }
+            // 处理消息已读
+            if (ObjectUtil.equal(command, MessageCommand.MSG_READ.getCommand())) {
+                MessageReadContent readContent = jsonObject.toBean(MessageReadContent.class);
+                messageSyncService.readMark(readContent);
             }
             channel.basicAck(deliveryTag, false);
         } catch (Exception e) {
