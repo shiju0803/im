@@ -11,6 +11,8 @@ import com.rabbitmq.client.Channel;
 import com.sj.im.common.constant.RabbitConstants;
 import com.sj.im.common.enums.command.MessageCommand;
 import com.sj.im.common.model.message.MessageContent;
+import com.sj.im.common.model.message.MessageReceiveAckContent;
+import com.sj.im.service.message.service.MessageSyncService;
 import com.sj.im.service.message.service.impl.P2PMessageServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -38,6 +40,8 @@ import java.util.Map;
 public class ChatOperateReceiver {
     @Resource
     private P2PMessageServiceImpl p2PMessageServiceImpl;
+    @Resource
+    private MessageSyncService messageSyncService;
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = RabbitConstants.IM_2_MESSAGE_SERVICE_QUEUE, durable = "true"),
@@ -52,10 +56,15 @@ public class ChatOperateReceiver {
             JSONObject jsonObject = JSONUtil.parseObj(msg);
             Integer command = jsonObject.getInt("command");
 
+            // 处理私聊消息
             if (ObjectUtil.equal(command, MessageCommand.MSG_P2P.getCommand())) {
-                // 处理消息
                 MessageContent messageContent = jsonObject.toBean(MessageContent.class);
                 p2PMessageServiceImpl.process(messageContent);
+            }
+            // 处理消息接收确认
+            if (ObjectUtil.equal(command, MessageCommand.MSG_RECEIVE_ACK)) {
+                MessageReceiveAckContent ackContent = jsonObject.toBean(MessageReceiveAckContent.class);
+                messageSyncService.receiveMark(ackContent);
             }
             channel.basicAck(deliveryTag, false);
         } catch (Exception e) {

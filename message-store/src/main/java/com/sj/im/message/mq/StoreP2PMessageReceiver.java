@@ -32,7 +32,6 @@ import java.util.Map;
 @Slf4j
 @Service
 public class StoreP2PMessageReceiver {
-
     @Resource
     private StoreMessageService storeMessageService;
 
@@ -47,9 +46,9 @@ public class StoreP2PMessageReceiver {
     @RabbitListener(
             bindings = @QueueBinding(
                     value = @Queue(value = RabbitConstants.STORE_P2P_MESSAGE_QUEUE, durable = "true"), // 定义队列名称及持久化
-                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE, durable = "true") // 定义交换机名称及持久化
-            ), concurrency = "1" // 设置并发数为1
-    )
+                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE), // 定义交换机名称
+                    key = RabbitConstants.STORE_P2P_MESSAGE_QUEUE), // 指定key
+            concurrency = "1") // 设置并发数为1
     public void onChatMessage(@Payload Message message, @Headers Map<String,Object> headers, Channel channel) throws Exception {
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);
         log.info("CHAT MSG FORM QUEUE ::: {}", msg);
@@ -61,7 +60,8 @@ public class StoreP2PMessageReceiver {
             ImMessageBodyEntity messageBody = JSONUtil.toBean(jsonObject.getStr("messageBody"), ImMessageBodyEntity.class);
             p2PMessageDto.setImMessageBodyEntity(messageBody);
             storeMessageService.doStoreP2PMessage(p2PMessageDto);
-
+            // 手动确认消息已处理
+            channel.basicAck(deliveryTag, false);
         } catch (Exception e) {
             log.error("处理消息出现异常：{}", e.getMessage());
             log.error("RMQ_CHAT_TRAN_ERROR", e);

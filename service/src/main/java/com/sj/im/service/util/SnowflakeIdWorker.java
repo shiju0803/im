@@ -5,6 +5,7 @@
 package com.sj.im.service.util;
 
 import cn.hutool.core.date.SystemClock;
+import com.sj.im.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -150,7 +151,7 @@ public class SnowflakeIdWorker {
             if (lastTimestampBak - SystemClock.now() / 1000 <= BACK_TIME_MAX) {
                 timestamp = lastTimestampBak;
             } else {
-                throw new RuntimeException(String.format("时钟回拨: now: [%d] last: [%d]", timestamp, lastTimestampBak));
+                throw new BusinessException(String.format("时钟回拨: now: [%d] last: [%d]", timestamp, lastTimestampBak));
             }
         }
 

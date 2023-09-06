@@ -4,7 +4,9 @@
 
 package com.sj.im.service.message.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.sj.im.codec.pack.message.ChatMessageAck;
+import com.sj.im.common.constant.SeqConstants;
 import com.sj.im.common.enums.command.MessageCommand;
 import com.sj.im.common.model.ClientInfo;
 import com.sj.im.common.model.ResponseVO;
@@ -16,6 +18,8 @@ import com.sj.im.service.message.service.MessageStoreService;
 import com.sj.im.service.message.service.P2PMessageService;
 import com.sj.im.service.message.web.rep.SendMessageReq;
 import com.sj.im.service.message.web.resp.SendMessageResp;
+import com.sj.im.service.seq.RedisSeq;
+import com.sj.im.service.util.ConversationIdGenerate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -41,6 +45,8 @@ public class P2PMessageServiceImpl implements P2PMessageService {
     private MessageHelper messageHelper;
     @Resource
     private MessageStoreService messageStoreService;
+    @Resource
+    private RedisSeq redisSeq;
 
     private final ThreadPoolExecutor threadPoolExecutor;
 
@@ -53,16 +59,60 @@ public class P2PMessageServiceImpl implements P2PMessageService {
         AtomicInteger num = new AtomicInteger(0);
         threadPoolExecutor = new ThreadPoolExecutor(2, 4, Runtime.getRuntime().availableProcessors(), TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(100), r -> {
-                    Thread thread = new Thread(r);
-                    thread.setDaemon(true);
-                    thread.setName("message-process-thread-" + num.getAndIncrement());
-                    return thread;
-                });
+            Thread thread = new Thread(r);
+            thread.setDaemon(true);
+            thread.setName("message-process-thread-" + num.getAndIncrement());
+            return thread;
+        });
     }
 
+    /**
+     * 处理消息
+     *
+     * @param content 消息内容
+     */
     @Override
     public void process(MessageContent content) {
+        log.info("消息开始处理：{}", content.getMessageId());
+        MessageContent messageCache = messageStoreService.getMessageFromMessageIdCache(content.getAppId(), content.getMessageId(), MessageContent.class);
+        if (ObjectUtil.isNotNull(messageCache)) {
+            threadPoolExecutor.execute(() -> {
+                // 回ack成功给自己
+                ack(messageCache, ResponseVO.successResponse());
+                // 发消息给同步其他在线端
+                syncToSender(messageCache, messageCache);
+                // 发消息给对方在线端
+                List<ClientInfo> clientInfos = dispatchMessage(messageCache);
 
+                if (ObjectUtil.isEmpty(clientInfos)) {
+                    // 发送接收确认给发送方，要带上服务端发送的标识
+                    receiverAck(messageCache);
+                }
+            });
+            return;
+        }
+
+        // appId + seq + (from + to) groupId
+        long seq = redisSeq.doGetSeq(content.getAppId() + ":" + SeqConstants.MESSAGE_SEQ + ":"
+                + ConversationIdGenerate.generateP2PId(content.getFromId(), content.getToId()));
+        content.setMessageSequence(seq);
+
+        threadPoolExecutor.execute(() -> {
+            messageStoreService.storeP2PMessage(content);
+            // 回ack成功给自己
+            ack(content, ResponseVO.successResponse());
+            // 发消息给同步其他在线端
+            syncToSender(content, content);
+            // 发消息给对方在线端
+            List<ClientInfo> clientInfos = dispatchMessage(content);
+
+            // 将messageId缓存到Redis
+            messageStoreService.setMessageFromMessageIdCache(content.getAppId(), content.getMessageId(), content);
+            if (ObjectUtil.isEmpty(clientInfos)) {
+                // 发送接收确认给发送方，要带上服务端发送的标识
+                receiverAck(content);
+            }
+        });
     }
 
     /**

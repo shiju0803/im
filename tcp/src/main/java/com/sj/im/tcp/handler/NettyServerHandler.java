@@ -46,10 +46,10 @@ import java.net.InetAddress;
  */
 @Slf4j
 public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
-    private TcpConfig nettyConfig;
-    private RedissonClient redissonClient;
-    private MqMessageProducer mqMessageProducer;
-    private FeignMessageService feignMessageService;
+    private final TcpConfig nettyConfig;
+    private final RedissonClient redissonClient;
+    private final MqMessageProducer mqMessageProducer;
+    private final FeignMessageService feignMessageService;
 
     public NettyServerHandler(RedissonClient redissonClient, FeignMessageService feignMessageService, TcpConfig nettyConfig, MqMessageProducer mqMessageProducer) {
         this.redissonClient = redissonClient;
@@ -88,9 +88,10 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
             return;
         }
 
-        // 私聊command
+        // 聊天command
         if (ObjectUtil.equal(command, MessageCommand.MSG_P2P.getCommand()) || ObjectUtil.equal(command, GroupEventCommand.MSG_GROUP.getCommand())) {
             processMsgEvent(ctx, msg, command);
+            return;
         }
 
         // 默认将消息发送到消息队列
@@ -129,7 +130,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         try {
             String hostAddress = InetAddress.getLocalHost().getHostAddress();
             userSession.setBrokerHost(hostAddress);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("获取主机地址失败: {}", e.getMessage());
         }
 
@@ -188,37 +189,35 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
     private void processMsgEvent(ChannelHandlerContext ctx, Message msg, Integer command) {
         try {
             // 获取消息的发送者和接收者 ID，并创建 CheckSendMessageReq 对象
-            String toId = "";
             CheckSendMessageReq req = new CheckSendMessageReq();
             req.setAppId(msg.getMessageHeader().getAppId());
             req.setCommand(msg.getMessageHeader().getCommand());
+
             JSONObject jsonObject = JSONUtil.parseObj(msg.getMessagePack());
-            String fromId = jsonObject.getStr("fromId");
+            req.setFromId(jsonObject.getStr("fromId"));
             if (ObjectUtil.equal(command, MessageCommand.MSG_P2P.getCommand())) {
-                toId = jsonObject.getStr("toId");
+                req.setToId(jsonObject.getStr("toId"));
             } else {
-                toId = jsonObject.getStr("groupId");
+                req.setToId(jsonObject.getStr("groupId"));
             }
-            req.setToId(toId);
-            req.setFromId(fromId);
+
             // 调用 Feign 客户端接口，检查是否可以发送消息
             ResponseVO<Object> response = feignMessageService.checkSendMessage(req);
             // 如果检查通过，则将消息发送到消息队列
             if (response.isOk()) {
                 mqMessageProducer.sendMessage(msg, command);
             } else { // 否则，将检查结果返回给客户端
-                int ackCommand = 0;
+                MessagePack<ResponseVO<Object>> ack = new MessagePack<>();
                 if (ObjectUtil.equal(command, MessageCommand.MSG_P2P.getCommand())) {
-                    ackCommand = MessageCommand.MSG_ACK.getCommand();
+                    ack.setCommand(MessageCommand.MSG_ACK.getCommand());
                 } else {
-                    ackCommand = GroupEventCommand.GROUP_MSG_ACK.getCommand();
+                    ack.setCommand(GroupEventCommand.GROUP_MSG_ACK.getCommand());
                 }
+
                 // 创建 ChatMessageAck 对象，并将检查结果封装为 RestResponse 对象
                 ChatMessageAck chatMessageAck = new ChatMessageAck(jsonObject.getStr("messageId"));
                 response.setData(chatMessageAck);
-                MessagePack<ResponseVO<Object>> ack = new MessagePack<>();
                 ack.setData(response);
-                ack.setCommand(ackCommand);
                 // 将检查结果发送给客户端
                 ctx.channel().writeAndFlush(ack);
             }

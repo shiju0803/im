@@ -9,6 +9,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.sj.im.common.config.GlobalHttpClientConfig;
+import com.sj.im.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.config.RequestConfig;
@@ -96,7 +97,7 @@ public class HttpRequestUtil {
 
         } catch (IOException e) {
             log.error("get请求发送失败,url:{}, errMsg:{}", url, e.getMessage());
-            throw new RuntimeException(e);
+            throw new BusinessException(e);
         }
         return result;
     }
@@ -194,7 +195,7 @@ public class HttpRequestUtil {
 
         } catch (IOException e) {
             log.error("post请求发送失败,url:{}, errMsg:{}", url, e.getMessage());
-            throw new RuntimeException(e);
+            throw new BusinessException(e);
         }
         return result;
     }

@@ -42,9 +42,9 @@ public class StoreGroupMessageReceiver {
     @RabbitListener(
             bindings = @QueueBinding(
                     value = @Queue(value = RabbitConstants.STORE_GROUP_MESSAGE_QUEUE, durable = "true"), // 定义队列名称及持久化
-                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE) // 定义交换机名称及持久化
-            ), concurrency = "1" // 设置并发数为1
-    )
+                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE), // 定义交换机名称
+                    key = RabbitConstants.STORE_GROUP_MESSAGE_QUEUE), // 指定key
+            concurrency = "1") // 设置并发数为1
     public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws Exception {
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);
         log.info("CHAT MSG FORM QUEUE ::: {}", msg);

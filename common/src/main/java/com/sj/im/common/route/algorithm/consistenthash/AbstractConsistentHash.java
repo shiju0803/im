@@ -4,6 +4,8 @@
 
 package com.sj.im.common.route.algorithm.consistenthash;
 
+import com.sj.im.common.exception.BusinessException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -71,7 +73,7 @@ public abstract class AbstractConsistentHash {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("MD5 not supported", e);
+            throw new BusinessException("MD5 not supported", e);
         }
         // 重置 MD5 消息摘要
         md5.reset();

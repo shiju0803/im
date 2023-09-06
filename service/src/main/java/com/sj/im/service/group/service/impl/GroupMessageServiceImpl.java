@@ -6,23 +6,31 @@ package com.sj.im.service.group.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.sj.im.codec.pack.message.ChatMessageAck;
+import com.sj.im.common.constant.SeqConstants;
 import com.sj.im.common.enums.command.GroupEventCommand;
 import com.sj.im.common.model.ClientInfo;
 import com.sj.im.common.model.ResponseVO;
 import com.sj.im.common.model.message.GroupChatMessageContent;
 import com.sj.im.common.model.message.MessageContent;
+import com.sj.im.common.model.message.OfflineMessageContent;
 import com.sj.im.service.group.service.GroupMessageService;
 import com.sj.im.service.group.service.ImGroupMemberService;
 import com.sj.im.service.group.web.req.SendGroupMessageReq;
 import com.sj.im.service.helper.MessageHelper;
+import com.sj.im.service.message.service.CheckSendMessageService;
 import com.sj.im.service.message.service.MessageStoreService;
 import com.sj.im.service.message.web.resp.SendMessageResp;
-import com.sj.im.service.message.service.CheckSendMessageService;
+import com.sj.im.service.seq.RedisSeq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author ShiJu
@@ -40,10 +48,73 @@ public class GroupMessageServiceImpl implements GroupMessageService {
     private ImGroupMemberService imGroupMemberService;
     @Resource
     private MessageStoreService messageStoreService;
+    @Resource
+    private RedisSeq redisSeq;
 
+    private final ThreadPoolExecutor threadPoolExecutor;
+
+    {
+        /**
+         * 创建一个线程池，包含2个核心线程和4个最大线程，线程空闲时间为60秒，
+         * 等待队列容量为100，使用LinkedBlockingDeque作为等待队列，线程工厂使用匿名内部类实现，
+         * 通过AtomicInteger类保证线程名称的唯一性，线程为守护线程。
+         */
+        AtomicInteger num = new AtomicInteger(0);
+        threadPoolExecutor = new ThreadPoolExecutor(2, 4, Runtime.getRuntime().availableProcessors(), TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(100), r -> {
+            Thread thread = new Thread(r);
+            thread.setDaemon(true);
+            thread.setName("group-message-process-thread-" + num.getAndIncrement());
+            return thread;
+        });
+    }
+
+    /**
+     * 这个方法处理一个群聊消息。
+     *
+     * @param content 要处理的消息内容。
+     */
     @Override
     public void process(GroupChatMessageContent content) {
+        Integer appId = content.getAppId();
+        String messageId = content.getMessageId();
+        String groupId = content.getGroupId();
 
+        // 判断是否是重复消息
+        GroupChatMessageContent messageCache = messageStoreService.getMessageFromMessageIdCache(appId, messageId, GroupChatMessageContent.class);
+        if (ObjectUtil.isNotNull(messageCache)) {
+            threadPoolExecutor.execute(() -> {
+                // 1.回ack成功给自己
+                ack(messageCache, ResponseVO.successResponse());
+                // 2.发消息给同步在线端
+                syncToSender(messageCache, messageCache);
+                // 3.发消息给对方在线端
+                dispatchMessage(messageCache);
+            });
+        }
+        // 获取消息序列号
+        long seq = redisSeq.doGetSeq(appId + ":" + SeqConstants.GROUP_SEQ + groupId);
+        content.setMessageSequence(seq);
+        threadPoolExecutor.execute(() -> {
+            // 存储消息
+            messageStoreService.storeGroupMessage(content);
+            // 获取群成员ID
+            List<String> groupMemberId = imGroupMemberService.getGroupMemberId(groupId, appId);
+            content.setMemberId(groupMemberId);
+            // 存储离线消息
+            OfflineMessageContent offlineMessageContent = new OfflineMessageContent();
+            BeanUtils.copyProperties(content, offlineMessageContent);
+            offlineMessageContent.setToId(content.getGroupId());
+            messageStoreService.storeGroupOfflineMessage(offlineMessageContent, groupMemberId);
+            // 1.回ack成功给自己
+            ack(content, ResponseVO.successResponse());
+            // 2.发消息给同步在线端
+            syncToSender(content, content);
+            // 3.发消息给对方在线端
+            dispatchMessage(content);
+            // 将消息存入缓存
+            messageStoreService.setMessageFromMessageIdCache(appId, messageId, content);
+        });
     }
 
     /**
@@ -71,7 +142,7 @@ public class GroupMessageServiceImpl implements GroupMessageService {
      */
     @Override
     public void ack(MessageContent messageContent, ResponseVO<Object> response) {
-// 创建一个 ChatMessageAck 对象，用于存储确认信息
+        // 创建一个 ChatMessageAck 对象，用于存储确认信息
         ChatMessageAck chatMessageAck = new ChatMessageAck(messageContent.getMessageId());
         // 将确认信息设置到 RestResponse 对象中
         response.setData(chatMessageAck);

@@ -15,10 +15,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableFeignClients(basePackages = {"com.sj.im.tcp.feign"})
 @SpringBootApplication(scanBasePackages = {"com.sj.im.tcp", "com.sj.im.common"})
-public class TcpApplication {
+public class ImTcpApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TcpApplication.class, args);
+        SpringApplication.run(ImTcpApplication.class, args);
     }
 
 }
