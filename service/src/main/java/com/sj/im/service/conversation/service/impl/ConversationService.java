@@ -24,7 +24,7 @@ import com.sj.im.service.conversation.mapper.ImConversationSetMapper;
 import com.sj.im.service.conversation.web.req.DeleteConversationReq;
 import com.sj.im.service.conversation.web.req.UpdateConversationReq;
 import com.sj.im.service.helper.MessageHelper;
-import com.sj.im.service.seq.RedisSeq;
+import com.sj.im.service.util.RedisSeq;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 

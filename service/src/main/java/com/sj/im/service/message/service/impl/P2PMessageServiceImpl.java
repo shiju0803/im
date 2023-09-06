@@ -21,7 +21,7 @@ import com.sj.im.service.message.service.MessageStoreService;
 import com.sj.im.service.message.service.P2PMessageService;
 import com.sj.im.service.message.web.rep.SendMessageReq;
 import com.sj.im.service.message.web.resp.SendMessageResp;
-import com.sj.im.service.seq.RedisSeq;
+import com.sj.im.service.util.RedisSeq;
 import com.sj.im.service.util.ConversationIdGenerate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

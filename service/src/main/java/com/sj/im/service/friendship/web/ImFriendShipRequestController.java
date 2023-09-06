@@ -8,7 +8,6 @@ import com.sj.im.common.model.ResponseVO;
 import com.sj.im.service.friendship.entry.ImFriendShipRequestEntity;
 import com.sj.im.service.friendship.service.ImFriendShipRequestService;
 import com.sj.im.service.friendship.web.req.ApproveFriendRequestReq;
-import com.sj.im.service.friendship.web.req.FriendDto;
 import com.sj.im.service.friendship.web.req.ReadFriendShipRequestReq;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,13 +28,6 @@ import java.util.List;
 public class ImFriendShipRequestController {
     @Resource
     ImFriendShipRequestService imFriendShipRequestService;
-
-    @ApiOperation("新增好友请求")
-    @PostMapping("/addFriendRequest")
-    public ResponseVO<String> addFriendRequest(@RequestBody FriendDto dto, String fromId, Integer appId) {
-        imFriendShipRequestService.addFriendshipRequest(fromId, dto, appId);
-        return ResponseVO.successResponse();
-    }
 
     @ApiOperation("审批好友请求")
     @PutMapping("/approveFriendRequest")

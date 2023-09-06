@@ -21,7 +21,7 @@ import com.sj.im.service.helper.MessageHelper;
 import com.sj.im.service.message.service.CheckSendMessageService;
 import com.sj.im.service.message.service.MessageStoreService;
 import com.sj.im.service.message.web.resp.SendMessageResp;
-import com.sj.im.service.seq.RedisSeq;
+import com.sj.im.service.util.RedisSeq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

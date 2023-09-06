@@ -15,6 +15,7 @@ import com.sj.im.codec.pack.group.CreateGroupPack;
 import com.sj.im.codec.pack.group.DestroyGroupPack;
 import com.sj.im.codec.pack.group.UpdateGroupInfoPack;
 import com.sj.im.common.constant.CallbackCommandConstants;
+import com.sj.im.common.constant.SeqConstants;
 import com.sj.im.common.enums.GroupMemberRoleEnum;
 import com.sj.im.common.enums.GroupStatusEnum;
 import com.sj.im.common.enums.GroupTypeEnum;
@@ -38,6 +39,7 @@ import com.sj.im.service.group.web.resp.GetJoinedGroupResp;
 import com.sj.im.service.group.web.resp.GetRoleInGroupResp;
 import com.sj.im.service.helper.CallbackHelper;
 import com.sj.im.service.helper.GroupMessageHelper;
+import com.sj.im.service.util.RedisSeq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +67,8 @@ public class ImGroupServiceImpl implements ImGroupService {
     private CallbackHelper callBackHelper;
     @Resource
     private GroupMessageHelper groupMessageHelper;
+    @Resource
+    private RedisSeq redisSeq;
 
     /**
      * 导入群
@@ -133,6 +137,8 @@ public class ImGroupServiceImpl implements ImGroupService {
         }
 
         ImGroupEntity imGroupEntity = BeanUtil.toBean(req, ImGroupEntity.class);
+        long seq = redisSeq.doGetSeq(req.getAppId() + ":" + SeqConstants.GROUP_SEQ);
+        imGroupEntity.setSequence(seq);
         imGroupEntity.setCreateTime(new Date());
         imGroupEntity.setStatus(GroupStatusEnum.NORMAL.getCode());
         imGroupMapper.insert(imGroupEntity);
@@ -155,8 +161,8 @@ public class ImGroupServiceImpl implements ImGroupService {
         }
 
         // TCP通知
-        CreateGroupPack pack = new CreateGroupPack();
-        BeanUtil.copyProperties(imGroupEntity, pack);
+        CreateGroupPack pack = BeanUtil.toBean(imGroupEntity, CreateGroupPack.class);
+        pack.setSequence(seq);
         groupMessageHelper.producer(req.getOperator(), GroupEventCommand.CREATED_GROUP,
                 pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
     }
@@ -200,9 +206,10 @@ public class ImGroupServiceImpl implements ImGroupService {
             }
         }
 
+        long seq = redisSeq.doGetSeq(req.getAppId() + ":" + SeqConstants.GROUP_SEQ);
         // 更新群组信息
-        ImGroupEntity update = new ImGroupEntity();
-        BeanUtil.copyProperties(req, update);
+        ImGroupEntity update = BeanUtil.toBean(req, ImGroupEntity.class);
+        update.setSequence(seq);
         update.setUpdateTime(new Date());
         int row = imGroupMapper.update(update, query);
         if (row != 1) {
@@ -216,8 +223,8 @@ public class ImGroupServiceImpl implements ImGroupService {
         }
 
         // TCP通知
-        UpdateGroupInfoPack pack = new UpdateGroupInfoPack();
-        BeanUtil.copyProperties(req, pack);
+        UpdateGroupInfoPack pack = BeanUtil.toBean(req, UpdateGroupInfoPack.class);
+        pack.setSequence(seq);
         groupMessageHelper.producer(req.getOperator(), GroupEventCommand.UPDATED_GROUP,
                 pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
     }
@@ -320,9 +327,11 @@ public class ImGroupServiceImpl implements ImGroupService {
             throw new BusinessException(GroupErrorCode.THIS_OPERATE_NEED_OWNER_ROLE);
         }
 
+        long seq = redisSeq.doGetSeq(req.getAppId() + ":" + SeqConstants.GROUP_SEQ);
         // 也是软删除
         ImGroupEntity update = new ImGroupEntity();
         update.setStatus(GroupStatusEnum.DESTROY.getCode());
+        update.setSequence(seq);
         int update1 = imGroupMapper.update(update, lqw);
         if (update1 != 1) {
             throw new BusinessException(GroupErrorCode.UPDATE_GROUP_BASE_INFO_ERROR);
@@ -338,6 +347,7 @@ public class ImGroupServiceImpl implements ImGroupService {
         // TCP通知
         DestroyGroupPack pack = new DestroyGroupPack();
         pack.setGroupId(req.getGroupId());
+        pack.setSequence(seq);
         groupMessageHelper.producer(req.getOperator(), GroupEventCommand.DESTROY_GROUP, pack, new ClientInfo(req.getAppId()
                 , req.getClientType(), req.getImei()));
     }
