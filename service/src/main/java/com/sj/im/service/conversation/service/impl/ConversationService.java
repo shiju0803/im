@@ -21,7 +21,6 @@ import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.service.config.AppConfig;
 import com.sj.im.service.conversation.entity.ImConversationSetEntity;
 import com.sj.im.service.conversation.mapper.ImConversationSetMapper;
-import com.sj.im.service.conversation.service.ConversationService;
 import com.sj.im.service.conversation.web.req.DeleteConversationReq;
 import com.sj.im.service.conversation.web.req.UpdateConversationReq;
 import com.sj.im.service.helper.MessageHelper;
@@ -38,7 +37,7 @@ import java.util.List;
  * @description: ConversationServiceImpl 是实现 ConversationService 接口的具体实现类
  */
 @Service
-public class ConversationServiceImpl implements ConversationService {
+public class ConversationService implements com.sj.im.service.conversation.service.ConversationService {
     @Resource
     private ImConversationSetMapper imConversationSetMapper;
     @Resource

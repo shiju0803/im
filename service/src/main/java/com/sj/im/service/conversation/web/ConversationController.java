@@ -8,7 +8,7 @@ import com.sj.im.common.model.ResponseVO;
 import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
 import com.sj.im.service.conversation.entity.ImConversationSetEntity;
-import com.sj.im.service.conversation.service.impl.ConversationServiceImpl;
+import com.sj.im.service.conversation.service.impl.ConversationService;
 import com.sj.im.service.conversation.web.req.DeleteConversationReq;
 import com.sj.im.service.conversation.web.req.UpdateConversationReq;
 import io.swagger.annotations.Api;
@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 public class ConversationController {
 
     @Resource
-    private ConversationServiceImpl conversationService;
+    private ConversationService conversationService;
 
     @DeleteMapping(value = "/delete")
     @ApiOperation(value = "删除会话", notes = "根据会话 ID 删除会话")

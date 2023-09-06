@@ -14,7 +14,7 @@ import com.sj.im.common.model.message.MessageContent;
 import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
 import com.sj.im.service.message.service.MessageSyncService;
-import com.sj.im.service.message.service.impl.P2PMessageServiceImpl;
+import com.sj.im.service.message.service.P2PMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -40,7 +40,7 @@ import java.util.Map;
 @Component
 public class ChatOperateReceiver {
     @Resource
-    private P2PMessageServiceImpl p2PMessageServiceImpl;
+    private P2PMessageService p2PMessageService;
     @Resource
     private MessageSyncService messageSyncService;
 
@@ -60,7 +60,7 @@ public class ChatOperateReceiver {
             // 处理私聊消息
             if (ObjectUtil.equal(command, MessageCommand.MSG_P2P.getCommand())) {
                 MessageContent messageContent = jsonObject.toBean(MessageContent.class);
-                p2PMessageServiceImpl.process(messageContent);
+                p2PMessageService.process(messageContent);
             }
             // 处理消息接收确认
             if (ObjectUtil.equal(command, MessageCommand.MSG_RECEIVE_ACK.getCommand())) {

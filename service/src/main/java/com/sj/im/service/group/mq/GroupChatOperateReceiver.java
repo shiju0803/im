@@ -13,7 +13,7 @@ import com.sj.im.common.enums.command.GroupEventCommand;
 import com.sj.im.common.model.message.GroupChatMessageContent;
 import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.service.group.service.GroupMessageService;
-import com.sj.im.service.message.service.MessageSyncService;
+import com.sj.im.service.message.service.impl.MessageSyncServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -40,7 +40,7 @@ public class GroupChatOperateReceiver {
     @Resource
     private GroupMessageService groupMessageService;
     @Resource
-    private MessageSyncService messageSyncService;
+    private MessageSyncServiceImpl messageSyncService;
 
     // 监听RabbitMQ队列，接收消息
     @RabbitListener(
