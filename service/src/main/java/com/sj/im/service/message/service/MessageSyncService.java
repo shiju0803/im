@@ -12,6 +12,8 @@ import com.sj.im.common.enums.command.Command;
 import com.sj.im.common.enums.command.GroupEventCommand;
 import com.sj.im.common.enums.command.MessageCommand;
 import com.sj.im.common.model.ClientInfo;
+import com.sj.im.common.model.SyncReq;
+import com.sj.im.common.model.SyncResp;
 import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
 import com.sj.im.service.conversation.service.ConversationService;
@@ -86,5 +88,15 @@ public class MessageSyncService {
             List<ClientInfo> clientInfos = messageHelper.sendToUser(messageReadPack.getToId(), GroupEventCommand.MSG_GROUP_READ_RECEIPT, readContent, readContent.getAppId());
             log.info("将已读消息发送给发送方[{}]的所有客户端，发送成功的客户端列表：{}", messageReadPack.getToId(), JSONUtil.toJsonStr(clientInfos));
         }
+    }
+
+    /**
+     * 同步离线消息
+     *
+     * @param req 请求参数，包括appId、operater、lastSequence和maxLimit
+     * @return RestResponse对象，包括SyncResp对象
+     */
+    public SyncResp syncOfflineMessage(SyncReq req) {
+
     }
 }

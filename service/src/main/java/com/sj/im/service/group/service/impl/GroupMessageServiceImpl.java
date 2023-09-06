@@ -4,6 +4,7 @@
 
 package com.sj.im.service.group.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.sj.im.codec.pack.message.ChatMessageAck;
 import com.sj.im.common.constant.SeqConstants;
@@ -102,8 +103,7 @@ public class GroupMessageServiceImpl implements GroupMessageService {
             List<String> groupMemberId = imGroupMemberService.getGroupMemberId(groupId, appId);
             content.setMemberId(groupMemberId);
             // 存储离线消息
-            OfflineMessageContent offlineMessageContent = new OfflineMessageContent();
-            BeanUtils.copyProperties(content, offlineMessageContent);
+            OfflineMessageContent offlineMessageContent = BeanUtil.toBean(content, OfflineMessageContent.class);
             offlineMessageContent.setToId(content.getGroupId());
             messageStoreService.storeGroupOfflineMessage(offlineMessageContent, groupMemberId);
             // 1.回ack成功给自己

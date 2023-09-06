@@ -8,12 +8,16 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.json.JSONUtil;
 import com.sj.im.common.constant.RabbitConstants;
 import com.sj.im.common.constant.RedisConstants;
+import com.sj.im.common.enums.ConversationTypeEnum;
 import com.sj.im.common.enums.DelFlagEnum;
 import com.sj.im.common.model.message.*;
+import com.sj.im.service.config.AppConfig;
+import com.sj.im.service.conversation.service.ConversationService;
 import com.sj.im.service.message.service.MessageStoreService;
 import com.sj.im.service.util.SnowflakeIdWorker;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +38,10 @@ public class MessageStoreServiceImpl implements MessageStoreService {
     private RabbitTemplate rabbitTemplate;
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private AppConfig appConfig;
+    @Resource
+    private ConversationService conversationService;
 
     /**
      * 存储单人聊天消息
@@ -142,7 +150,30 @@ public class MessageStoreServiceImpl implements MessageStoreService {
      */
     @Override
     public void storeOfflineMessage(OfflineMessageContent offlineMessage) {
+        Integer appId = offlineMessage.getAppId();
+        String fromId = offlineMessage.getFromId();
+        String toId = offlineMessage.getToId();
+        // 找到fromId的队列
+        String fromKey = appId + ":" + RedisConstants.OFFLINE_MESSAGE + ":" + fromId;
+        // 找到toId的队列
+        String toKey = appId + ":" + RedisConstants.OFFLINE_MESSAGE + ":" + toId;
 
+        ZSetOperations<String, String> operations = stringRedisTemplate.opsForZSet();
+        // 判断队列中的数据是否超过设定值
+        if (operations.zCard(fromKey) > appConfig.getOfflineMessageCount()) {
+            operations.removeRange(fromKey, 0, 0);
+        }
+        offlineMessage.setConversationId(conversationService.convertConversationId(ConversationTypeEnum.P2P.getCode(), fromId, toId));
+        // 插入 数据 根据messageKey作为分值
+        operations.add(fromKey, JSONUtil.toJsonStr(offlineMessage), offlineMessage.getMessageKey());
+
+        //判断 队列中的数据是否超过设定值
+        if (operations.zCard(toKey) > appConfig.getOfflineMessageCount()) {
+            operations.removeRange(toKey, 0, 0);
+        }
+        offlineMessage.setConversationId(conversationService.convertConversationId(ConversationTypeEnum.P2P.getCode(), toId, fromId));
+        // 插入 数据 根据messageKey作为分值
+        operations.add(toKey, JSONUtil.toJsonStr(offlineMessage), offlineMessage.getMessageKey());
     }
 
     /**
@@ -153,6 +184,19 @@ public class MessageStoreServiceImpl implements MessageStoreService {
      */
     @Override
     public void storeGroupOfflineMessage(OfflineMessageContent offlineMessage, List<String> memberIds) {
-
+        ZSetOperations<String, String> operations = stringRedisTemplate.opsForZSet();
+        //判断 队列中的数据是否超过设定值
+        offlineMessage.setConversationType(ConversationTypeEnum.GROUP.getCode());
+        for (String memberId : memberIds) {
+            // 找到toId的队列
+            String toKey = offlineMessage.getAppId() + ":" + RedisConstants.OFFLINE_MESSAGE + ":" + memberId;
+            offlineMessage.setConversationId(conversationService.convertConversationId(
+                    ConversationTypeEnum.GROUP.getCode(), memberId, offlineMessage.getToId()));
+            if (operations.zCard(toKey) > appConfig.getOfflineMessageCount()) {
+                operations.removeRange(toKey, 0, 0);
+            }
+            // 插入 数据 根据messageKey 作为分值
+            operations.add(toKey, JSONUtil.toJsonStr(offlineMessage), offlineMessage.getMessageKey());
+        }
     }
 }

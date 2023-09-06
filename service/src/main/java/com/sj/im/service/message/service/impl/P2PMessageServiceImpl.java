@@ -4,14 +4,17 @@
 
 package com.sj.im.service.message.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.sj.im.codec.pack.message.ChatMessageAck;
 import com.sj.im.common.constant.SeqConstants;
+import com.sj.im.common.enums.ConversationTypeEnum;
 import com.sj.im.common.enums.command.MessageCommand;
 import com.sj.im.common.model.ClientInfo;
 import com.sj.im.common.model.ResponseVO;
 import com.sj.im.common.model.message.MessageContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
+import com.sj.im.common.model.message.OfflineMessageContent;
 import com.sj.im.service.helper.MessageHelper;
 import com.sj.im.service.message.service.CheckSendMessageService;
 import com.sj.im.service.message.service.MessageStoreService;
@@ -98,7 +101,13 @@ public class P2PMessageServiceImpl implements P2PMessageService {
         content.setMessageSequence(seq);
 
         threadPoolExecutor.execute(() -> {
+            // 存储消息
             messageStoreService.storeP2PMessage(content);
+            // 存储离线消息
+            OfflineMessageContent offlineMessageContent = BeanUtil.toBean(content, OfflineMessageContent.class);
+            offlineMessageContent.setConversationType(ConversationTypeEnum.P2P.getCode());
+            messageStoreService.storeOfflineMessage(offlineMessageContent);
+
             // 回ack成功给自己
             ack(content, ResponseVO.successResponse());
             // 发消息给同步其他在线端
