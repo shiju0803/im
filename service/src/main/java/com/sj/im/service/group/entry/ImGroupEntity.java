@@ -6,28 +6,26 @@ package com.sj.im.service.group.entry;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("im_group")
-public class ImGroupEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ImGroupEntity {
 
     /**
      * 群组ID
      */
-    @TableId(value = "group_id")
+    @MppMultiId
     private String groupId;
 
     /**
      * 应用ID
      */
+    @MppMultiId
     private Integer appId;
 
     /**

@@ -4,6 +4,7 @@
 
 package com.sj.im.message.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.sj.im.common.model.message.GroupChatMessageContent;
 import com.sj.im.common.model.message.MessageContent;
 import com.sj.im.message.entry.ImGroupMessageHistoryEntity;
@@ -14,7 +15,6 @@ import com.sj.im.message.mapper.ImMessageBodyMapper;
 import com.sj.im.message.mapper.ImMessageHistoryMapper;
 import com.sj.im.message.model.DoStoreGroupMessageDto;
 import com.sj.im.message.model.DoStoreP2PMessageDto;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,16 +65,14 @@ public class StoreMessageService {
 
         Date now = new Date();
         // 构造发送方的消息历史记录实体
-        ImMessageHistoryEntity fromHistory = new ImMessageHistoryEntity();
-        BeanUtils.copyProperties(messageContent, fromHistory);
+        ImMessageHistoryEntity fromHistory = BeanUtil.toBean(messageContent, ImMessageHistoryEntity.class);
         fromHistory.setOwnerId(messageContent.getFromId());
         fromHistory.setMessageKey(imMessageBodyEntity.getMessageKey());
         fromHistory.setCreateTime(now);
         fromHistory.setSequence(messageContent.getMessageSequence());
 
         // 构造接收方的消息历史记录实体
-        ImMessageHistoryEntity toHistory = new ImMessageHistoryEntity();
-        BeanUtils.copyProperties(messageContent, toHistory);
+        ImMessageHistoryEntity toHistory = BeanUtil.toBean(messageContent, ImMessageHistoryEntity.class);
         toHistory.setOwnerId(messageContent.getToId());
         toHistory.setMessageKey(imMessageBodyEntity.getMessageKey());
         toHistory.setCreateTime(now);
@@ -110,8 +108,7 @@ public class StoreMessageService {
      * @return 群组消息历史记录实体
      */
     private ImGroupMessageHistoryEntity extractToGroupMessageHistory(GroupChatMessageContent messageContent, ImMessageBodyEntity messageBodyEntity) {
-        ImGroupMessageHistoryEntity result = new ImGroupMessageHistoryEntity();
-        BeanUtils.copyProperties(messageContent, result);
+        ImGroupMessageHistoryEntity result = BeanUtil.toBean(messageContent, ImGroupMessageHistoryEntity.class);
         result.setGroupId(messageContent.getGroupId());
         result.setMessageKey(messageBodyEntity.getMessageKey());
         result.setCreateTime(new Date());

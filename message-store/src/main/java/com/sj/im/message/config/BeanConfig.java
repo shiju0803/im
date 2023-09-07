@@ -6,6 +6,7 @@ package com.sj.im.message.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  * @author ShiJu
@@ -21,6 +22,7 @@ public class BeanConfig {
      * @return EasySqlInjector 实例
      */
     @Bean
+    @Primary
     public EasySqlInjector easySqlInjector() {
         return new EasySqlInjector();
     }

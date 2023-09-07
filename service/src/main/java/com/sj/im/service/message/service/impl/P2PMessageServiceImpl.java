@@ -206,8 +206,7 @@ public class P2PMessageServiceImpl implements P2PMessageService {
     @Override
     public SendMessageResp send(SendMessageReq req) {
         SendMessageResp sendMessageResp = new SendMessageResp();
-        MessageContent message = new MessageContent();
-        BeanUtils.copyProperties(req, message);
+        MessageContent message = BeanUtil.toBean(req, MessageContent.class);
         // 插入数据
         messageStoreService.storeP2PMessage(message);
         sendMessageResp.setMessageKey(message.getMessageKey());

@@ -7,35 +7,31 @@ package com.sj.im.service.friendship.entry;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.github.jeffreyning.mybatisplus.anno.AutoMap;
+import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@AutoMap
 @TableName("im_friendship")
-public class ImFriendShipEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ImFriendShipEntity {
 
     /**
      * 应用 ID
      */
-    @TableField(value = "app_id")
+    @MppMultiId
     private Integer appId;
 
     /**
      * 发起好友请求的用户 ID
      */
-    @TableField(value = "from_id")
+    @MppMultiId
     private String fromId;
 
     /**
      * 接收好友请求的用户 ID
      */
-    @TableField(value = "to_id")
+    @MppMultiId
     private String toId;
 
     /**
@@ -51,6 +47,7 @@ public class ImFriendShipEntity implements Serializable {
     /**
      * 是否加入黑名单：1-正常，2-拉黑
      */
+    @MppMultiId
     private Integer black;
 
     /**

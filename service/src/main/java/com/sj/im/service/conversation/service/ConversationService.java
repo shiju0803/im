@@ -4,16 +4,18 @@
 
 package com.sj.im.service.conversation.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
 import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
 import com.sj.im.common.model.message.MessageReadContent;
+import com.sj.im.service.conversation.entry.ImConversationSetEntity;
 import com.sj.im.service.conversation.web.req.DeleteConversationReq;
 import com.sj.im.service.conversation.web.req.UpdateConversationReq;
 
 /**
  * 会话服务接口
  */
-public interface ConversationService {
+public interface ConversationService extends IMppService<ImConversationSetEntity> {
 
     /**
      * 将会话 ID 转换为字符串形式
@@ -54,5 +56,5 @@ public interface ConversationService {
      * @param req 同步请求
      * @return 同步结果响应
      */
-    SyncResp syncConversationSet(SyncReq req);
+    SyncResp<ImConversationSetEntity> syncConversationSet(SyncReq req);
 }

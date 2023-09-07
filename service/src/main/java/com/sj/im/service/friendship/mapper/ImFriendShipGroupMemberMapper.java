@@ -4,10 +4,10 @@
 
 package com.sj.im.service.friendship.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import com.sj.im.service.friendship.entry.ImFriendShipGroupMemberEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface ImFriendShipGroupMemberMapper extends BaseMapper<ImFriendShipGroupMemberEntity> {
+public interface ImFriendShipGroupMemberMapper extends MppBaseMapper<ImFriendShipGroupMemberEntity> {
 }

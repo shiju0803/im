@@ -7,6 +7,7 @@ package com.sj.im.message.entry;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,24 +16,32 @@ import java.util.Date;
 @TableName("im_group_message_history")
 public class ImGroupMessageHistoryEntity {
 
+    @MppMultiId
     private Integer appId;
+
+    @MppMultiId
+    private String groupId;
+
+    @MppMultiId
+    private Long messageKey;
 
     private String fromId;
 
-    private String groupId;
-
-    /** messageBodyId*/
-    private Long messageKey;
-    /** 序列号*/
     private Long sequence;
 
     private String messageRandom;
 
     private Long messageTime;
 
+    /**
+     * 创建时间
+     */
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
+    /**
+     * 更新时间
+     */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 }

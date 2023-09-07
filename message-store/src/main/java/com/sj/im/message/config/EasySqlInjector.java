@@ -5,16 +5,17 @@
 package com.sj.im.message.config;
 
 import com.baomidou.mybatisplus.core.injector.AbstractMethod;
-import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn;
+import com.github.jeffreyning.mybatisplus.base.MppSqlInjector;
 
 import java.util.List;
 
 /**
  * 自定义的 SQL 注入器，扩展自默认的 SQL 注入器（DefaultSqlInjector）。
+ * 由于com.github.jeffreyning.mybatisplus-plus中bean重复了，这里改为继承MppSqlInjector，然后进行覆盖
  */
-public class EasySqlInjector extends DefaultSqlInjector {
+public class EasySqlInjector extends MppSqlInjector {
 
     /**
      * 重写父类的 getMethodList 方法，用于获取映射器类中定义的方法列表。

@@ -7,7 +7,7 @@ package com.sj.im.service.friendship.service.impl;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import com.sj.im.codec.pack.friendship.ApproverFriendRequestPack;
 import com.sj.im.codec.pack.friendship.ReadAllFriendRequestPack;
 import com.sj.im.common.constant.SeqConstants;
@@ -40,7 +40,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ImFriendShipRequestServiceImpl extends ServiceImpl<ImFriendShipRequestMapper, ImFriendShipRequestEntity> implements ImFriendShipRequestService {
+public class ImFriendShipRequestServiceImpl extends MppServiceImpl<ImFriendShipRequestMapper, ImFriendShipRequestEntity> implements ImFriendShipRequestService {
     @Resource
     private ImFriendShipRequestMapper imFriendShipRequestMapper;
     @Resource

@@ -4,18 +4,15 @@
 
 package com.sj.im.service.group.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import com.sj.im.service.group.entry.ImGroupMemberEntity;
 import com.sj.im.service.group.web.req.GroupMemberDto;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
-public interface ImGroupMemberMapper extends BaseMapper<ImGroupMemberEntity> {
+public interface ImGroupMemberMapper extends MppBaseMapper<ImGroupMemberEntity> {
     @Results({
             @Result(column = "member_id", property = "memberId"),
             @Result(column = "speak_date", property = "speakDate"),
@@ -32,15 +29,15 @@ public interface ImGroupMemberMapper extends BaseMapper<ImGroupMemberEntity> {
             " join_time ," +
             " join_type " +
             " from im_group_member where app_id = #{appId} AND group_id = #{groupId} ")
-    List<GroupMemberDto> getGroupMember(Integer appId, String groupId);
+    List<GroupMemberDto> getGroupMember(@Param("appId") Integer appId, @Param("groupId") String groupId);
 
     @Select("select group_id from im_group_member where app_id = #{appId} and member_id = #{memberId}")
-    List<String> getJoinedGroupId(Integer appId, String memberId);
+    List<String> getJoinedGroupId(@Param("appId") Integer appId, @Param("memberId") String memberId);
 
     @Select("select " +
             " member_id " +
             " from im_group_member where app_id = #{appId} AND group_id = #{groupId} and role != 3")
-    List<String> getGroupMemberId(Integer appId, String groupId);
+    List<String> getGroupMemberId(@Param("appId") Integer appId, @Param("groupId") String groupId);
 
     @Results({
             @Result(column = "member_id", property = "memberId"),
@@ -58,8 +55,8 @@ public interface ImGroupMemberMapper extends BaseMapper<ImGroupMemberEntity> {
             " join_time ," +
             " join_type " +
             " from im_group_member where app_id = #{appId} AND group_id = #{groupId} and role in (1,2) ")
-    List<GroupMemberDto> getGroupManager(String groupId, Integer appId);
+    List<GroupMemberDto> getGroupManager(@Param("groupId") String groupId, @Param("appId") Integer appId);
 
-    @Select("select group_id from im_group_member where app_id = #{appId} AND member_id = #{memberId} and role != #{role}" )
-    List<String> syncJoinedGroupId(Integer appId, String memberId, int role);
+    @Select("select group_id from im_group_member where app_id = #{appId} AND member_id = #{memberId} and role != #{role}")
+    List<String> syncJoinedGroupId(@Param("appId") Integer appId, @Param("memberId") String memberId, @Param("role") int role);
 }

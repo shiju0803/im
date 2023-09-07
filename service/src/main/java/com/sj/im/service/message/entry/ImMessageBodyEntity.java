@@ -4,9 +4,7 @@
 
 package com.sj.im.service.message.entry;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -17,6 +15,7 @@ public class ImMessageBodyEntity {
 
     private Integer appId;
 
+    @TableId(value = "message_key")
     private Long messageKey;
 
     private String messageBody;

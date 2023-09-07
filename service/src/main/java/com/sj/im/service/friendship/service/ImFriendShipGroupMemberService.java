@@ -4,12 +4,14 @@
 
 package com.sj.im.service.friendship.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
+import com.sj.im.service.friendship.entry.ImFriendShipGroupMemberEntity;
 import com.sj.im.service.friendship.web.req.AddFriendShipGroupMemberReq;
 import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupMemberReq;
 
 import java.util.List;
 
-public interface ImFriendShipGroupMemberService {
+public interface ImFriendShipGroupMemberService extends IMppService<ImFriendShipGroupMemberEntity> {
 
     /**
      * 添加组内成员

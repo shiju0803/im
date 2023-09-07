@@ -4,6 +4,7 @@
 
 package com.sj.im.service.util;
 
+import cn.hutool.core.util.ObjectUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import javax.annotation.Resource;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: TODO
+ * @description: 生产seq工具类
  */
 @Service
 public class RedisSeq {
@@ -20,6 +21,6 @@ public class RedisSeq {
     private StringRedisTemplate stringRedisTemplate;
 
     public long doGetSeq(String key) {
-        return stringRedisTemplate.opsForValue().increment(key);
+        return ObjectUtil.defaultIfNull(stringRedisTemplate.opsForValue().increment(key), 0L);
     }
 }

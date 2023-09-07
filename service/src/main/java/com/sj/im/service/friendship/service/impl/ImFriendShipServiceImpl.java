@@ -5,11 +5,12 @@
 package com.sj.im.service.friendship.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import com.sj.im.codec.pack.friendship.AddFriendBlackPack;
 import com.sj.im.codec.pack.friendship.AddFriendPack;
 import com.sj.im.codec.pack.friendship.DeleteFriendPack;
@@ -48,7 +49,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class ImFriendShipServiceImpl extends ServiceImpl<ImFriendShipMapper, ImFriendShipEntity> implements ImFriendShipService {
+public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, ImFriendShipEntity> implements ImFriendShipService {
     @Resource
     private ImFriendShipService thisService;
     @Resource
@@ -527,16 +527,16 @@ public class ImFriendShipServiceImpl extends ServiceImpl<ImFriendShipMapper, ImF
 
         // 返回体
         SyncResp<ImFriendShipEntity> resp = new SyncResp<>();
-        // seq > req.getseq limit maxlimit
+        // seq > req.getSeq limit maxLimit
         LambdaQueryWrapper<ImFriendShipEntity> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ImFriendShipEntity::getFromId, req.getOperator());
         lqw.gt(ImFriendShipEntity::getFriendSequence, req.getLastSequence());
         lqw.eq(ImFriendShipEntity::getAppId, req.getAppId());
         lqw.last("limit " + req.getMaxLimit());
         lqw.orderByAsc(ImFriendShipEntity::getFriendSequence);
-        List<ImFriendShipEntity> dataList = list(lqw);
+        List<ImFriendShipEntity> dataList = imFriendShipMapper.selectList(lqw);
 
-        if (!CollectionUtils.isEmpty(dataList)) {
+        if (CollUtil.isNotEmpty(dataList)) {
             // 如果查询结果非空，则设置 SyncResp 对象的属性
             ImFriendShipEntity maxSeqEntity = dataList.get(dataList.size() - 1);
             resp.setDataList(dataList);

@@ -4,10 +4,10 @@
 
 package com.sj.im.service.message.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import com.sj.im.service.message.entry.ImMessageBodyEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ImMessageBodyMapper extends BaseMapper<ImMessageBodyEntity> {
+public interface ImMessageBodyMapper extends MppBaseMapper<ImMessageBodyEntity> {
 }

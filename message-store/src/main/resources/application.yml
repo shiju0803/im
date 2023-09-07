@@ -89,3 +89,7 @@ httpclient:
   connectionRequestTimeout: 2000
   socketTimeout: 5000
   staleConnectionCheckEnabled: true
+
+# mybatisplus-plus对mybatisplus的一些功能补充
+mpp:
+  entityBasePath: com.sj.im.message.entry

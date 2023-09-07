@@ -4,10 +4,10 @@
 
 package com.sj.im.message.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import com.sj.im.message.entry.ImMessageBodyEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface ImMessageBodyMapper extends BaseMapper<ImMessageBodyEntity> {
+public interface ImMessageBodyMapper extends MppBaseMapper<ImMessageBodyEntity> {
 }

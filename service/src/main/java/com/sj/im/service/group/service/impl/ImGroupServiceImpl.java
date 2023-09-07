@@ -11,6 +11,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import com.sj.im.codec.pack.group.CreateGroupPack;
 import com.sj.im.codec.pack.group.DestroyGroupPack;
 import com.sj.im.codec.pack.group.UpdateGroupInfoPack;
@@ -56,7 +57,7 @@ import java.util.UUID;
  */
 @Service
 @Slf4j
-public class ImGroupServiceImpl implements ImGroupService {
+public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEntity> implements ImGroupService {
     @Resource
     private ImGroupMapper imGroupMapper;
     @Resource
@@ -89,7 +90,7 @@ public class ImGroupServiceImpl implements ImGroupService {
             }
         }
         // 导入逻辑
-        ImGroupEntity entity = new ImGroupEntity();
+        ImGroupEntity entity = BeanUtil.toBean(req, ImGroupEntity.class);
         // 如果群所有者为空的话，报错
         if (ObjectUtil.equal(req.getGroupType(), GroupTypeEnum.PUBLIC.getCode()) && CharSequenceUtil.isBlank(req.getOwnerId())) {
             throw new BusinessException(GroupErrorCode.PUBLIC_GROUP_MUST_HAVE_OWNER);
@@ -100,7 +101,6 @@ public class ImGroupServiceImpl implements ImGroupService {
             entity.setCreateTime(new Date());
         }
         entity.setStatus(GroupStatusEnum.NORMAL.getCode());
-        BeanUtil.copyProperties(req, entity);
         int insert = imGroupMapper.insert(entity);
 
         if (insert != 1) {
@@ -136,8 +136,8 @@ public class ImGroupServiceImpl implements ImGroupService {
             throw new BusinessException(GroupErrorCode.PUBLIC_GROUP_MUST_HAVE_OWNER);
         }
 
-        ImGroupEntity imGroupEntity = BeanUtil.toBean(req, ImGroupEntity.class);
         long seq = redisSeq.doGetSeq(req.getAppId() + ":" + SeqConstants.GROUP_SEQ);
+        ImGroupEntity imGroupEntity = BeanUtil.toBean(req, ImGroupEntity.class);
         imGroupEntity.setSequence(seq);
         imGroupEntity.setCreateTime(new Date());
         imGroupEntity.setStatus(GroupStatusEnum.NORMAL.getCode());
@@ -150,9 +150,11 @@ public class ImGroupServiceImpl implements ImGroupService {
         groupMemberDto.setJoinTime(new Date());
         imGroupMemberService.addGroupMember(req.getGroupId(), req.getAppId(), groupMemberDto);
 
-        //插入群成员
-        for (GroupMemberDto dto : req.getMember()) {
-            imGroupMemberService.addGroupMember(req.getGroupId(), req.getAppId(), dto);
+        if (ObjectUtil.isNotEmpty(req.getMember())) {
+            //插入群成员
+            for (GroupMemberDto dto : req.getMember()) {
+                imGroupMemberService.addGroupMember(req.getGroupId(), req.getAppId(), dto);
+            }
         }
 
         // 回调
@@ -237,8 +239,7 @@ public class ImGroupServiceImpl implements ImGroupService {
         // 判读一下群是否合法
         ImGroupEntity group = getGroup(req.getGroupId(), req.getAppId());
         // 准备返回的实体
-        GetGroupResp getGroupResp = new GetGroupResp();
-        BeanUtil.copyProperties(group, getGroupResp);
+        GetGroupResp getGroupResp = BeanUtil.toBean(group, GetGroupResp.class);
         try {
             // 返回的实体中也有成员，所以要查询成员信息
             List<GroupMemberDto> groupMember = imGroupMemberService.getGroupMember(req.getGroupId(), req.getAppId());
@@ -377,8 +378,10 @@ public class ImGroupServiceImpl implements ImGroupService {
             throw new BusinessException(GroupErrorCode.GROUP_IS_DESTROY);
         }
 
+        long seq = redisSeq.doGetSeq(req.getAppId() + ":" + SeqConstants.GROUP_SEQ);
         ImGroupEntity updateGroup = new ImGroupEntity();
         updateGroup.setOwnerId(req.getOwnerId());
+        updateGroup.setSequence(seq);
         lqw = new LambdaQueryWrapper<>();
         lqw.eq(ImGroupEntity::getAppId, req.getAppId());
         lqw.eq(ImGroupEntity::getGroupId, req.getGroupId());
@@ -416,8 +419,11 @@ public class ImGroupServiceImpl implements ImGroupService {
                 throw new BusinessException(GroupErrorCode.THIS_OPERATE_NEED_MANAGER_ROLE);
             }
         }
+
+        long seq = redisSeq.doGetSeq(req.getAppId() + ":" + SeqConstants.GROUP_SEQ);
         ImGroupEntity update = new ImGroupEntity();
         update.setMute(req.getMute());
+        update.setSequence(seq);
 
         LambdaQueryWrapper<ImGroupEntity> lqw = new LambdaQueryWrapper<>();
         lqw.eq(ImGroupEntity::getGroupId, req.getGroupId());

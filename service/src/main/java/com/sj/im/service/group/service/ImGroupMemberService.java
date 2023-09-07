@@ -4,13 +4,15 @@
 
 package com.sj.im.service.group.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
+import com.sj.im.service.group.entry.ImGroupMemberEntity;
 import com.sj.im.service.group.web.req.*;
 import com.sj.im.service.group.web.resp.AddMemberResp;
 import com.sj.im.service.group.web.resp.GetRoleInGroupResp;
 
 import java.util.List;
 
-public interface ImGroupMemberService {
+public interface ImGroupMemberService extends IMppService<ImGroupMemberEntity> {
     /**
      * 导入群组成员
      */

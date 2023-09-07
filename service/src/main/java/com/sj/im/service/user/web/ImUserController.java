@@ -25,9 +25,9 @@ import java.util.Map;
  * @version 1.0
  * @description: 处理用户数据
  */
-@Api(tags = "V1/User")
+@Api(tags = "V1/处理用户数据")
 @RestController
-@RequestMapping("/v1/user")
+@RequestMapping("v1/user")
 public class ImUserController {
     @Resource
     private ImUserService imUserService;

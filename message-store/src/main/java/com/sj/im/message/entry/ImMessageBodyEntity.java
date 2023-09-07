@@ -6,6 +6,7 @@ package com.sj.im.message.entry;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class ImMessageBodyEntity {
 
     private Integer appId;
 
+    @TableId(value = "message_key")
     private Long messageKey;
 
     private String messageBody;

@@ -11,6 +11,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import com.sj.im.codec.pack.group.AddGroupMemberPack;
 import com.sj.im.codec.pack.group.GroupMemberSpeakPack;
 import com.sj.im.codec.pack.group.RemoveGroupMemberPack;
@@ -40,7 +41,6 @@ import com.sj.im.service.helper.GroupMessageHelper;
 import com.sj.im.service.user.entry.ImUserDataEntity;
 import com.sj.im.service.user.service.ImUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +56,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ImGroupMemberServiceImpl implements ImGroupMemberService {
+public class ImGroupMemberServiceImpl extends MppServiceImpl<ImGroupMemberMapper, ImGroupMemberEntity> implements ImGroupMemberService {
     @Resource
     private ImGroupService imGroupService;
     @Resource
@@ -135,8 +135,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         Date now = new Date();
         if (ObjectUtil.isNull(imGroupMemberEntity)) {
             // 如果是空的话，就是首次加群
-            imGroupMemberEntity = new ImGroupMemberEntity();
-            BeanUtil.copyProperties(dto, imGroupMemberEntity);
+            imGroupMemberEntity = BeanUtil.toBean(dto, ImGroupMemberEntity.class);
             imGroupMemberEntity.setGroupId(groupId);
             imGroupMemberEntity.setAppId(appId);
             imGroupMemberEntity.setJoinTime(now);
@@ -144,15 +143,18 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
             if (insert != 1) {
                 throw new BusinessException(GroupErrorCode.USER_JOIN_GROUP_ERROR);
             }
-        } else if (ObjectUtil.equal(GroupMemberRoleEnum.LEAVE.getCode(), imGroupMemberEntity.getRole())) {
+            return;
+        }
+
+        if (ObjectUtil.equal(GroupMemberRoleEnum.LEAVE.getCode(), imGroupMemberEntity.getRole())) {
             // 如果不为空且Role是3离开的话就是再次进入群
-            imGroupMemberEntity = new ImGroupMemberEntity();
-            BeanUtil.copyProperties(dto, imGroupMemberEntity);
+            imGroupMemberEntity = BeanUtil.toBean(dto, ImGroupMemberEntity.class);
             imGroupMemberEntity.setJoinTime(now);
             int update = imGroupMemberMapper.update(imGroupMemberEntity, lqw);
             if (update != 1) {
                 throw new BusinessException(GroupErrorCode.USER_JOIN_GROUP_ERROR);
             }
+            return;
         }
         throw new BusinessException(GroupErrorCode.USER_IS_JOINED_GROUP);
     }
@@ -182,7 +184,6 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         resp.setGroupMemberId(imGroupMemberEntity.getGroupMemberId());
         resp.setMemberId(imGroupMemberEntity.getMemberId());
         resp.setRole(imGroupMemberEntity.getRole());
-
         return resp;
     }
 
@@ -458,8 +459,8 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
                 }
             }
         }
-        ImGroupMemberEntity update = new ImGroupMemberEntity();
 
+        ImGroupMemberEntity update = new ImGroupMemberEntity();
         if (StringUtils.isNotBlank(req.getAlias())) {
             update.setAlias(req.getAlias());
         }
@@ -476,8 +477,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         imGroupMemberMapper.update(update, lqw);
 
         // TCP通知
-        UpdateGroupMemberPack pack = new UpdateGroupMemberPack();
-        BeanUtils.copyProperties(req, pack);
+        UpdateGroupMemberPack pack = BeanUtil.toBean(req, UpdateGroupMemberPack.class);
         groupMessageHelper.producer(req.getOperator(), GroupEventCommand.UPDATED_MEMBER,
                 pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
     }
@@ -533,8 +533,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
 
         int i = imGroupMemberMapper.updateById(imGroupMemberEntity);
         if (i == 1) {
-            GroupMemberSpeakPack pack = new GroupMemberSpeakPack();
-            BeanUtils.copyProperties(req, pack);
+            GroupMemberSpeakPack pack = BeanUtil.toBean(req, GroupMemberSpeakPack.class);
             groupMessageHelper.producer(req.getOperator(), GroupEventCommand.SPEAK_GROUP_MEMBER, pack,
                     new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
         }

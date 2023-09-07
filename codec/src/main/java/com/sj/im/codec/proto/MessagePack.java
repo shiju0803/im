@@ -16,6 +16,8 @@ import java.io.Serializable;
 @Data
 public class MessagePack<T> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * 发送方用户ID
      */

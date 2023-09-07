@@ -6,7 +6,7 @@ package com.sj.im.service.friendship.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import com.sj.im.codec.pack.friendship.AddFriendGroupMemberPack;
 import com.sj.im.codec.pack.friendship.DeleteFriendGroupMemberPack;
 import com.sj.im.common.enums.command.FriendshipEventCommand;
@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ImFriendShipGroupMemberServiceImpl extends ServiceImpl<ImFriendShipGroupMemberMapper, ImFriendShipGroupMemberEntity> implements ImFriendShipGroupMemberService {
+public class ImFriendShipGroupMemberServiceImpl extends MppServiceImpl<ImFriendShipGroupMemberMapper, ImFriendShipGroupMemberEntity> implements ImFriendShipGroupMemberService {
     @Resource
     private ImFriendShipGroupMemberMapper imFriendShipGroupMemberMapper;
     @Resource

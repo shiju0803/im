@@ -6,28 +6,25 @@ package com.sj.im.service.friendship.entry;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("im_friendship_group_member")
-public class ImFriendShipGroupMemberEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ImFriendShipGroupMemberEntity {
 
     /**
      * 分组编号
      */
-    @TableField(value = "group_id")
+    @TableId(value = "group_id")
     private Long groupId;
 
     /**
      * 好友id
      */
-    @TableField(value = "to_id")
     private String toId;
 
     /**

@@ -89,7 +89,7 @@
         <dependency>
             <groupId>com.github.jeffreyning</groupId>
             <artifactId>mybatisplus-plus</artifactId>
-            <version>1.5.1-RELEASE</version>
+            <version>1.7.4-RELEASE</version>
         </dependency>
 
         <!-- codec -->

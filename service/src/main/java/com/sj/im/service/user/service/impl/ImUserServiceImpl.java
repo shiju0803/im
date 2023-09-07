@@ -210,9 +210,7 @@ public class ImUserServiceImpl extends ServiceImpl<ImUserDataMapper, ImUserDataE
         }
 
         // 构建更新数据对象
-        ImUserDataEntity update = new ImUserDataEntity();
-        BeanUtil.copyProperties(req, update);
-
+        ImUserDataEntity update = BeanUtil.toBean(req, ImUserDataEntity.class);
         // 这里不需要修改AppId和userId，如果要修改这两个的话，还不如新建一个用户
         update.setAppId(null);
         update.setUserId(null);
@@ -221,8 +219,7 @@ public class ImUserServiceImpl extends ServiceImpl<ImUserDataMapper, ImUserDataE
         // 如果更新成功，则发送用户修改事件和回调请求
         if (update1) {
             // TCP通知其他端 构建用户修改事件对象
-            UserModifyPack pack = new UserModifyPack();
-            BeanUtil.copyProperties(req, pack);
+            UserModifyPack pack = BeanUtil.toBean(req, UserModifyPack.class);
             // 发送用户修改事件
             messageHelper.sendToUser(req.getUserId(), req.getClientType(), req.getImei(),
                     UserEventCommand.USER_MODIFY, pack, req.getAppId());

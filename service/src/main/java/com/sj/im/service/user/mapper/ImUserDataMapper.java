@@ -4,10 +4,10 @@
 
 package com.sj.im.service.user.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import com.sj.im.service.user.entry.ImUserDataEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface ImUserDataMapper extends BaseMapper<ImUserDataEntity> {
+public interface ImUserDataMapper extends MppBaseMapper<ImUserDataEntity> {
 }

@@ -4,11 +4,11 @@
 
 package com.sj.im.service.group.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import com.sj.im.service.group.entry.ImGroupMessageHistoryEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ImGroupMessageHistoryMapper extends BaseMapper<ImGroupMessageHistoryEntity> {
+public interface ImGroupMessageHistoryMapper extends MppBaseMapper<ImGroupMessageHistoryEntity> {
 
 }

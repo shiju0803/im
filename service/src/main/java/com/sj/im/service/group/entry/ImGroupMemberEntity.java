@@ -7,14 +7,11 @@ package com.sj.im.service.group.entry;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("im_group_member")
-public class ImGroupMemberEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ImGroupMemberEntity {
 
     @TableId(value = "group_member_id", type = IdType.AUTO)
     private Long groupMemberId;

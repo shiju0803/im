@@ -7,6 +7,7 @@ package com.sj.im.service.user.entry;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.Data;
 
 import java.util.Date;
@@ -19,10 +20,24 @@ import java.util.Date;
 @Data
 @TableName("im_user_data")
 public class ImUserDataEntity {
+
     /**
      * 用户id
      */
+    @MppMultiId
     private String userId;
+
+    /**
+     * appId
+     */
+    @MppMultiId
+    private Integer appId;
+
+    /**
+     * 用户类型 1普通用户 2客服 3 机器人
+     */
+    @MppMultiId
+    private Integer userType;
 
     /**
      * 用户名称
@@ -78,16 +93,6 @@ public class ImUserDataEntity {
      * 禁言标识 0未禁言 1禁言
      */
     private Integer silentFlag;
-
-    /**
-     * 用户类型 1普通用户 2客服 3 机器人
-     */
-    private Integer userType;
-
-    /**
-     * appId
-     */
-    private Integer appId;
 
     /**
      * 删除标识 0未删除 1已删除

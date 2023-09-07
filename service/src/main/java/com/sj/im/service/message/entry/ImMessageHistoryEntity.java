@@ -4,9 +4,8 @@
 
 package com.sj.im.service.message.entry;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,14 +14,17 @@ import java.util.Date;
 @TableName("im_message_history")
 public class ImMessageHistoryEntity {
 
+    @MppMultiId
     private Integer appId;
 
     private String fromId;
 
     private String toId;
 
+    @MppMultiId
     private String ownerId;
 
+    @MppMultiId
     private Long messageKey;
 
     private Long sequence;

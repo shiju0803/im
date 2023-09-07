@@ -4,17 +4,18 @@
 
 package com.sj.im.service.friendship.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import com.sj.im.service.friendship.entry.ImFriendShipEntity;
 import com.sj.im.service.friendship.web.req.CheckFriendShipReq;
 import com.sj.im.service.friendship.web.resp.CheckFriendShipResp;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
 @Mapper
-public interface ImFriendShipMapper extends BaseMapper<ImFriendShipEntity> {
+public interface ImFriendShipMapper extends MppBaseMapper<ImFriendShipEntity> {
     @Select("<script>" +
             "select from_id as fromId, to_id as toId, if(status = 1, 1, 0) as status from im_friendship where from_id = #{fromId} and to_id in " +
             "<foreach collection='toIds' index = 'index' item = 'id' separator = ',' close = ')' open = '('>" +
@@ -83,11 +84,9 @@ public interface ImFriendShipMapper extends BaseMapper<ImFriendShipEntity> {
     )
     List<CheckFriendShipResp> checkFriendShipBlackBoth(CheckFriendShipReq toId);
 
-    @Select(" select max(friend_sequence) from im_friendship where app_id = #{appId} AND from_id = #{userId} ")
-    Long getFriendShipMaxSeq(Integer appId, String userId);
+    @Select("select max(friend_sequence) from im_friendship where app_id = #{appId} AND from_id = #{userId} ")
+    Long getFriendShipMaxSeq(@Param("appId") Integer appId, @Param("userId") String userId);
 
-    @Select(
-            " select to_id from im_friendship where from_id = #{userId} AND app_id = #{appId} and status = 1 and black = 1 "
-    )
-    List<String> getAllFriendId(String userId, Integer appId);
+    @Select("select to_id from im_friendship where from_id = #{userId} AND app_id = #{appId} and status = 1 and black = 1")
+    List<String> getAllFriendId(@Param("userId") String userId, @Param("appId") Integer appId);
 }

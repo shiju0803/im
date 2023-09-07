@@ -5,7 +5,11 @@
 package com.sj.im.service.message.web;
 
 import com.sj.im.common.model.ResponseVO;
+import com.sj.im.common.model.SyncReq;
+import com.sj.im.common.model.SyncResp;
 import com.sj.im.common.model.message.CheckSendMessageReq;
+import com.sj.im.common.model.message.OfflineMessageContent;
+import com.sj.im.service.message.service.MessageSyncService;
 import com.sj.im.service.message.service.P2PMessageService;
 import com.sj.im.service.message.web.rep.SendMessageReq;
 import com.sj.im.service.message.web.resp.SendMessageResp;
@@ -30,6 +34,8 @@ import javax.annotation.Resource;
 public class MessageController {
     @Resource
     private P2PMessageService p2PMessageService;
+    @Resource
+    private MessageSyncService messageSyncService;
 
     @ApiOperation(value = "发送消息")
     @PostMapping("/send")
@@ -42,5 +48,11 @@ public class MessageController {
     public ResponseVO<Object> checkSend(@RequestBody @Validated CheckSendMessageReq req) {
         p2PMessageService.imServerPermissionCheck(req.getFromId(), req.getToId(), req.getAppId());
         return ResponseVO.successResponse();
+    }
+
+    @ApiOperation(value = "同步离线消息")
+    @PostMapping("/syncOfflineMessage")
+    public ResponseVO<SyncResp<OfflineMessageContent>> syncOfflineMessage(@RequestBody @Validated SyncReq req) {
+        return ResponseVO.successResponse(messageSyncService.syncOfflineMessage(req));
     }
 }

@@ -13,6 +13,7 @@ import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
 import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
+import com.sj.im.common.model.message.OfflineMessageContent;
 import com.sj.im.common.model.message.RecallMessageContent;
 
 public interface MessageSyncService {
@@ -53,7 +54,7 @@ public interface MessageSyncService {
      * @param req 请求参数，包括appId、operator、lastSequence和maxLimit
      * @return RestResponse对象，包括SyncResp对象
      */
-    SyncResp syncOfflineMessage(SyncReq req);
+    SyncResp<OfflineMessageContent> syncOfflineMessage(SyncReq req);
 
     /**
      * 处理消息撤回操作，具体步骤如下:

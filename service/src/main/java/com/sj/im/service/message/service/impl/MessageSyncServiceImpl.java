@@ -5,10 +5,12 @@
 package com.sj.im.service.message.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import com.sj.im.codec.pack.message.MessageReadPack;
 import com.sj.im.codec.pack.message.RecallMessageNotifyPack;
+import com.sj.im.common.constant.RedisConstants;
 import com.sj.im.common.enums.command.Command;
 import com.sj.im.common.enums.command.GroupEventCommand;
 import com.sj.im.common.enums.command.MessageCommand;
@@ -18,15 +20,21 @@ import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
 import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
+import com.sj.im.common.model.message.OfflineMessageContent;
 import com.sj.im.common.model.message.RecallMessageContent;
 import com.sj.im.service.conversation.service.ConversationService;
 import com.sj.im.service.helper.MessageHelper;
 import com.sj.im.service.message.service.MessageSyncService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.DefaultTypedTuple;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ShiJu
@@ -41,6 +49,8 @@ public class MessageSyncServiceImpl implements MessageSyncService {
     private MessageHelper messageHelper;
     @Resource
     private ConversationService conversationService;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 接收消息确认，发送给用户
@@ -104,8 +114,37 @@ public class MessageSyncServiceImpl implements MessageSyncService {
      * @return RestResponse对象，包括SyncResp对象
      */
     @Override
-    public SyncResp syncOfflineMessage(SyncReq req) {
-        return null;
+    public SyncResp<OfflineMessageContent> syncOfflineMessage(SyncReq req) {
+        SyncResp<OfflineMessageContent> resp = new SyncResp<>();
+
+        String key = req.getAppId() + ":" + RedisConstants.OFFLINE_MESSAGE + ":" + req.getOperator();
+        // 获取最大seq
+        long maxSeq = 0L;
+        ZSetOperations<String, String> zSetOperations = stringRedisTemplate.opsForZSet();
+        Set<ZSetOperations.TypedTuple<String>> set = zSetOperations.reverseRangeWithScores(key, 0, 0);
+        if (CollUtil.isNotEmpty(set)) {
+            List<ZSetOperations.TypedTuple<String>> list = new ArrayList<>(set);
+            DefaultTypedTuple<String> o = (DefaultTypedTuple<String>) list.get(0);
+            maxSeq = ObjectUtil.defaultIfNull(o.getScore(), 0D).longValue();
+        }
+
+        List<OfflineMessageContent> respList = new ArrayList<>();
+        resp.setMaxSequence(maxSeq);
+
+        Set<ZSetOperations.TypedTuple<String>> querySet = zSetOperations.rangeByScoreWithScores(key, req.getLastSequence(), maxSeq, 0, req.getMaxLimit());
+
+        if (CollUtil.isNotEmpty(querySet)) {
+            for (ZSetOperations.TypedTuple<String> typedTuple : querySet) {
+                String value = typedTuple.getValue();
+                OfflineMessageContent messageContent = JSONUtil.toBean(value, OfflineMessageContent.class);
+                respList.add(messageContent);
+            }
+            resp.setDataList(respList);
+
+            OfflineMessageContent offlineMessageContent = respList.get(respList.size() - 1);
+            resp.setCompleted(maxSeq <= offlineMessageContent.getMessageKey());
+        }
+        return resp;
     }
 
     /**

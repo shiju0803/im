@@ -4,9 +4,11 @@
 
 package com.sj.im.service.conversation.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import com.sj.im.codec.pack.conversation.DeleteConversationPack;
 import com.sj.im.codec.pack.conversation.UpdateConversationPack;
 import com.sj.im.common.constant.SeqConstants;
@@ -19,14 +21,16 @@ import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
 import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.service.config.AppConfig;
-import com.sj.im.service.conversation.entity.ImConversationSetEntity;
+import com.sj.im.service.conversation.entry.ImConversationSetEntity;
 import com.sj.im.service.conversation.mapper.ImConversationSetMapper;
+import com.sj.im.service.conversation.service.ConversationService;
 import com.sj.im.service.conversation.web.req.DeleteConversationReq;
 import com.sj.im.service.conversation.web.req.UpdateConversationReq;
 import com.sj.im.service.helper.MessageHelper;
 import com.sj.im.service.util.RedisSeq;
-import org.springframework.beans.BeanUtils;
+import com.sj.im.service.util.WriteUserSeq;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -37,7 +41,7 @@ import java.util.List;
  * @description: ConversationServiceImpl 是实现 ConversationService 接口的具体实现类
  */
 @Service
-public class ConversationService implements com.sj.im.service.conversation.service.ConversationService {
+public class ConversationServiceImpl extends MppServiceImpl<ImConversationSetMapper, ImConversationSetEntity> implements ConversationService {
     @Resource
     private ImConversationSetMapper imConversationSetMapper;
     @Resource
@@ -46,6 +50,8 @@ public class ConversationService implements com.sj.im.service.conversation.servi
     private AppConfig appConfig;
     @Resource
     private RedisSeq redisSeq;
+    @Resource
+    private WriteUserSeq writeUserSeq;
 
     /**
      * 将 fromId 和 toId 组合成 conversationId
@@ -64,6 +70,7 @@ public class ConversationService implements com.sj.im.service.conversation.servi
      *
      * @param messageReadContent 消息已读内容
      */
+    @Transactional
     public void messageMarkRead(MessageReadContent messageReadContent) {
         String toId = messageReadContent.getToId();
         if (ObjectUtil.equal(messageReadContent.getConversationType(), ConversationTypeEnum.GROUP.getCode())) {
@@ -76,15 +83,15 @@ public class ConversationService implements com.sj.im.service.conversation.servi
         query.eq(ImConversationSetEntity::getAppId, messageReadContent.getAppId());
         ImConversationSetEntity imConversationSetEntity = imConversationSetMapper.selectOne(query);
         // 如果不存在，则新建一个会话
-        if (imConversationSetEntity == null) {
-            imConversationSetEntity = new ImConversationSetEntity();
+        if (ObjectUtil.isNull(imConversationSetEntity)) {
+            imConversationSetEntity = BeanUtil.toBean(messageReadContent, ImConversationSetEntity.class);
             long seq = redisSeq.doGetSeq(messageReadContent.getAppId() + ":" + SeqConstants.CONVERSATION_SEQ);
             imConversationSetEntity.setConversationId(conversationId);
-            BeanUtils.copyProperties(messageReadContent, imConversationSetEntity);
             imConversationSetEntity.setReadSequence(messageReadContent.getMessageSequence());
             imConversationSetEntity.setToId(toId);
             imConversationSetEntity.setSequence(seq);
             imConversationSetMapper.insert(imConversationSetEntity);
+            writeUserSeq.writeUserSeq(messageReadContent.getAppId(), messageReadContent.getFromId(), SeqConstants.CONVERSATION_SEQ, seq);
             return;
         }
 
@@ -93,6 +100,7 @@ public class ConversationService implements com.sj.im.service.conversation.servi
         imConversationSetEntity.setSequence(seq);
         imConversationSetEntity.setReadSequence(messageReadContent.getMessageSequence());
         imConversationSetMapper.readMark(imConversationSetEntity);
+        writeUserSeq.writeUserSeq(messageReadContent.getAppId(), messageReadContent.getFromId(), SeqConstants.CONVERSATION_SEQ, seq);
     }
 
     /**
@@ -101,6 +109,7 @@ public class ConversationService implements com.sj.im.service.conversation.servi
      * @param req 删除会话请求
      * @return 删除结果
      */
+    @Transactional
     public void deleteConversation(DeleteConversationReq req) {
         // 有置顶/免打扰, 清除状态
         LambdaQueryWrapper<ImConversationSetEntity> wrapper = new LambdaQueryWrapper<>();
@@ -127,6 +136,7 @@ public class ConversationService implements com.sj.im.service.conversation.servi
      * @param req 更新会话请求
      * @return 更新结果
      */
+    @Transactional
     public void updateConversation(UpdateConversationReq req) {
         // 如果更新参数为空，则返回参数错误
         if (ObjectUtil.isNull(req.getIsTop()) && ObjectUtil.isNull(req.getIsMute())) {
@@ -140,19 +150,23 @@ public class ConversationService implements com.sj.im.service.conversation.servi
 
         // 如果会话存在，则更新会话信息
         if (ObjectUtil.isNotNull(conversationSet)) {
-            if (ObjectUtil.isNull(req.getIsTop())) {
+            long seq = redisSeq.doGetSeq(req.getAppId() + ":" + SeqConstants.CONVERSATION_SEQ);
+            if (ObjectUtil.isNotNull(req.getIsTop())) {
                 conversationSet.setIsTop(req.getIsTop());
             }
-            if (ObjectUtil.isNull(req.getIsMute())) {
+            if (ObjectUtil.isNotNull(req.getIsMute())) {
                 conversationSet.setIsMute(req.getIsMute());
             }
+            conversationSet.setSequence(seq);
             imConversationSetMapper.update(conversationSet, wrapper);
+            writeUserSeq.writeUserSeq(req.getAppId(), req.getFromId(), SeqConstants.CONVERSATION_SEQ, seq);
 
             // 向客户端发送更新会话事件
             UpdateConversationPack pack = new UpdateConversationPack();
             pack.setConversationId(req.getConversationId());
             pack.setIsMute(req.getIsMute());
             pack.setIsTop(req.getIsTop());
+            pack.setSequence(seq);
             pack.setConversationType(conversationSet.getConversationType());
             messageHelper.sendToUserExceptClient(req.getFromId(), ConversationEventCommand.CONVERSATION_UPDATE,
                     pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));

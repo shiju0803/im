@@ -7,14 +7,11 @@ package com.sj.im.service.friendship.entry;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("im_friendship_request")
-public class ImFriendShipRequestEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ImFriendShipRequestEntity {
 
     @TableId(type = IdType.AUTO)
     private Long id;

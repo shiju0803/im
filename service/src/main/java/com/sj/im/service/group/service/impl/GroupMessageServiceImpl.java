@@ -23,7 +23,6 @@ import com.sj.im.service.message.service.MessageStoreService;
 import com.sj.im.service.message.web.resp.SendMessageResp;
 import com.sj.im.service.util.RedisSeq;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -189,9 +188,7 @@ public class GroupMessageServiceImpl implements GroupMessageService {
         // 创建一个SendMessageResp对象，用于存储发送消息的响应结果
         SendMessageResp sendMessageResp = new SendMessageResp();
         // 创建一个GroupChatMessageContent对象，用于存储群聊消息内容
-        GroupChatMessageContent message = new GroupChatMessageContent();
-        // 将请求中的属性值拷贝到message对象中
-        BeanUtils.copyProperties(req, message);
+        GroupChatMessageContent message = BeanUtil.toBean(req, GroupChatMessageContent.class);
         // 将群聊消息存储到消息存储服务中
         messageStoreService.storeGroupMessage(message);
         // 将消息的唯一标识设置到响应结果中

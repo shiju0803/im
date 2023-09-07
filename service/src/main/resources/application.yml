@@ -10,13 +10,15 @@ spring:
     hikari:
       auto-commit: true
       connection-test-query: SELECT 1
-      connection-timeout: 10000
-      idle-timeout: 30000 #连接空闲时间需要比最大生命周期时间短一些
-      max-lifetime: 400000 #连接最大生命周期需要比MYSQL连接空闲时间10分钟短一些
-      maximum-pool-size: 30
+      connection-timeout: 60000
+      idle-timeout: 60000 #连接空闲时间需要比最大生命周期时间短一些
+      max-lifetime: 60000 #连接最大生命周期需要比MYSQL连接空闲时间10分钟短一些
+      maximum-pool-size: 60
       minimum-idle: 10
       pool-name: im_HikariCP
-      validation-timeout: 1000
+      validation-timeout: 3000
+      login-timeout: 5
+      read-only: false
 
   redis:
     cluster:
@@ -122,3 +124,8 @@ httpclient:
   connectionRequestTimeout: 2000
   socketTimeout: 5000
   staleConnectionCheckEnabled: true
+
+# mybatisplus-plus对mybatisplus的一些功能补充
+mpp:
+  entityBasePath: com.sj.im.service.conversation.entry,com.sj.im.service.friendship.entry,com.sj.im.service.group.entry,com.sj.im.service.message.entry,com.sj.im.service.user.entry
+

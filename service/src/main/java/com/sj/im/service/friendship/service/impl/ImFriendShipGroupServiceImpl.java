@@ -7,7 +7,7 @@ package com.sj.im.service.friendship.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
 import com.sj.im.codec.pack.friendship.AddFriendGroupPack;
 import com.sj.im.codec.pack.friendship.DeleteFriendGroupPack;
 import com.sj.im.common.constant.SeqConstants;
@@ -41,7 +41,7 @@ import java.util.Date;
  */
 @Service
 @Slf4j
-public class ImFriendShipGroupServiceImpl extends ServiceImpl<ImFriendShipGroupMapper, ImFriendShipGroupEntity> implements ImFriendShipGroupService {
+public class ImFriendShipGroupServiceImpl extends MppServiceImpl<ImFriendShipGroupMapper, ImFriendShipGroupEntity> implements ImFriendShipGroupService {
     @Resource
     private ImFriendShipGroupMapper imFriendShipGroupMapper;
     @Resource

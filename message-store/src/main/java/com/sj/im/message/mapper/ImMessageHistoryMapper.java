@@ -4,14 +4,14 @@
 
 package com.sj.im.message.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import com.sj.im.message.entry.ImMessageHistoryEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Collection;
 
 @Mapper
-public interface ImMessageHistoryMapper extends BaseMapper<ImMessageHistoryEntity> {
+public interface ImMessageHistoryMapper extends MppBaseMapper<ImMessageHistoryEntity> {
 
     /**
      * 批量插入（mysql）

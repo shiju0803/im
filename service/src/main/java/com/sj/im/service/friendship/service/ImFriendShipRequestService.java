@@ -4,6 +4,7 @@
 
 package com.sj.im.service.friendship.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
 import com.sj.im.service.friendship.entry.ImFriendShipRequestEntity;
 import com.sj.im.service.friendship.web.req.ApproveFriendRequestReq;
 import com.sj.im.service.friendship.web.req.FriendDto;
@@ -16,7 +17,7 @@ import java.util.List;
  * @version 1.0
  * @description: 好友申请业务接口
  */
-public interface ImFriendShipRequestService {
+public interface ImFriendShipRequestService extends IMppService<ImFriendShipRequestEntity> {
 
     /**
      * 添加好友申请

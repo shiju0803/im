@@ -4,6 +4,7 @@
 
 package com.sj.im.service.group.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
 import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
 import com.sj.im.service.friendship.web.req.GetGroupInfoReq;
@@ -12,7 +13,7 @@ import com.sj.im.service.group.web.req.*;
 import com.sj.im.service.group.web.resp.GetGroupResp;
 import com.sj.im.service.group.web.resp.GetJoinedGroupResp;
 
-public interface ImGroupService {
+public interface ImGroupService extends IMppService<ImGroupEntity> {
     /**
      * 导入群组
      *

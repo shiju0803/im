@@ -4,6 +4,7 @@
 
 package com.sj.im.service.friendship.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
 import com.sj.im.service.friendship.entry.ImFriendShipGroupEntity;
 import com.sj.im.service.friendship.web.req.AddFriendShipGroupReq;
 import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupReq;
@@ -13,7 +14,7 @@ import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupReq;
  * @version 1.0
  * @description: 好友分组业务接口
  */
-public interface ImFriendShipGroupService {
+public interface ImFriendShipGroupService extends IMppService<ImFriendShipGroupEntity> {
 
     /**
      * 添加好友分组

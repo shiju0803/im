@@ -4,6 +4,7 @@
 
 package com.sj.im.service.friendship.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
 import com.sj.im.common.model.RequestBase;
 import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
@@ -19,7 +20,7 @@ import java.util.List;
  * @version 1.0
  * @description: 好友业务接口
  */
-public interface ImFriendShipService {
+public interface ImFriendShipService extends IMppService<ImFriendShipEntity> {
     /**
      * 导入关系链
      */

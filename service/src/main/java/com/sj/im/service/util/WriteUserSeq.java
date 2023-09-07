@@ -5,7 +5,7 @@
 package com.sj.im.service.util;
 
 import com.sj.im.common.constant.RedisConstants;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 public class WriteUserSeq {
 
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisTemplate<String, Long> redisTemplate;
 
     /**
      * 将用户序列号写入 Redis 中
@@ -31,6 +31,6 @@ public class WriteUserSeq {
         // 拼接 Redis key，格式为 appId:SeqPrefix:userId
         String key = appId + ":" + RedisConstants.SEQ_PREFIX + ":" + userId;
         // 将序列号值写入 Redis hash 中
-        stringRedisTemplate.opsForHash().put(key, type, seq);
+        redisTemplate.opsForHash().put(key, type, seq);
     }
 }
