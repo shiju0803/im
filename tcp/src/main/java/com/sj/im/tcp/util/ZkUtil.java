@@ -24,6 +24,10 @@ public class ZkUtil {
     @Resource
     private ZooKeeper zkClient;
 
+    public static void main(String[] args) {
+
+    }
+
     /**
      * 创建持久化节点，客户端断开连接后，节点数据持久化在磁盘上，不会被删除。
      *

@@ -20,5 +20,4 @@ public class ImTcpApplication {
     public static void main(String[] args) {
         SpringApplication.run(ImTcpApplication.class, args);
     }
-
 }
