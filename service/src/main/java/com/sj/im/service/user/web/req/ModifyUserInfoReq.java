@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author ShiJu
@@ -22,7 +22,7 @@ import javax.validation.constraints.NotEmpty;
 @ApiModel("修改用户信息的请求")
 public class ModifyUserInfoReq extends RequestBase {
 
-    @NotEmpty(message = "用户id不能为空")
+    @NotBlank(message = "用户id不能为空")
     @ApiModelProperty(value = "用户id", required = true)
     private String userId;
 

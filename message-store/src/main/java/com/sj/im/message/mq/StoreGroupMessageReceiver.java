@@ -39,8 +39,7 @@ public class StoreGroupMessageReceiver {
     /**
      * 监听群组消息队列，接收并处理消息
      */
-    @RabbitListener(
-            bindings = @QueueBinding(
+    @RabbitListener(bindings = @QueueBinding(
                     value = @Queue(value = RabbitConstants.STORE_GROUP_MESSAGE_QUEUE, durable = "true"), // 定义队列名称及持久化
                     exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE), // 定义交换机名称
                     key = RabbitConstants.STORE_GROUP_MESSAGE_QUEUE), // 指定key

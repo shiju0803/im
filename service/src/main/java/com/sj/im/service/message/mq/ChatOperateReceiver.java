@@ -46,7 +46,8 @@ public class ChatOperateReceiver {
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = RabbitConstants.IM_2_MESSAGE_SERVICE_QUEUE, durable = "true"),
-            exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE)
+            exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE),
+            key = RabbitConstants.IM_2_MESSAGE_SERVICE_QUEUE
     ), concurrency = "1")
     public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws IOException {
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);

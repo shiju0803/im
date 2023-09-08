@@ -163,7 +163,13 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         JSONObject json = mqMessageProducer.sendMessage(pack, msg.getMessageHeader(), UserEventCommand.USER_ONLINE_STATUS_CHANGE.getCommand());
         log.info("发送用户状态变更通知：{}", json.toString());
 
-        // 给客户端回复登录ack
+        // 给客户端回复登录 ack
+        MessagePack<LoginAckPack> loginSuccess = getLoginAckPackMessagePack(userId, imei, appId);
+        // 将 MessagePack 对象写入并刷新到通道中
+        ctx.channel().writeAndFlush(loginSuccess);
+    }
+
+    private static MessagePack<LoginAckPack> getLoginAckPackMessagePack(String userId, String imei, Integer appId) {
         MessagePack<LoginAckPack> loginSuccess = new MessagePack<>();
         // 设置 userId 属性为登录请求包中的 userId
         LoginAckPack loginAckPack = new LoginAckPack();
@@ -176,8 +182,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         // 设置 MessagePack 对象的 IMEI 和 AppId 属性为收到的消息的对应属性
         loginSuccess.setImei(imei);
         loginSuccess.setAppId(appId);
-        // 将 MessagePack 对象写入并刷新到通道中
-        ctx.channel().writeAndFlush(loginSuccess);
+        return loginSuccess;
     }
 
     /**

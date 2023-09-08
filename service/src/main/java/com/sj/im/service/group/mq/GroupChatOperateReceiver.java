@@ -43,10 +43,10 @@ public class GroupChatOperateReceiver {
     private MessageSyncServiceImpl messageSyncService;
 
     // 监听RabbitMQ队列，接收消息
-    @RabbitListener(
-            bindings = @QueueBinding(
+    @RabbitListener(bindings = @QueueBinding(
                     value = @Queue(value = RabbitConstants.IM_2_GROUP_SERVICE_QUEUE, durable = "true"),
-                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE)
+                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE),
+                    key = RabbitConstants.IM_2_GROUP_SERVICE_QUEUE
             ), concurrency = "1")
     public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws Exception {
         // 将消息体转换为字符串

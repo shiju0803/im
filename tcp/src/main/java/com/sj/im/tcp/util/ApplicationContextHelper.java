@@ -14,11 +14,11 @@ public class ApplicationContextHelper implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
-    public ApplicationContextHelper() {}
-
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ApplicationContextHelper.applicationContext = applicationContext;
+        if (ApplicationContextHelper.applicationContext == null) {
+            ApplicationContextHelper.applicationContext = applicationContext;
+        }
     }
 
     /**
