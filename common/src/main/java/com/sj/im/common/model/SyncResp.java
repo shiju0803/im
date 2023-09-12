@@ -11,9 +11,10 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 同步数据响应类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 同步数据响应类
  */
 @Data
 @ApiModel(description = "同步响应")

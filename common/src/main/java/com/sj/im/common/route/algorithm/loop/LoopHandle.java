@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * 负载均衡策略-轮询模式
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 负载均衡策略-轮询模式
  */
 public class LoopHandle implements RouteHandle {
 

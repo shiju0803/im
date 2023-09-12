@@ -5,9 +5,10 @@
 package com.sj.im.tcp.listener.process;
 
 /**
+ * ProcessFactory类用于获取消息处理器
+ *
  * @author ShiJu
  * @version 1.0
- * @description: ProcessFactory类用于获取消息处理器
  */
 public class ProcessFactory {
 

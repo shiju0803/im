@@ -7,9 +7,10 @@ package com.sj.im.common.model.message;
 import lombok.Data;
 
 /**
+ * 离线消息内容类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 离线消息内容类
  */
 @Data
 public class OfflineMessageContent {

@@ -8,11 +8,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 获取群角色接口响应类
- */
 @Data
 @ApiModel("获取群角色接口响应类")
 public class GetRoleInGroupResp {

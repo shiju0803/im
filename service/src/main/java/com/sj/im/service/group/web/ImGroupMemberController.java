@@ -17,9 +17,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 群组成员接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群组成员接口
  */
 @Api(tags = "V1/群组成员接口")
 @RestController

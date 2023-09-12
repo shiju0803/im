@@ -7,9 +7,10 @@ package com.sj.im.common.enums.exception;
 import lombok.Getter;
 
 /**
+ * 用户管理错误码
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户管理错误码
  */
 @Getter
 public enum UserErrorCode implements BaseExceptionEnum {

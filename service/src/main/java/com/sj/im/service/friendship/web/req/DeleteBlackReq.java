@@ -12,11 +12,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 移出黑名单请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("移出黑名单请求")

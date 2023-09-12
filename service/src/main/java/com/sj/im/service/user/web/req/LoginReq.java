@@ -12,11 +12,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 登录的请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("登录请求接口入参")

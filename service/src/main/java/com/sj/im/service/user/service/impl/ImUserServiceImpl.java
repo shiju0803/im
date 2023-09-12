@@ -44,25 +44,32 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * 用户相关接口实现类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户相关接口实现类
  */
 @Service
 @Slf4j
 public class ImUserServiceImpl extends ServiceImpl<ImUserDataMapper, ImUserDataEntity> implements ImUserService {
     @Resource
     private AppConfig appConfig;
+
     @Resource
     private CallbackHelper callBackHelper;
+
     @Resource
     private MessageHelper messageHelper;
+
     @Resource
     private ZookeeperHelper zookeeperHelper;
+
     @Resource
     private RouteHandle routeHandle;
+
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
     @Resource
     private ImGroupService imGroupService;
 
@@ -113,7 +120,8 @@ public class ImUserServiceImpl extends ServiceImpl<ImUserDataMapper, ImUserDataE
         List<ImUserDataEntity> imUserDataEntities = list(qw);
 
         // 过滤出查询失败的用户一并返回
-        Map<String, ImUserDataEntity> map = imUserDataEntities.stream().collect(Collectors.toMap(ImUserDataEntity::getUserId, entity -> entity));
+        Map<String, ImUserDataEntity> map =
+                imUserDataEntities.stream().collect(Collectors.toMap(ImUserDataEntity::getUserId, entity -> entity));
         // 通过Map的containsKey来判断没有在查询成功中的用户，将他们添加到查询失败的用户中去
         List<String> failUser = new ArrayList<>();
         for (String userId : req.getUserIds()) {
@@ -221,12 +229,13 @@ public class ImUserServiceImpl extends ServiceImpl<ImUserDataMapper, ImUserDataE
             // TCP通知其他端 构建用户修改事件对象
             UserModifyPack pack = BeanUtil.toBean(req, UserModifyPack.class);
             // 发送用户修改事件
-            messageHelper.sendToUser(req.getUserId(), req.getClientType(), req.getImei(),
-                    UserEventCommand.USER_MODIFY, pack, req.getAppId());
+            messageHelper.sendToUser(req.getUserId(), req.getClientType(), req.getImei(), UserEventCommand.USER_MODIFY,
+                                     pack, req.getAppId());
 
             // 如果开启了修改用户信息后回调功能，则发送回调请求
             if (appConfig.isModifyUserAfterCallback()) {
-                callBackHelper.callback(req.getAppId(), CallbackCommandConstants.MODIFY_USER_AFTER, JSONUtil.toJsonStr(req));
+                callBackHelper.callback(req.getAppId(), CallbackCommandConstants.MODIFY_USER_AFTER,
+                                        JSONUtil.toJsonStr(req));
             }
             return;
         }
@@ -266,7 +275,9 @@ public class ImUserServiceImpl extends ServiceImpl<ImUserDataMapper, ImUserDataE
      */
     @Override
     public Map<Object, Object> getUserSequence(GetUserSequenceReq req) {
-        Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(req.getAppId() + ":" + RedisConstants.SEQ_PREFIX + ":" + req.getUserId());
+        Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(
+                req.getAppId() + ":" + RedisConstants.SEQ_PREFIX + ":" + req.getUserId());
+
         Long groupSeq = imGroupService.getUserGroupMaxSeq(req.getUserId(), req.getAppId());
         map.put(SeqConstants.GROUP_SEQ, groupSeq);
         return map;

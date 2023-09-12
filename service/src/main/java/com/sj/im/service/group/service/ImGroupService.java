@@ -13,6 +13,12 @@ import com.sj.im.service.group.web.req.*;
 import com.sj.im.service.group.web.resp.GetGroupResp;
 import com.sj.im.service.group.web.resp.GetJoinedGroupResp;
 
+/**
+ * 群组服务类
+ *
+ * @author ShiJu
+ * @version 1.0
+ */
 public interface ImGroupService extends IMppService<ImGroupEntity> {
     /**
      * 导入群组

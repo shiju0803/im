@@ -7,9 +7,10 @@ package com.sj.im.service.util;
 import com.sj.im.common.exception.BusinessException;
 
 /**
+ * 生成点对点会话 ID 的工具类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 生成点对点会话 ID 的工具类
  */
 public class ConversationIdGenerate {
 

@@ -13,6 +13,7 @@ import com.sj.im.common.enums.command.MessageCommand;
 import com.sj.im.common.model.message.MessageContent;
 import com.sj.im.common.model.message.MessageReadContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
+import com.sj.im.common.model.message.RecallMessageContent;
 import com.sj.im.service.message.service.MessageSyncService;
 import com.sj.im.service.message.service.P2PMessageService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +33,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
+ * 聊天操作接收器
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 聊天操作接收器
  */
 @Slf4j
 @Component
@@ -47,9 +49,9 @@ public class ChatOperateReceiver {
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = RabbitConstants.IM_2_MESSAGE_SERVICE_QUEUE, durable = "true"),
             exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE),
-            key = RabbitConstants.IM_2_MESSAGE_SERVICE_QUEUE
-    ), concurrency = "1")
-    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws IOException {
+            key = RabbitConstants.IM_2_MESSAGE_SERVICE_QUEUE), concurrency = "1")
+    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel)
+            throws IOException {
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);
         log.info("CHAT MSG FROM QUEUE ::: {}", msg);
         long deliveryTag = (long) headers.get(AmqpHeaders.DELIVERY_TAG);
@@ -72,6 +74,11 @@ public class ChatOperateReceiver {
             if (ObjectUtil.equal(command, MessageCommand.MSG_READ.getCommand())) {
                 MessageReadContent readContent = jsonObject.toBean(MessageReadContent.class);
                 messageSyncService.readMark(readContent);
+            }
+            // 处理消息撤回
+            if (ObjectUtil.equal(command, MessageCommand.MSG_RECALL.getCommand())) {
+                RecallMessageContent recallContent = jsonObject.toBean(RecallMessageContent.class);
+                messageSyncService.recallMessage(recallContent);
             }
             channel.basicAck(deliveryTag, false);
         } catch (Exception e) {

@@ -12,6 +12,9 @@ import javax.annotation.Resource;
 
 /**
  * 写入用户序列号工具类
+ *
+ * @author ShiJu
+ * @version 1.0
  */
 @Service
 public class WriteUserSeq {

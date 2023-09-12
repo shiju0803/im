@@ -14,9 +14,10 @@ import com.sj.im.service.user.web.resp.UserOnlineStatusResp;
 import java.util.Map;
 
 /**
+ * 用户在线状态相关接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户在线状态相关接口
  */
 public interface ImUserStatusService {
     /**

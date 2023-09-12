@@ -4,6 +4,7 @@
 
 package com.sj.im.service.user.web.resp;
 
+
 import com.sj.im.service.user.entry.ImUserDataEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,11 +12,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 获取用户信息的接口响应类
- */
 @Data
 @ApiModel("获取用户信息的接口响应类")
 public class GetUserInfoResp {

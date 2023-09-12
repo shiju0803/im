@@ -12,11 +12,6 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 新建群请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("新建群请求")

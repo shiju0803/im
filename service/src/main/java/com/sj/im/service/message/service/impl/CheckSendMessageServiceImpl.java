@@ -27,9 +27,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
+ * 发送消息校验逻辑
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 发送消息校验逻辑
  */
 @Service
 public class CheckSendMessageServiceImpl implements CheckSendMessageService {
@@ -125,12 +126,13 @@ public class CheckSendMessageServiceImpl implements CheckSendMessageService {
         GetRoleInGroupResp roleInGroup = imGroupMemberService.getRoleInGroupOne(groupId, fromId, appId);
         // 判断群是否被禁言
         // 如果禁言 只有群管理和群主可以发言
-        if (ObjectUtil.equal(imGroup.getMute(), GroupMuteTypeEnum.MUTE.getCode())
-                && (ObjectUtil.notEqual(roleInGroup.getRole(), GroupMemberRoleEnum.MANAGER.getCode())
-                || ObjectUtil.notEqual(roleInGroup.getRole(), GroupMemberRoleEnum.OWNER.getCode()))) {
+        if (ObjectUtil.equal(imGroup.getMute(), GroupMuteTypeEnum.MUTE.getCode()) && (
+                ObjectUtil.notEqual(roleInGroup.getRole(), GroupMemberRoleEnum.MANAGER.getCode())
+                        || ObjectUtil.notEqual(roleInGroup.getRole(), GroupMemberRoleEnum.OWNER.getCode()))) {
             throw new BusinessException(GroupErrorCode.THIS_GROUP_IS_MUTE);
         }
-        if (ObjectUtil.isNotNull(roleInGroup.getSpeakDate()) && roleInGroup.getSpeakDate() > System.currentTimeMillis()) {
+        if (ObjectUtil.isNotNull(roleInGroup.getSpeakDate())
+                && roleInGroup.getSpeakDate() > System.currentTimeMillis()) {
             throw new BusinessException(GroupErrorCode.GROUP_MEMBER_IS_SPEAK);
         }
     }

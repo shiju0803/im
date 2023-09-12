@@ -7,9 +7,10 @@ package com.sj.im.common.enums.command;
 import lombok.Getter;
 
 /**
+ * 会话事件命令枚举
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 会话事件命令枚举
  */
 @Getter
 public enum ConversationEventCommand implements Command {

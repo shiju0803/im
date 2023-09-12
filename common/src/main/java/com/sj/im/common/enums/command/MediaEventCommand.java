@@ -5,9 +5,10 @@
 package com.sj.im.common.enums.command;
 
 /**
+ * 媒体事件命令枚举
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 媒体事件命令枚举
  */
 public enum MediaEventCommand implements Command {
 

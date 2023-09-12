@@ -36,12 +36,14 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * ConversationServiceImpl 是实现 ConversationService 接口的具体实现类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: ConversationServiceImpl 是实现 ConversationService 接口的具体实现类
  */
 @Service
-public class ConversationServiceImpl extends MppServiceImpl<ImConversationSetMapper, ImConversationSetEntity> implements ConversationService {
+public class ConversationServiceImpl extends MppServiceImpl<ImConversationSetMapper, ImConversationSetEntity>
+        implements ConversationService {
     @Resource
     private ImConversationSetMapper imConversationSetMapper;
     @Resource
@@ -76,7 +78,8 @@ public class ConversationServiceImpl extends MppServiceImpl<ImConversationSetMap
         if (ObjectUtil.equal(messageReadContent.getConversationType(), ConversationTypeEnum.GROUP.getCode())) {
             toId = messageReadContent.getGroupId();
         }
-        String conversationId = convertConversationId(messageReadContent.getConversationType(), messageReadContent.getFromId(), toId);
+        String conversationId =
+                convertConversationId(messageReadContent.getConversationType(), messageReadContent.getFromId(), toId);
         // 查询是否存在该会话
         LambdaQueryWrapper<ImConversationSetEntity> query = new LambdaQueryWrapper<>();
         query.eq(ImConversationSetEntity::getConversationId, conversationId);
@@ -91,7 +94,8 @@ public class ConversationServiceImpl extends MppServiceImpl<ImConversationSetMap
             imConversationSetEntity.setToId(toId);
             imConversationSetEntity.setSequence(seq);
             imConversationSetMapper.insert(imConversationSetEntity);
-            writeUserSeq.writeUserSeq(messageReadContent.getAppId(), messageReadContent.getFromId(), SeqConstants.CONVERSATION_SEQ, seq);
+            writeUserSeq.writeUserSeq(messageReadContent.getAppId(), messageReadContent.getFromId(),
+                                      SeqConstants.CONVERSATION_SEQ, seq);
             return;
         }
 
@@ -100,7 +104,8 @@ public class ConversationServiceImpl extends MppServiceImpl<ImConversationSetMap
         imConversationSetEntity.setSequence(seq);
         imConversationSetEntity.setReadSequence(messageReadContent.getMessageSequence());
         imConversationSetMapper.readMark(imConversationSetEntity);
-        writeUserSeq.writeUserSeq(messageReadContent.getAppId(), messageReadContent.getFromId(), SeqConstants.CONVERSATION_SEQ, seq);
+        writeUserSeq.writeUserSeq(messageReadContent.getAppId(), messageReadContent.getFromId(),
+                                  SeqConstants.CONVERSATION_SEQ, seq);
     }
 
     /**
@@ -125,8 +130,8 @@ public class ConversationServiceImpl extends MppServiceImpl<ImConversationSetMap
         if (ObjectUtil.equal(appConfig.getDeleteConversationSyncMode(), 1)) {
             DeleteConversationPack pack = new DeleteConversationPack();
             pack.setConversationId(req.getConversationId());
-            messageHelper.sendToUserExceptClient(req.getFromId(), ConversationEventCommand.CONVERSATION_DELETE,
-                    pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+            messageHelper.sendToUserExceptClient(req.getFromId(), ConversationEventCommand.CONVERSATION_DELETE, pack,
+                                                 new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
         }
     }
 
@@ -168,8 +173,8 @@ public class ConversationServiceImpl extends MppServiceImpl<ImConversationSetMap
             pack.setIsTop(req.getIsTop());
             pack.setSequence(seq);
             pack.setConversationType(conversationSet.getConversationType());
-            messageHelper.sendToUserExceptClient(req.getFromId(), ConversationEventCommand.CONVERSATION_UPDATE,
-                    pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+            messageHelper.sendToUserExceptClient(req.getFromId(), ConversationEventCommand.CONVERSATION_UPDATE, pack,
+                                                 new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
         }
     }
 

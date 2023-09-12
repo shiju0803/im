@@ -11,6 +11,12 @@ import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupMemberReq;
 
 import java.util.List;
 
+/**
+ * 好友分组成员业务接口
+ *
+ * @author ShiJu
+ * @version 1.0
+ */
 public interface ImFriendShipGroupMemberService extends IMppService<ImFriendShipGroupMemberEntity> {
 
     /**

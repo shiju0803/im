@@ -25,9 +25,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
+ * 用户在线状态消息监听
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户在线状态消息监听
  */
 @Slf4j
 @Component
@@ -37,13 +38,13 @@ public class UserOnlineStatusReceiver {
     private ImUserStatusService imUserStatusService;
 
     // 监听 RabbitMQ 消息
-    @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = RabbitConstants.IM_2_USER_SERVICE_QUEUE, durable = "true"),
-            exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE, durable = "true"),
-            key = RabbitConstants.IM_2_USER_SERVICE_QUEUE
-    ), concurrency = "1")
+    @RabbitListener(
+            bindings = @QueueBinding(value = @Queue(value = RabbitConstants.IM_2_USER_SERVICE_QUEUE, durable = "true"),
+                                     exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE, durable = "true"),
+                                     key = RabbitConstants.IM_2_USER_SERVICE_QUEUE), concurrency = "1")
     @RabbitHandler
-    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws Exception {
+    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel)
+            throws Exception {
         long start = System.currentTimeMillis();
         Thread t = Thread.currentThread();
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);
@@ -68,7 +69,8 @@ public class UserOnlineStatusReceiver {
             channel.basicNack(deliveryTag, false, false);
         } finally {
             long end = System.currentTimeMillis();
-            log.debug("channel {} basic-Ack ,it costs {} ms,threadName = {},threadId={}", channel, end - start, t.getName(), t.getId());
+            log.debug("channel {} basic-Ack ,it costs {} ms,threadName = {},threadId={}", channel, end - start,
+                      t.getName(), t.getId());
         }
     }
 }

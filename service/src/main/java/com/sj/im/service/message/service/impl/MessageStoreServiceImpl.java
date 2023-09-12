@@ -26,9 +26,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 消息存储服务类，用于将消息存入 Redis 中
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 消息存储服务类，用于将消息存入 Redis 中
  */
 @Service
 public class MessageStoreServiceImpl implements MessageStoreService {
@@ -60,7 +61,8 @@ public class MessageStoreServiceImpl implements MessageStoreService {
         // 设置消息的唯一标识
         messageContent.setMessageKey(messageBody.getMessageKey());
         // 发送消息到 RabbitMQ 中，等待消费
-        rabbitTemplate.convertAndSend(RabbitConstants.IM_EXCHANGE, RabbitConstants.STORE_P2P_MESSAGE_QUEUE, JSONUtil.toJsonStr(dto));
+        rabbitTemplate.convertAndSend(RabbitConstants.IM_EXCHANGE, RabbitConstants.STORE_P2P_MESSAGE_QUEUE,
+                                      JSONUtil.toJsonStr(dto));
     }
 
     /**
@@ -105,7 +107,8 @@ public class MessageStoreServiceImpl implements MessageStoreService {
         // 将消息体的消息 ID 赋值给消息内容的消息 ID
         messageContent.setMessageKey(messageBody.getMessageKey());
         // 发送消息到 RabbitMQ 中，等待消费
-        rabbitTemplate.convertAndSend(RabbitConstants.IM_EXCHANGE, RabbitConstants.STORE_GROUP_MESSAGE_QUEUE, JSONUtil.toJsonStr(dto));
+        rabbitTemplate.convertAndSend(RabbitConstants.IM_EXCHANGE, RabbitConstants.STORE_GROUP_MESSAGE_QUEUE,
+                                      JSONUtil.toJsonStr(dto));
     }
 
     /**
@@ -163,7 +166,8 @@ public class MessageStoreServiceImpl implements MessageStoreService {
         if (operations.zCard(fromKey) > appConfig.getOfflineMessageCount()) {
             operations.removeRange(fromKey, 0, 0);
         }
-        offlineMessage.setConversationId(conversationService.convertConversationId(ConversationTypeEnum.P2P.getCode(), fromId, toId));
+        offlineMessage.setConversationId(
+                conversationService.convertConversationId(ConversationTypeEnum.P2P.getCode(), fromId, toId));
         // 插入 数据 根据messageKey作为分值
         operations.add(fromKey, JSONUtil.toJsonStr(offlineMessage), offlineMessage.getMessageKey());
 
@@ -171,7 +175,8 @@ public class MessageStoreServiceImpl implements MessageStoreService {
         if (operations.zCard(toKey) > appConfig.getOfflineMessageCount()) {
             operations.removeRange(toKey, 0, 0);
         }
-        offlineMessage.setConversationId(conversationService.convertConversationId(ConversationTypeEnum.P2P.getCode(), toId, fromId));
+        offlineMessage.setConversationId(
+                conversationService.convertConversationId(ConversationTypeEnum.P2P.getCode(), toId, fromId));
         // 插入 数据 根据messageKey作为分值
         operations.add(toKey, JSONUtil.toJsonStr(offlineMessage), offlineMessage.getMessageKey());
     }
@@ -190,8 +195,9 @@ public class MessageStoreServiceImpl implements MessageStoreService {
         for (String memberId : memberIds) {
             // 找到toId的队列
             String toKey = offlineMessage.getAppId() + ":" + RedisConstants.OFFLINE_MESSAGE + ":" + memberId;
-            offlineMessage.setConversationId(conversationService.convertConversationId(
-                    ConversationTypeEnum.GROUP.getCode(), memberId, offlineMessage.getToId()));
+            offlineMessage.setConversationId(
+                    conversationService.convertConversationId(ConversationTypeEnum.GROUP.getCode(), memberId,
+                                                              offlineMessage.getToId()));
             if (operations.zCard(toKey) > appConfig.getOfflineMessageCount()) {
                 operations.removeRange(toKey, 0, 0);
             }

@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.user;
 import lombok.Data;
 
 /**
+ * 用户修改通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户修改通知报文
  */
 @Data
 public class UserModifyPack {

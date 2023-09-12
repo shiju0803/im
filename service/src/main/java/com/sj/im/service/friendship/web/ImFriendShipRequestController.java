@@ -18,9 +18,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 好友申请接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友申请接口
  */
 @Api(tags = "V1/好友请求控制器")
 @RestController

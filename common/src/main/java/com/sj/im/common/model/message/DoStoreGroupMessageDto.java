@@ -7,9 +7,10 @@ package com.sj.im.common.model.message;
 import lombok.Data;
 
 /**
+ * 存储群聊消息 DTO 类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 存储群聊消息 DTO 类
  */
 @Data
 public class DoStoreGroupMessageDto {

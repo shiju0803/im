@@ -38,16 +38,15 @@ import java.util.Map;
 public class MqMessageListener {
 
     // 监听RabbitMQ队列，接收消息
-    @RabbitListener(
-            bindings = @QueueBinding(
-                    // 定义队列名称及持久化
-                    value = @Queue(value = RabbitConstants.MESSAGE_SERVICE_2_IM_QUEUE, durable = "true"),
-                    // 定义交换机名称及持久化
-                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE),
-                    // 定义路由键
-                    key = "${netty.brokerId}"
-            ), concurrency = "1") // 设置并发数为1
-    private void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws Exception {
+    @RabbitListener(bindings = @QueueBinding(
+            // 定义队列名称及持久化
+            value = @Queue(value = RabbitConstants.MESSAGE_SERVICE_2_IM_QUEUE, durable = "true"),
+            // 定义交换机名称及持久化
+            exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE),
+            // 定义路由键
+            key = "${netty.brokerId}"), concurrency = "1") // 设置并发数为1
+    private void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel)
+            throws Exception {
         try {
             // 将消息内容转换为MessagePack对象
             String msgStr = new String(message.getBody());

@@ -10,11 +10,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 导入好友关系接口响应类
- */
 @Data
 @ApiModel("导入好友关系接口响应类")
 public class ImportFriendShipResp {

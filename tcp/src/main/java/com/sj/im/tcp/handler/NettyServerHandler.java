@@ -40,9 +40,10 @@ import org.redisson.api.RedissonClient;
 import java.net.InetAddress;
 
 /**
+ * 事件处理器
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 事件处理器
  */
 @Slf4j
 public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
@@ -51,7 +52,8 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
     private final MqMessageProducer mqMessageProducer;
     private final FeignMessageService feignMessageService;
 
-    public NettyServerHandler(RedissonClient redissonClient, FeignMessageService feignMessageService, TcpConfig nettyConfig, MqMessageProducer mqMessageProducer) {
+    public NettyServerHandler(RedissonClient redissonClient, FeignMessageService feignMessageService,
+                              TcpConfig nettyConfig, MqMessageProducer mqMessageProducer) {
         this.redissonClient = redissonClient;
         this.nettyConfig = nettyConfig;
         this.feignMessageService = feignMessageService;
@@ -89,7 +91,8 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         }
 
         // 聊天command
-        if (ObjectUtil.equal(command, MessageCommand.MSG_P2P.getCommand()) || ObjectUtil.equal(command, GroupEventCommand.MSG_GROUP.getCommand())) {
+        if (ObjectUtil.equal(command, MessageCommand.MSG_P2P.getCommand()) || ObjectUtil.equal(command,
+                                                                                               GroupEventCommand.MSG_GROUP.getCommand())) {
             processMsgEvent(ctx, msg, command);
             return;
         }
@@ -160,7 +163,8 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         pack.setUserId(userId);
         pack.setStatus(ImConnectStatusEnum.ONLINE_STATUS.getCode());
         // 发送用户状态变更消息
-        JSONObject json = mqMessageProducer.sendMessage(pack, msg.getMessageHeader(), UserEventCommand.USER_ONLINE_STATUS_CHANGE.getCommand());
+        JSONObject json = mqMessageProducer.sendMessage(pack, msg.getMessageHeader(),
+                                                        UserEventCommand.USER_ONLINE_STATUS_CHANGE.getCommand());
         log.info("发送用户状态变更通知：{}", json.toString());
 
         // 给客户端回复登录 ack

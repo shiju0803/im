@@ -5,10 +5,12 @@
 package com.sj.im.codec.pack.friendship;
 
 import lombok.Data;
+
 /**
+ * 用户添加黑名单以后tcp通知数据包
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户添加黑名单以后tcp通知数据包
  */
 @Data
 public class AddFriendBlackPack {

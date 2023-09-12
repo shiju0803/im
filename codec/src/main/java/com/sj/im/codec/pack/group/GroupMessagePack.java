@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.group;
 import lombok.Data;
 
 /**
+ * 群聊消息分发报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群聊消息分发报文
  */
 @Data
 public class GroupMessagePack {

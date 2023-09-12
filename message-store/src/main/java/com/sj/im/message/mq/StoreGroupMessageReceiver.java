@@ -28,6 +28,9 @@ import java.util.Map;
 
 /**
  * 接收和处理存储群组消息的消息接收器类
+ *
+ * @author ShiJu
+ * @version 1.0
  */
 @Slf4j
 @Service
@@ -40,11 +43,12 @@ public class StoreGroupMessageReceiver {
      * 监听群组消息队列，接收并处理消息
      */
     @RabbitListener(bindings = @QueueBinding(
-                    value = @Queue(value = RabbitConstants.STORE_GROUP_MESSAGE_QUEUE, durable = "true"), // 定义队列名称及持久化
-                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE), // 定义交换机名称
-                    key = RabbitConstants.STORE_GROUP_MESSAGE_QUEUE), // 指定key
-            concurrency = "1") // 设置并发数为1
-    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws Exception {
+            value = @Queue(value = RabbitConstants.STORE_GROUP_MESSAGE_QUEUE, durable = "true"), // 定义队列名称及持久化
+            exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE), // 定义交换机名称
+            key = RabbitConstants.STORE_GROUP_MESSAGE_QUEUE), // 指定key
+                    concurrency = "1") // 设置并发数为1
+    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel)
+            throws Exception {
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);
         log.info("CHAT MSG FORM QUEUE ::: {}", msg);
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
@@ -52,7 +56,8 @@ public class StoreGroupMessageReceiver {
             // 解析消息内容
             JSONObject jsonObject = JSONUtil.parseObj(msg);
             DoStoreGroupMessageDto groupMessageDto = jsonObject.toBean(DoStoreGroupMessageDto.class);
-            ImMessageBodyEntity messageBody = JSONUtil.toBean(jsonObject.getStr("messageBody"), ImMessageBodyEntity.class);
+            ImMessageBodyEntity messageBody =
+                    JSONUtil.toBean(jsonObject.getStr("messageBody"), ImMessageBodyEntity.class);
             groupMessageDto.setImMessageBodyEntity(messageBody);
             // 调用消息存储服务处理群组消息
             storeMessageService.doStoreGroupMessage(groupMessageDto);

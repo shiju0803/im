@@ -12,11 +12,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 转让群请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("转让群请求")

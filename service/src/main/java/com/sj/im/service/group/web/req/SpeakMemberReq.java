@@ -13,11 +13,6 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 群成员禁言请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "SpeakMemberReq", description = "禁言群成员请求参数")

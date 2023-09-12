@@ -7,19 +7,19 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 群状态枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群状态枚举类
  */
 @Getter
 public enum GroupStatusEnum {
 
-    /**
-     * 1正常 2解散 其他待定比如封禁...
-     */
-    NORMAL(1),
+    NORMAL(1, "正常"),
 
-    DESTROY(2),
+    DESTROY(2, "解散"),
+
+    BAN(3, "封禁")
 
     ;
 
@@ -40,8 +40,10 @@ public enum GroupStatusEnum {
     }
 
     private final int code;
+    private final String desc;
 
-    GroupStatusEnum(int code) {
+    GroupStatusEnum(int code, String desc) {
         this.code = code;
+        this.desc = desc;
     }
 }

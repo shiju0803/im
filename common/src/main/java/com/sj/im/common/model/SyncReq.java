@@ -12,9 +12,10 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotNull;
 
 /**
+ * 同步数据请求参数类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 同步数据请求参数类
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

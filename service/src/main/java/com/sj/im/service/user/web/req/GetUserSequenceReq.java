@@ -12,11 +12,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 获取用户序列接口入参
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("获取用户序列接口入参")

@@ -15,15 +15,13 @@ import java.util.List;
 /**
  * @author ShiJu
  * @version 1.0
- * @description: 消息解码器
- * ByteToMessageDecoder是Netty中的一个抽象类，它提供了一个可重用的ByteBuf解码器，
+ * @description: 消息解码器 ByteToMessageDecoder是Netty中的一个抽象类，它提供了一个可重用的ByteBuf解码器，
  * 可以将ByteBuf解码为消息对象。它的作用是将二进制数据按照特定的规则进行解码，转换成Java对象，方便后续的业务处理。
  */
 public class MessageDecoder extends ByteToMessageDecoder {
 
     /**
-     * 将ByteBuf解码为Message对象。ByteBuf必须包含一个28字节的标头，该标头指定
-     * 消息命令、版本、客户端类型、消息类型、应用程序ID、imei长度和正文长度。
+     * 将ByteBuf解码为Message对象。 ByteBuf必须包含一个28字节的标头，该标头指定 消息命令、版本、客户端类型、消息类型、应用程序ID、imei长度和正文长度。
      * 每个字段占用4个字节。如果ByteBuf不包含至少28个字节，则此方法返回而不产生任何输出。
      *
      * @param ctx 用于传递事件给ChannelPipeline中的下一个ChannelHandler。

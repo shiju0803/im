@@ -15,9 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * 全局HttpClient配置类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 全局HttpClient配置类
  */
 @Configuration
 public class GlobalHttpClientConfig {
@@ -73,8 +74,10 @@ public class GlobalHttpClientConfig {
      * @Qualifier 指定bean标签进行注入
      */
     @Bean(name = "httpClientBuilder")
-    public HttpClientBuilder getHttpClientBuilder(@Qualifier("httpClientConnectionManager") PoolingHttpClientConnectionManager httpClientConnectionManager) {
-        // HttpClientBuilder中的构造方法被protected修饰，所以这里不能直接使用new来实例化一个HttpClientBuilder,可以使用HttpClientBuilder提供的静态方法create()来获取HttpClientBuilder对象
+    public HttpClientBuilder getHttpClientBuilder(
+            @Qualifier("httpClientConnectionManager") PoolingHttpClientConnectionManager httpClientConnectionManager) {
+        // HttpClientBuilder中的构造方法被protected修饰，所以这里不能直接使用new来实例化一个HttpClientBuilder,
+        // 可以使用HttpClientBuilder提供的静态方法create()来获取HttpClientBuilder对象
         httpClientBuilder = HttpClientBuilder.create();
         httpClientBuilder.setConnectionManager(httpClientConnectionManager);
         return httpClientBuilder;
@@ -85,7 +88,8 @@ public class GlobalHttpClientConfig {
      * 注入连接池，用于获取httpClient
      */
     @Bean
-    public CloseableHttpClient getCloseableHttpClient(@Qualifier("httpClientBuilder") HttpClientBuilder httpClientBuilder) {
+    public CloseableHttpClient getCloseableHttpClient(
+            @Qualifier("httpClientBuilder") HttpClientBuilder httpClientBuilder) {
         return httpClientBuilder.build();
     }
 
@@ -105,10 +109,8 @@ public class GlobalHttpClientConfig {
     @Bean(name = "builder")
     public RequestConfig.Builder getBuilder() {
         RequestConfig.Builder builder = RequestConfig.custom();
-        return builder.setConnectTimeout(connectTimeout)
-                .setConnectionRequestTimeout(connectionRequestTimeout)
-                .setSocketTimeout(socketTimeout)
-                .setStaleConnectionCheckEnabled(staleConnectionCheckEnabled);
+        return builder.setConnectTimeout(connectTimeout).setConnectionRequestTimeout(connectionRequestTimeout)
+                      .setSocketTimeout(socketTimeout).setStaleConnectionCheckEnabled(staleConnectionCheckEnabled);
     }
 
     /**

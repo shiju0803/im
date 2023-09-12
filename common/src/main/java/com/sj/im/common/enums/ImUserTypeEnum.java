@@ -7,22 +7,25 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 用户类型枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户类型枚举类
  */
 @Getter
 public enum ImUserTypeEnum {
 
-    IM_USER(1),
+    IM_USER(1, "普通用户"),
 
-    APP_ADMIN(100),
+    APP_ADMIN(100, "应用管理员"),
 
     ;
 
     private final int code;
+    private final String desc;
 
-    ImUserTypeEnum(int code) {
+    ImUserTypeEnum(int code, String desc) {
         this.code = code;
+        this.desc = desc;
     }
 }

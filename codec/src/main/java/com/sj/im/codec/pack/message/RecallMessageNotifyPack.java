@@ -8,9 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 聊天消息撤回回调
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 聊天消息撤回回调
  */
 @Data
 @NoArgsConstructor

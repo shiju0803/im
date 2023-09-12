@@ -7,14 +7,15 @@ package com.sj.im.codec.pack.friendship;
 import lombok.Data;
 
 /**
+ * 修改好友通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 修改好友通知报文
  */
 @Data
 public class UpdateFriendPack {
 
-    public String fromId;
+    private String fromId;
 
     private String toId;
 

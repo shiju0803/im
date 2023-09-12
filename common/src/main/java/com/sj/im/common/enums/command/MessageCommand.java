@@ -6,6 +6,12 @@ package com.sj.im.common.enums.command;
 
 import lombok.Getter;
 
+/**
+ * 消息事件命令枚举
+ *
+ * @author ShiJu
+ * @version 1.0
+ */
 @Getter
 public enum MessageCommand implements Command {
 

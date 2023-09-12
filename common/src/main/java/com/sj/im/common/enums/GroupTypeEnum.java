@@ -7,19 +7,17 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 群类型枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群类型枚举类
  */
 @Getter
 public enum GroupTypeEnum {
 
-    /**
-     * 群类型 1私有群（类似微信） 2公开群(类似qq）
-     */
-    PRIVATE(1),
+    PRIVATE(1, "私有群（类似微信）"),
 
-    PUBLIC(2),
+    PUBLIC(2, "公开群(类似qq）"),
 
     ;
 
@@ -40,8 +38,10 @@ public enum GroupTypeEnum {
     }
 
     private final int code;
+    private final String desc;
 
-    GroupTypeEnum(int code) {
+    GroupTypeEnum(int code, String desc) {
         this.code = code;
+        this.desc = desc;
     }
 }

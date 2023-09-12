@@ -9,9 +9,10 @@ import com.sj.im.common.route.RouteHandle;
 import java.util.List;
 
 /**
+ * 负载均衡策略-一致性哈希算法模式
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 负载均衡策略-一致性哈希算法模式
  */
 public class ConsistentHashHandle implements RouteHandle {
 

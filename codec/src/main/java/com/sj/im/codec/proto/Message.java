@@ -7,9 +7,10 @@ package com.sj.im.codec.proto;
 import lombok.Data;
 
 /**
+ * 自定义的消息类，包含消息头和消息体
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 自定义的消息类，包含消息头和消息体
  */
 @Data
 public class Message {

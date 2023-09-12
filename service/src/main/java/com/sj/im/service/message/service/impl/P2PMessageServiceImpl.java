@@ -6,7 +6,9 @@ package com.sj.im.service.message.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
 import com.sj.im.codec.pack.message.ChatMessageAck;
+import com.sj.im.common.constant.CallbackCommandConstants;
 import com.sj.im.common.constant.SeqConstants;
 import com.sj.im.common.enums.ConversationTypeEnum;
 import com.sj.im.common.enums.command.MessageCommand;
@@ -15,16 +17,17 @@ import com.sj.im.common.model.ResponseVO;
 import com.sj.im.common.model.message.MessageContent;
 import com.sj.im.common.model.message.MessageReceiveAckContent;
 import com.sj.im.common.model.message.OfflineMessageContent;
+import com.sj.im.service.config.AppConfig;
+import com.sj.im.service.helper.CallbackHelper;
 import com.sj.im.service.helper.MessageHelper;
 import com.sj.im.service.message.service.CheckSendMessageService;
 import com.sj.im.service.message.service.MessageStoreService;
 import com.sj.im.service.message.service.P2PMessageService;
 import com.sj.im.service.message.web.rep.SendMessageReq;
 import com.sj.im.service.message.web.resp.SendMessageResp;
-import com.sj.im.service.util.RedisSeq;
 import com.sj.im.service.util.ConversationIdGenerate;
+import com.sj.im.service.util.RedisSeq;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,9 +38,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 私聊业务类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 私聊业务类
  */
 @Slf4j
 @Service
@@ -50,6 +54,10 @@ public class P2PMessageServiceImpl implements P2PMessageService {
     private MessageStoreService messageStoreService;
     @Resource
     private RedisSeq redisSeq;
+    @Resource
+    private AppConfig appConfig;
+    @Resource
+    private CallbackHelper callbackHelper;
 
     private final ThreadPoolExecutor threadPoolExecutor;
 
@@ -61,7 +69,7 @@ public class P2PMessageServiceImpl implements P2PMessageService {
          */
         AtomicInteger num = new AtomicInteger(0);
         threadPoolExecutor = new ThreadPoolExecutor(2, 4, Runtime.getRuntime().availableProcessors(), TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(100), r -> {
+                                                    new LinkedBlockingQueue<>(100), r -> {
             Thread thread = new Thread(r);
             thread.setDaemon(true);
             thread.setName("message-process-thread-" + num.getAndIncrement());
@@ -77,7 +85,9 @@ public class P2PMessageServiceImpl implements P2PMessageService {
     @Override
     public void process(MessageContent content) {
         log.info("消息开始处理：{}", content.getMessageId());
-        MessageContent messageCache = messageStoreService.getMessageFromMessageIdCache(content.getAppId(), content.getMessageId(), MessageContent.class);
+        MessageContent messageCache =
+                messageStoreService.getMessageFromMessageIdCache(content.getAppId(), content.getMessageId(),
+                                                                 MessageContent.class);
         if (ObjectUtil.isNotNull(messageCache)) {
             threadPoolExecutor.execute(() -> {
                 // 回ack成功给自己
@@ -95,9 +105,22 @@ public class P2PMessageServiceImpl implements P2PMessageService {
             return;
         }
 
+        // 之前回调
+        ResponseVO responseVO = ResponseVO.successResponse();
+        if (appConfig.isSendMessageAfterCallback()) {
+            responseVO = callbackHelper.beforeCallback(content.getAppId(), CallbackCommandConstants.SEND_MESSAGE_BEFORE,
+                                                       JSONUtil.toJsonStr(content));
+        }
+
+        if (!responseVO.isOk()) {
+            ack(content, responseVO);
+            return;
+        }
+
         // appId + seq + (from + to) groupId
-        long seq = redisSeq.doGetSeq(content.getAppId() + ":" + SeqConstants.MESSAGE_SEQ + ":"
-                + ConversationIdGenerate.generateP2PId(content.getFromId(), content.getToId()));
+        long seq = redisSeq.doGetSeq(
+                content.getAppId() + ":" + SeqConstants.MESSAGE_SEQ + ":" + ConversationIdGenerate.generateP2PId(
+                        content.getFromId(), content.getToId()));
         content.setMessageSequence(seq);
 
         threadPoolExecutor.execute(() -> {
@@ -121,6 +144,13 @@ public class P2PMessageServiceImpl implements P2PMessageService {
                 // 发送接收确认给发送方，要带上服务端发送的标识
                 receiverAck(content);
             }
+
+            // 之后回调
+            if (appConfig.isSendMessageAfterCallback()) {
+                callbackHelper.callback(content.getAppId(), CallbackCommandConstants.SEND_MESSAGE_AFTER,
+                                        JSONUtil.toJsonStr(content));
+            }
+            log.info("消息处理完成：{}", content.getMessageId());
         });
     }
 
@@ -132,7 +162,8 @@ public class P2PMessageServiceImpl implements P2PMessageService {
      */
     @Override
     public List<ClientInfo> dispatchMessage(MessageContent messageContent) {
-        return messageHelper.sendToUser(messageContent.getToId(), MessageCommand.MSG_P2P, messageContent, messageContent.getAppId());
+        return messageHelper.sendToUser(messageContent.getToId(), MessageCommand.MSG_P2P, messageContent,
+                                        messageContent.getAppId());
     }
 
     /**
@@ -166,7 +197,8 @@ public class P2PMessageServiceImpl implements P2PMessageService {
         pack.setServerSend(true);
         // 发送接收确认消息给发送方
         messageHelper.sendToUser(messageContent.getFromId(), MessageCommand.MSG_RECEIVE_ACK, pack,
-                new ClientInfo(messageContent.getAppId(), messageContent.getAppId(), messageContent.getImei()));
+                                 new ClientInfo(messageContent.getAppId(), messageContent.getAppId(),
+                                                messageContent.getImei()));
     }
 
     /**
@@ -178,7 +210,8 @@ public class P2PMessageServiceImpl implements P2PMessageService {
     @Override
     public void syncToSender(MessageContent messageContent, ClientInfo clientInfo) {
         // 发消息
-        messageHelper.sendToUserExceptClient(messageContent.getFromId(), MessageCommand.MSG_P2P, messageContent, messageContent);
+        messageHelper.sendToUserExceptClient(messageContent.getFromId(), MessageCommand.MSG_P2P, messageContent,
+                                             messageContent);
     }
 
     /**

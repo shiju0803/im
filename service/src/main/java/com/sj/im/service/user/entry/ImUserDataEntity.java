@@ -13,9 +13,10 @@ import lombok.Data;
 import java.util.Date;
 
 /**
+ * 数据库用户数据实体类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 数据库用户数据实体类
  */
 @Data
 @TableName("im_user_data")

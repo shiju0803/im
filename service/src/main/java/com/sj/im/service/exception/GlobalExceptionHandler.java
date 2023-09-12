@@ -29,9 +29,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 全局异常处理类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 全局异常处理类
  */
 @Slf4j
 @RestControllerAdvice

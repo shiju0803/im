@@ -33,9 +33,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 群消息服务类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群消息服务类
  */
 @Slf4j
 @Service
@@ -61,7 +62,7 @@ public class GroupMessageServiceImpl implements GroupMessageService {
          */
         AtomicInteger num = new AtomicInteger(0);
         threadPoolExecutor = new ThreadPoolExecutor(2, 4, Runtime.getRuntime().availableProcessors(), TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(100), r -> {
+                                                    new LinkedBlockingQueue<>(100), r -> {
             Thread thread = new Thread(r);
             thread.setDaemon(true);
             thread.setName("group-message-process-thread-" + num.getAndIncrement());
@@ -81,7 +82,8 @@ public class GroupMessageServiceImpl implements GroupMessageService {
         String groupId = content.getGroupId();
 
         // 判断是否是重复消息
-        GroupChatMessageContent messageCache = messageStoreService.getMessageFromMessageIdCache(appId, messageId, GroupChatMessageContent.class);
+        GroupChatMessageContent messageCache =
+                messageStoreService.getMessageFromMessageIdCache(appId, messageId, GroupChatMessageContent.class);
         if (ObjectUtil.isNotNull(messageCache)) {
             threadPoolExecutor.execute(() -> {
                 // 1.回ack成功给自己
@@ -93,7 +95,7 @@ public class GroupMessageServiceImpl implements GroupMessageService {
             });
         }
         // 获取消息序列号
-        long seq = redisSeq.doGetSeq(appId + ":" + SeqConstants.GROUP_SEQ + groupId);
+        long seq = redisSeq.doGetSeq(appId + ":" + SeqConstants.GROUP_MESSAGE_SEQ + groupId);
         content.setMessageSequence(seq);
         threadPoolExecutor.execute(() -> {
             // 存储消息
@@ -128,7 +130,8 @@ public class GroupMessageServiceImpl implements GroupMessageService {
             // 如果当前成员ID不是消息发送者的ID
             if (ObjectUtil.notEqual(memberId, messageContent.getFromId())) {
                 // 将消息发送到当前成员的在线设备
-                messageHelper.sendToUser(memberId, GroupEventCommand.MSG_GROUP, messageContent, messageContent.getAppId());
+                messageHelper.sendToUser(memberId, GroupEventCommand.MSG_GROUP, messageContent,
+                                         messageContent.getAppId());
             }
         }
     }
@@ -158,7 +161,8 @@ public class GroupMessageServiceImpl implements GroupMessageService {
     @Override
     public void syncToSender(GroupChatMessageContent messageContent, ClientInfo clientInfo) {
         // 将消息发送给除了发送者以外的所有在线用户
-        messageHelper.sendToUserExceptClient(messageContent.getFromId(), GroupEventCommand.MSG_GROUP, messageContent, messageContent);
+        messageHelper.sendToUserExceptClient(messageContent.getFromId(), GroupEventCommand.MSG_GROUP, messageContent,
+                                             messageContent);
     }
 
     /**

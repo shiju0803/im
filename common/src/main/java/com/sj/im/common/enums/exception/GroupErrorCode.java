@@ -7,9 +7,10 @@ package com.sj.im.common.enums.exception;
 import lombok.Getter;
 
 /**
+ * 群组错误枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群组错误枚举类
  */
 @Getter
 public enum GroupErrorCode implements BaseExceptionEnum {

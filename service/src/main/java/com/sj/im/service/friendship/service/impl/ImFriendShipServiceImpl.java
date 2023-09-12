@@ -59,13 +59,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * 好友关系业务类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友关系业务类
  */
 @Service
 @Slf4j
-public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, ImFriendShipEntity> implements ImFriendShipService {
+public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, ImFriendShipEntity>
+        implements ImFriendShipService {
     @Resource
     private ImFriendShipService thisService;
     @Resource
@@ -155,8 +157,9 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
 
         // 如果配置了添加好友前回调，则调用回调服务
         if (appConfig.isAddFriendBeforeCallback()) {
-            ResponseVO callbackResp = callBackHelper.beforeCallback(req.getAppId(),
-                    CallbackCommandConstants.ADD_FRIEND_BEFORE, JSONUtil.toJsonStr(req));
+            ResponseVO callbackResp =
+                    callBackHelper.beforeCallback(req.getAppId(), CallbackCommandConstants.ADD_FRIEND_BEFORE,
+                                                  JSONUtil.toJsonStr(req));
             if (!callbackResp.isOk()) {
                 // 如果回调服务返回失败，则抛出业务异常
                 throw new BusinessException(callbackResp.getMsg());
@@ -212,14 +215,15 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
         pack.setToId(req.getToItem().getToId());
         // 将好友信息更新的消息实体发送给发送方用户
         messageHelper.sendToUser(req.getFromId(), req.getClientType(), req.getImei(),
-                FriendshipEventCommand.FRIEND_UPDATE, pack, req.getAppId());
+                                 FriendshipEventCommand.FRIEND_UPDATE, pack, req.getAppId());
 
         // 如果配置了在回调之后再修改好友信息，构造回调相关的参数并执行回调操作
         if ((appConfig.isModifyFriendAfterCallback())) {
             AddFriendAfterCallbackDto callbackDto = new AddFriendAfterCallbackDto();
             callbackDto.setFromId(req.getFromId());
             callbackDto.setToItem(req.getToItem());
-            callBackHelper.callback(req.getAppId(), CallbackCommandConstants.UPDATE_FRIEND_AFTER, JSONUtil.toJsonStr(callbackDto));
+            callBackHelper.callback(req.getAppId(), CallbackCommandConstants.UPDATE_FRIEND_AFTER,
+                                    JSONUtil.toJsonStr(callbackDto));
         }
     }
 
@@ -256,7 +260,7 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
             deleteFriendPack.setFromId(req.getFromId());
             deleteFriendPack.setToId(req.getToId());
             messageHelper.sendToUser(req.getFromId(), req.getClientType(), req.getImei(),
-                    FriendshipEventCommand.FRIEND_DELETE, deleteFriendPack, req.getAppId());
+                                     FriendshipEventCommand.FRIEND_DELETE, deleteFriendPack, req.getAppId());
 
             // 之后回调
             if (appConfig.isDeleteFriendAfterCallback()) {
@@ -264,7 +268,7 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
                 deleteFriendAfterCallbackDto.setFromId(req.getFromId());
                 deleteFriendAfterCallbackDto.setToId(req.getToId());
                 callBackHelper.callback(req.getAppId(), CallbackCommandConstants.DELETE_FRIEND_AFTER,
-                        JSONUtil.toJsonStr(deleteFriendAfterCallbackDto));
+                                        JSONUtil.toJsonStr(deleteFriendAfterCallbackDto));
             }
         } else {
             throw new BusinessException(FriendShipErrorCode.FRIEND_IS_DELETED);
@@ -292,7 +296,7 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
         deleteFriendPack.setFromId(req.getFromId());
         // 发送删除所有好友的通知消息
         messageHelper.sendToUser(req.getFromId(), req.getClientType(), req.getImei(),
-                FriendshipEventCommand.FRIEND_ALL_DELETE, deleteFriendPack, req.getAppId());
+                                 FriendshipEventCommand.FRIEND_ALL_DELETE, deleteFriendPack, req.getAppId());
     }
 
     /**
@@ -346,7 +350,8 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
         }
 
         // 2、将复杂sql查询出来的数据转换为map
-        Map<String, Integer> collect = resp.stream().collect(Collectors.toMap(CheckFriendShipResp::getToId, CheckFriendShipResp::getStatus));
+        Map<String, Integer> collect =
+                resp.stream().collect(Collectors.toMap(CheckFriendShipResp::getToId, CheckFriendShipResp::getStatus));
         // 3、最后比对之前result中和collect是否完全相同，collect中没有的话，就将这个数据封装起来放到resp中去
         for (Map.Entry<String, Integer> entry : result.entrySet()) {
             String toId = entry.getKey();
@@ -425,7 +430,8 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
         addFriendBlackPack.setSequence(seq);
         addFriendBlackPack.setToId(toId);
         //发送添加黑名单关系的通知消息
-        messageHelper.sendToUser(fromId, req.getClientType(), req.getImei(), FriendshipEventCommand.FRIEND_BLACK_ADD, addFriendBlackPack, appId);
+        messageHelper.sendToUser(fromId, req.getClientType(), req.getImei(), FriendshipEventCommand.FRIEND_BLACK_ADD,
+                                 addFriendBlackPack, appId);
 
         // 之后回调
         if (appConfig.isAddFriendShipBlackAfterCallback()) {
@@ -469,14 +475,16 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
             deleteFriendPack.setFromId(req.getFromId());
             deleteFriendPack.setSequence(seq);
             deleteFriendPack.setToId(req.getToId());
-            messageHelper.sendToUser(req.getFromId(), req.getClientType(), req.getImei(), FriendshipEventCommand.FRIEND_BLACK_DELETE, deleteFriendPack, req.getAppId());
+            messageHelper.sendToUser(req.getFromId(), req.getClientType(), req.getImei(),
+                                     FriendshipEventCommand.FRIEND_BLACK_DELETE, deleteFriendPack, req.getAppId());
 
             // 如果设置了回调，执行回调操作
             if ((appConfig.isDeleteFriendShipBlackAfterCallback())) {
                 AddFriendBlackAfterCallbackDto callbackDto = new AddFriendBlackAfterCallbackDto();
                 callbackDto.setFromId(req.getFromId());
                 callbackDto.setToId(req.getToId());
-                callBackHelper.callback(req.getAppId(), CallbackCommandConstants.DELETE_BLACK, JSONUtil.toJsonStr(callbackDto));
+                callBackHelper.callback(req.getAppId(), CallbackCommandConstants.DELETE_BLACK,
+                                        JSONUtil.toJsonStr(callbackDto));
 
             }
         }
@@ -499,7 +507,8 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
         }
 
         // 将查询结果转换为 Map，以被检查好友 ID 为键，好友关系状态为值
-        Map<String, Integer> collect = resp.stream().collect(Collectors.toMap(CheckFriendShipResp::getToId, CheckFriendShipResp::getStatus));
+        Map<String, Integer> collect =
+                resp.stream().collect(Collectors.toMap(CheckFriendShipResp::getToId, CheckFriendShipResp::getStatus));
         // 遍历被检查好友 ID Map，如果某个好友关系不存在则将其添加到结果列表中
         for (Map.Entry<String, Integer> entry : toIdMap.entrySet()) {
             String toId = entry.getKey();
@@ -572,12 +581,9 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
         LambdaUpdateWrapper<ImFriendShipEntity> updateWrapper = new LambdaUpdateWrapper<>();
         // 设置要更新的字段和对应的值
         updateWrapper.set(ImFriendShipEntity::getAddSource, dto.getAddSource())
-                .set(ImFriendShipEntity::getExtra, dto.getExtra())
-                .set(ImFriendShipEntity::getFriendSequence, seq)
-                .set(ImFriendShipEntity::getRemark, dto.getRemark())
-                .eq(ImFriendShipEntity::getAppId, appId)
-                .eq(ImFriendShipEntity::getToId, dto.getToId())
-                .eq(ImFriendShipEntity::getFromId, fromId);
+                     .set(ImFriendShipEntity::getExtra, dto.getExtra()).set(ImFriendShipEntity::getFriendSequence, seq)
+                     .set(ImFriendShipEntity::getRemark, dto.getRemark()).eq(ImFriendShipEntity::getAppId, appId)
+                     .eq(ImFriendShipEntity::getToId, dto.getToId()).eq(ImFriendShipEntity::getFromId, fromId);
 
         int update = imFriendShipMapper.update(null, updateWrapper);
         if (update == 1) {
@@ -694,7 +700,7 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
         addFriendPack.setSequence(seq);
         if (ObjectUtil.isNotNull(requestBase)) {
             messageHelper.sendToUser(fromId, requestBase.getClientType(), requestBase.getImei(),
-                    FriendshipEventCommand.FRIEND_ADD, addFriendPack, requestBase.getAppId());
+                                     FriendshipEventCommand.FRIEND_ADD, addFriendPack, requestBase.getAppId());
         } else {
             messageHelper.sendToUser(fromId, FriendshipEventCommand.FRIEND_ADD, addFriendPack, requestBase.getAppId());
         }
@@ -708,8 +714,7 @@ public class ImFriendShipServiceImpl extends MppServiceImpl<ImFriendShipMapper, 
             AddFriendAfterCallbackDto callbackDto = new AddFriendAfterCallbackDto();
             callbackDto.setFromId(fromId);
             callbackDto.setToItem(dto);
-            callBackHelper.callback(appId,
-                    CallbackCommandConstants.ADD_FRIEND_AFTER, JSONUtil.toJsonStr(callbackDto));
+            callBackHelper.callback(appId, CallbackCommandConstants.ADD_FRIEND_AFTER, JSONUtil.toJsonStr(callbackDto));
         }
     }
 }

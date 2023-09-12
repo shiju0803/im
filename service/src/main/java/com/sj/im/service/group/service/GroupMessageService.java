@@ -12,9 +12,10 @@ import com.sj.im.service.group.web.req.SendGroupMessageReq;
 import com.sj.im.service.message.web.resp.SendMessageResp;
 
 /**
+ * 群消息服务类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群消息服务类
  */
 public interface GroupMessageService {
 

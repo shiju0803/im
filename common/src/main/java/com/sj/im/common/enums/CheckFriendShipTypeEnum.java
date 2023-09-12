@@ -7,27 +7,25 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 检查好友关系枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 检查好友关系枚举类
  */
 @Getter
 public enum CheckFriendShipTypeEnum {
-    /**
-     * 单方校验
-     */
-    SINGLE(1),
 
-    /**
-     * 双方校验
-     */
-    BOTH(2),
+    SINGLE(1, "单方校验"),
+
+    BOTH(2, "双方校验"),
 
     ;
 
     private final int type;
+    private final String desc;
 
-    CheckFriendShipTypeEnum(int type) {
+    CheckFriendShipTypeEnum(int type, String desc) {
         this.type = type;
+        this.desc = desc;
     }
 }

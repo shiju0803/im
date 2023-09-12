@@ -9,9 +9,10 @@ import com.sj.im.common.exception.BusinessException;
 import com.sj.im.common.route.RouteInfo;
 
 /**
+ * 路由信息解析工具类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 路由信息解析工具类
  */
 public class RouteInfoParseUtil {
 

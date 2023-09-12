@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.user;
 import lombok.Data;
 
 /**
+ * 用户客户端状态变化通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户客户端状态变化通知报文
  */
 @Data
 public class UserCustomStatusChangeNotifyPack {

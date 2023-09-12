@@ -17,12 +17,11 @@ import io.netty.buffer.ByteBuf;
  * @description: 自定义私有协议转换器
  */
 public class ByteBufToMessageUtil {
+    private ByteBufToMessageUtil() {}
+
     /**
-     * 请求方式 HTTP GET POST PUT DELETE 版本 1.0 1.1 2.0
-     * client IOS 安卓 pc(windows mac) web // 支持json 也支持 protobuf
-     * appId (自定义参数)
-     * 请求数据长度 28 + imei + body
-     * 请求头（指令 版本 clientType 消息解析类型 appId imei长度 bodyLen） + imei号 + 请求体
+     * 请求方式 HTTP GET POST PUT DELETE 版本 1.0 1.1 2.0 client IOS 安卓 pc(windows mac) web // 支持json 也支持 protobuf appId
+     * (自定义参数) 请求数据长度 28 + imei + body 请求头（指令 版本 clientType 消息解析类型 appId imei长度 bodyLen） + imei号 + 请求体
      */
     public static Message transition(ByteBuf in) {
         // 获取指令
@@ -80,8 +79,5 @@ public class ByteBufToMessageUtil {
         // 标记读指针位置
         in.markReaderIndex();
         return message;
-    }
-
-    private ByteBufToMessageUtil() {
     }
 }

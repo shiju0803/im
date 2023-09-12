@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.group;
 import lombok.Data;
 
 /**
+ * 解散群通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 解散群通知报文
  */
 @Data
 public class DestroyGroupPack {

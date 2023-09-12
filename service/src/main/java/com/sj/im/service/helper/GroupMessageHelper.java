@@ -24,9 +24,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 群组行为消息发送
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群组行为消息发送
  */
 @Slf4j
 @Component
@@ -44,21 +45,27 @@ public class GroupMessageHelper {
         if (ObjectUtil.equal(command, GroupEventCommand.ADDED_MEMBER)) {
             // 加入群聊需要发送给管理员和加入者本身
             doAddMember(userId, command, data, clientInfo, groupId, object);
-        } else if (ObjectUtil.equal(command, GroupEventCommand.DELETED_MEMBER)) {
-            // 踢人出群需要发送给群内所有人和踢出者本身
-            doDeleteMember(userId, command, data, clientInfo, object, groupId);
-        } else if (ObjectUtil.equal(command, GroupEventCommand.UPDATED_MEMBER)) {
-            // 修改群成员只需要发送给给管理员和修改者本身
-            doUpdateMember(userId, command, data, clientInfo, object, groupId);
         } else {
-            // 其他操作默认发给所有人
-            doOther(userId, command, data, clientInfo, groupMemberId);
+            if (ObjectUtil.equal(command, GroupEventCommand.DELETED_MEMBER)) {
+                // 踢人出群需要发送给群内所有人和踢出者本身
+                doDeleteMember(userId, command, data, clientInfo, object, groupId);
+            } else {
+                if (ObjectUtil.equal(command, GroupEventCommand.UPDATED_MEMBER)) {
+                    // 修改群成员只需要发送给给管理员和修改者本身
+                    doUpdateMember(userId, command, data, clientInfo, object, groupId);
+                } else {
+                    // 其他操作默认发给所有人
+                    doOther(userId, command, data, clientInfo, groupMemberId);
+                }
+            }
         }
     }
 
-    private void doOther(String userId, Command command, Object data, ClientInfo clientInfo, List<String> groupMemberId) {
+    private void doOther(String userId, Command command, Object data, ClientInfo clientInfo,
+                         List<String> groupMemberId) {
         for (String memberId : groupMemberId) {
-            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(memberId, userId)) {
+            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(
+                    memberId, userId)) {
                 messageHelper.sendToUserExceptClient(memberId, command, data, clientInfo);
             } else {
                 messageHelper.sendToUser(memberId, command, data, clientInfo.getAppId());
@@ -66,7 +73,8 @@ public class GroupMessageHelper {
         }
     }
 
-    private void doUpdateMember(String userId, Command command, Object data, ClientInfo clientInfo, JSONObject object, String groupId) {
+    private void doUpdateMember(String userId, Command command, Object data, ClientInfo clientInfo, JSONObject object,
+                                String groupId) {
         UpdateGroupMemberPack updateMember = BeanUtil.toBean(object, UpdateGroupMemberPack.class);
         String memberId = updateMember.getMemberId();
         List<GroupMemberDto> groupManager = imGroupMemberService.getGroupManager(groupId, clientInfo.getAppId());
@@ -74,7 +82,8 @@ public class GroupMessageHelper {
         groupMemberDto.setMemberId(memberId);
         groupManager.add(groupMemberDto);
         for (GroupMemberDto memberDto : groupManager) {
-            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(memberDto.getMemberId(), userId)) {
+            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(
+                    memberDto.getMemberId(), userId)) {
                 messageHelper.sendToUserExceptClient(memberDto.getMemberId(), command, data, clientInfo);
             } else {
                 messageHelper.sendToUser(memberDto.getMemberId(), command, data, clientInfo.getAppId());
@@ -82,13 +91,15 @@ public class GroupMessageHelper {
         }
     }
 
-    private void doDeleteMember(String userId, Command command, Object data, ClientInfo clientInfo, JSONObject object, String groupId) {
+    private void doDeleteMember(String userId, Command command, Object data, ClientInfo clientInfo, JSONObject object,
+                                String groupId) {
         RemoveGroupMemberPack removeMember = BeanUtil.toBean(object, RemoveGroupMemberPack.class);
         String member = removeMember.getMember();
         List<String> members = imGroupMemberService.getGroupMemberId(groupId, clientInfo.getAppId());
         members.add(member);
         for (String memberId : members) {
-            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(memberId, userId)) {
+            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(
+                    memberId, userId)) {
                 messageHelper.sendToUserExceptClient(memberId, command, data, clientInfo);
             } else {
                 messageHelper.sendToUser(memberId, command, data, clientInfo.getAppId());
@@ -96,12 +107,14 @@ public class GroupMessageHelper {
         }
     }
 
-    private void doAddMember(String userId, Command command, Object data, ClientInfo clientInfo, String groupId, JSONObject object) {
+    private void doAddMember(String userId, Command command, Object data, ClientInfo clientInfo, String groupId,
+                             JSONObject object) {
         List<GroupMemberDto> groupManager = imGroupMemberService.getGroupManager(groupId, clientInfo.getAppId());
         AddGroupMemberPack addGroupMemberPack = BeanUtil.toBean(object, AddGroupMemberPack.class);
         List<String> members = addGroupMemberPack.getMembers();
         for (GroupMemberDto manager : groupManager) {
-            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(manager.getMemberId(), userId)) {
+            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(
+                    manager.getMemberId(), userId)) {
                 messageHelper.sendToUserExceptClient(manager.getMemberId(), command, data, clientInfo);
             } else {
                 messageHelper.sendToUser(manager.getMemberId(), command, data, clientInfo.getAppId());
@@ -109,7 +122,8 @@ public class GroupMessageHelper {
         }
 
         for (String member : members) {
-            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(member, userId)) {
+            if (ObjectUtil.notEqual(clientInfo.getClientType(), ClientType.WEBAPI.getCode()) && ObjectUtil.equal(member,
+                                                                                                                 userId)) {
                 messageHelper.sendToUserExceptClient(member, command, data, clientInfo);
             } else {
                 messageHelper.sendToUser(member, command, data, clientInfo.getAppId());

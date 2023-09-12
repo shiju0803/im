@@ -14,11 +14,6 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 导入好友关系请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("导入好友关系请求")

@@ -10,11 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 审批好友申请请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("审批好友申请请求")

@@ -51,9 +51,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * 群组业务
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群组业务
  */
 @Service
 @Slf4j
@@ -92,7 +93,8 @@ public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEnt
         // 导入逻辑
         ImGroupEntity entity = BeanUtil.toBean(req, ImGroupEntity.class);
         // 如果群所有者为空的话，报错
-        if (ObjectUtil.equal(req.getGroupType(), GroupTypeEnum.PUBLIC.getCode()) && CharSequenceUtil.isBlank(req.getOwnerId())) {
+        if (ObjectUtil.equal(req.getGroupType(), GroupTypeEnum.PUBLIC.getCode()) && CharSequenceUtil.isBlank(
+                req.getOwnerId())) {
             throw new BusinessException(GroupErrorCode.PUBLIC_GROUP_MUST_HAVE_OWNER);
         }
 
@@ -132,7 +134,8 @@ public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEnt
             }
         }
         // 如果要新建的群组是公开群组的话，但是没有所有者的话，就报错
-        if (ObjectUtil.equal(req.getGroupType(), GroupTypeEnum.PUBLIC.getCode()) && CharSequenceUtil.isBlank(req.getOwnerId())) {
+        if (ObjectUtil.equal(req.getGroupType(), GroupTypeEnum.PUBLIC.getCode()) && CharSequenceUtil.isBlank(
+                req.getOwnerId())) {
             throw new BusinessException(GroupErrorCode.PUBLIC_GROUP_MUST_HAVE_OWNER);
         }
 
@@ -159,14 +162,15 @@ public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEnt
 
         // 回调
         if (appConfig.isCreateGroupAfterCallback()) {
-            callBackHelper.callback(req.getAppId(), CallbackCommandConstants.CREATE_GROUP_AFTER, JSONUtil.toJsonStr(imGroupEntity));
+            callBackHelper.callback(req.getAppId(), CallbackCommandConstants.CREATE_GROUP_AFTER,
+                                    JSONUtil.toJsonStr(imGroupEntity));
         }
 
         // TCP通知
         CreateGroupPack pack = BeanUtil.toBean(imGroupEntity, CreateGroupPack.class);
         pack.setSequence(seq);
-        groupMessageHelper.producer(req.getOperator(), GroupEventCommand.CREATED_GROUP,
-                pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+        groupMessageHelper.producer(req.getOperator(), GroupEventCommand.CREATED_GROUP, pack,
+                                    new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
     }
 
     /**
@@ -194,14 +198,16 @@ public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEnt
         boolean isAdmin = false;
         if (!isAdmin) {
             //不是后台调用需要检查权限
-            GetRoleInGroupResp role = imGroupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
+            GetRoleInGroupResp role =
+                    imGroupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
             if (ObjectUtil.isNull(role)) {
                 throw new BusinessException(GroupErrorCode.MEMBER_IS_NOT_JOINED_GROUP);
             }
 
             Integer roleInfo = role.getRole();
-            boolean isManager = ObjectUtil.equal(roleInfo, GroupMemberRoleEnum.MANAGER.getCode())
-                    || ObjectUtil.equal(roleInfo, GroupMemberRoleEnum.OWNER.getCode());
+            boolean isManager =
+                    ObjectUtil.equal(roleInfo, GroupMemberRoleEnum.MANAGER.getCode()) || ObjectUtil.equal(roleInfo,
+                                                                                                          GroupMemberRoleEnum.OWNER.getCode());
             //公开群只能群主修改资料
             if (!isManager && ObjectUtil.equal(GroupTypeEnum.PUBLIC.getCode(), imGroupEntity.getGroupType())) {
                 throw new BusinessException(GroupErrorCode.THIS_OPERATE_NEED_MANAGER_ROLE);
@@ -221,14 +227,14 @@ public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEnt
         // 之后回调
         if (appConfig.isModifyGroupAfterCallback()) {
             callBackHelper.callback(req.getAppId(), CallbackCommandConstants.UPDATE_GROUP_AFTER,
-                    JSONUtil.toJsonStr(imGroupMapper.selectOne(query)));
+                                    JSONUtil.toJsonStr(imGroupMapper.selectOne(query)));
         }
 
         // TCP通知
         UpdateGroupInfoPack pack = BeanUtil.toBean(req, UpdateGroupInfoPack.class);
         pack.setSequence(seq);
-        groupMessageHelper.producer(req.getOperator(), GroupEventCommand.UPDATED_GROUP,
-                pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+        groupMessageHelper.producer(req.getOperator(), GroupEventCommand.UPDATED_GROUP, pack,
+                                    new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
     }
 
     /**
@@ -342,15 +348,16 @@ public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEnt
         if (appConfig.isDestroyGroupAfterCallback()) {
             DestroyGroupCallbackDto callbackDto = new DestroyGroupCallbackDto();
             callbackDto.setGroupId(req.getGroupId());
-            callBackHelper.callback(req.getAppId(), CallbackCommandConstants.DESTROY_GROUP_AFTER, JSONUtil.toJsonStr(callbackDto));
+            callBackHelper.callback(req.getAppId(), CallbackCommandConstants.DESTROY_GROUP_AFTER,
+                                    JSONUtil.toJsonStr(callbackDto));
         }
 
         // TCP通知
         DestroyGroupPack pack = new DestroyGroupPack();
         pack.setGroupId(req.getGroupId());
         pack.setSequence(seq);
-        groupMessageHelper.producer(req.getOperator(), GroupEventCommand.DESTROY_GROUP, pack, new ClientInfo(req.getAppId()
-                , req.getClientType(), req.getImei()));
+        groupMessageHelper.producer(req.getOperator(), GroupEventCommand.DESTROY_GROUP, pack,
+                                    new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
     }
 
     /**
@@ -360,7 +367,8 @@ public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEnt
     @Transactional
     public void transferGroup(TransferGroupReq req) {
         // 先判断一下转让群主的用户是不是群主
-        GetRoleInGroupResp roleInGroupOne = imGroupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
+        GetRoleInGroupResp roleInGroupOne =
+                imGroupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
         if (ObjectUtil.notEqual(roleInGroupOne.getRole(), GroupMemberRoleEnum.OWNER.getCode())) {
             throw new BusinessException(GroupErrorCode.THIS_OPERATE_NEED_OWNER_ROLE);
         }
@@ -410,9 +418,12 @@ public class ImGroupServiceImpl extends MppServiceImpl<ImGroupMapper, ImGroupEnt
 
         if (!isAdmin) {
             //不是后台调用需要检查权限
-            GetRoleInGroupResp role = imGroupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
+            GetRoleInGroupResp role =
+                    imGroupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
             Integer roleInfo = role.getRole();
-            boolean isManager = ObjectUtil.equal(roleInfo, GroupMemberRoleEnum.MANAGER.getCode()) || ObjectUtil.equal(roleInfo, GroupMemberRoleEnum.OWNER.getCode());
+            boolean isManager =
+                    ObjectUtil.equal(roleInfo, GroupMemberRoleEnum.MANAGER.getCode()) || ObjectUtil.equal(roleInfo,
+                                                                                                          GroupMemberRoleEnum.OWNER.getCode());
 
             //公开群只能群主修改资料
             if (!isManager) {

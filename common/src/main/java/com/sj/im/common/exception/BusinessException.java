@@ -8,9 +8,10 @@ import com.sj.im.common.enums.exception.BaseExceptionEnum;
 import lombok.Getter;
 
 /**
+ * 自定义业务异常类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 自定义业务异常类
  */
 @Getter
 public class BusinessException extends RuntimeException {

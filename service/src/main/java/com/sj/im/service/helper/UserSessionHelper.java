@@ -18,9 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 获取UserSession工具类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 获取UserSession工具类
  */
 @Component
 public class UserSessionHelper {

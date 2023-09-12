@@ -8,9 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 客户端信息类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 客户端信息类
  */
 @Data
 @NoArgsConstructor

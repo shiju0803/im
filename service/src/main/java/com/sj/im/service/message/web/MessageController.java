@@ -9,6 +9,7 @@ import com.sj.im.common.model.SyncReq;
 import com.sj.im.common.model.SyncResp;
 import com.sj.im.common.model.message.CheckSendMessageReq;
 import com.sj.im.common.model.message.OfflineMessageContent;
+import com.sj.im.common.model.message.RecallMessageContent;
 import com.sj.im.service.message.service.MessageSyncService;
 import com.sj.im.service.message.service.P2PMessageService;
 import com.sj.im.service.message.web.rep.SendMessageReq;
@@ -24,9 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
+ * 消息管理
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 消息管理
  */
 @RestController
 @RequestMapping("v1/message")
@@ -54,5 +56,12 @@ public class MessageController {
     @PostMapping("/syncOfflineMessage")
     public ResponseVO<SyncResp<OfflineMessageContent>> syncOfflineMessage(@RequestBody @Validated SyncReq req) {
         return ResponseVO.successResponse(messageSyncService.syncOfflineMessage(req));
+    }
+
+    @ApiOperation(value = "消息撤回")
+    @PostMapping("/recallMessage")
+    public ResponseVO<String> recallMessage(@RequestBody @Validated RecallMessageContent req) {
+        messageSyncService.recallMessage(req);
+        return ResponseVO.successResponse();
     }
 }

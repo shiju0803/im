@@ -15,9 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * mybatis-plus配置类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: mybatis-plus配置类
  */
 @Configuration
 @EnableMPP

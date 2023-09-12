@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.message;
 import lombok.Data;
 
 /**
+ * 聊天消息回调
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 聊天消息回调
  */
 @Data
 public class ChatMessageAck {

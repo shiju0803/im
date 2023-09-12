@@ -7,9 +7,10 @@ package com.sj.im.common.enums.exception;
 import lombok.Getter;
 
 /**
+ * 网关错误码枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 网关错误码枚举类
  */
 @Getter
 public enum GateWayErrorCode implements BaseExceptionEnum {

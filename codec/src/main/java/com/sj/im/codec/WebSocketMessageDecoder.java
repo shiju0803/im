@@ -14,9 +14,10 @@ import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import java.util.List;
 
 /**
+ * WebSocket 消息解码器，将二进制 WebSocketFrame 转换为自定义的 Message 对象
+ *
  * @author ShiJu
  * @version 1.0
- * @description: WebSocket 消息解码器，将二进制 WebSocketFrame 转换为自定义的 Message 对象
  */
 public class WebSocketMessageDecoder extends MessageToMessageDecoder<BinaryWebSocketFrame> {
 
@@ -40,7 +41,7 @@ public class WebSocketMessageDecoder extends MessageToMessageDecoder<BinaryWebSo
         // 将 ByteBuf 对象转换为自定义的 Message 对象
         Message message = ByteBufToMessageUtil.transition(content);
         // 如果转换失败，则返回
-        if(message == null){
+        if (message == null) {
             return;
         }
         // 将解码后的 Message 对象添加到输出列表中

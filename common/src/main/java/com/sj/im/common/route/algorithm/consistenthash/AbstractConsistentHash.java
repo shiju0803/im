@@ -12,9 +12,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
+ * 用于实现一致性哈希算法的抽象类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用于实现一致性哈希算法的抽象类
  */
 public abstract class AbstractConsistentHash {
 

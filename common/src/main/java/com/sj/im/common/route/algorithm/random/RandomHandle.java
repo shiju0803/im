@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * 负载均衡策略-随机模式
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 负载均衡策略-随机模式
  */
 public class RandomHandle implements RouteHandle {
 

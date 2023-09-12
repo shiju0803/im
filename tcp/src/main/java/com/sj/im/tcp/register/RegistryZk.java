@@ -16,9 +16,10 @@ import javax.annotation.Resource;
 import java.net.InetAddress;
 
 /**
+ * 服务注册到zookeeper类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 服务注册到zookeeper类
  */
 @Slf4j
 @Component
@@ -36,12 +37,14 @@ public class RegistryZk {
         // 获取本地主机地址
         String ip = InetAddress.getLocalHost().getHostAddress();
         // 创建服务器TCP配置的节点
-        String tcpPath = TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_TCP + "/" + ip + ":" + tcpConfig.getTcpPort();
+        String tcpPath = TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_TCP + "/" + ip + ":"
+                + tcpConfig.getTcpPort();
         zkUtil.createTmpNode(tcpPath);
         log.info("注册Zookeeper TCP路径成功，msg=[{}]", tcpPath);
 
         // 创建服务器WebSocket配置的节点
-        String webPath = TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_WEB + "/" + ip + ":" + tcpConfig.getWebSocketPort();
+        String webPath = TcpConstants.IM_CORE_ZK_ROOT + TcpConstants.IM_CORE_ZK_ROOT_WEB + "/" + ip + ":"
+                + tcpConfig.getWebSocketPort();
         zkUtil.createTmpNode(webPath);
         log.info("注册Zookeeper WebSocket路径成功，msg=[{}]", webPath);
     }

@@ -79,7 +79,8 @@ public class RedissonConfig {
 
     @Bean
     public RedisUserLoginMessageListener userLoginMessageListener() {
-        RedisUserLoginMessageListener userLoginMessageListener = new RedisUserLoginMessageListener(redissonClient(), tcpConfig);
+        RedisUserLoginMessageListener userLoginMessageListener =
+                new RedisUserLoginMessageListener(redissonClient(), tcpConfig);
         userLoginMessageListener.listenerUserLogin();
         return userLoginMessageListener;
     }
@@ -90,13 +91,10 @@ public class RedissonConfig {
     public RedissonClient getSingleRedissonClient() {
         Config config = new Config();
         String host = address.startsWith(RedisConstants.REDIS_PROTO) ? address : RedisConstants.REDIS_PROTO + address;
-        SingleServerConfig serverConfig = config.useSingleServer()
-                .setAddress(host)
-                .setDatabase(database)
-                .setTimeout(timeout)
-                .setConnectionMinimumIdleSize(poolMinIdle)
-                .setConnectTimeout(poolConnTimeout)
-                .setConnectionPoolSize(poolSize);
+        SingleServerConfig serverConfig =
+                config.useSingleServer().setAddress(host).setDatabase(database).setTimeout(timeout)
+                      .setConnectionMinimumIdleSize(poolMinIdle).setConnectTimeout(poolConnTimeout)
+                      .setConnectionPoolSize(poolSize);
         if (StringUtils.isNotBlank(password)) {
             serverConfig.setPassword(password);
         }
@@ -110,12 +108,9 @@ public class RedissonConfig {
      */
     public RedissonClient getSentinelRedissonClient() {
         Config config = new Config();
-        SentinelServersConfig sentinelServersConfig = config.useSentinelServers()
-                .addSentinelAddress(getNodes(nodes))
-                .setDatabase(database)
-                .setMasterName(masterName)
-                .setTimeout(timeout)
-                .setConnectTimeout(poolConnTimeout);
+        SentinelServersConfig sentinelServersConfig =
+                config.useSentinelServers().addSentinelAddress(getNodes(nodes)).setDatabase(database)
+                      .setMasterName(masterName).setTimeout(timeout).setConnectTimeout(poolConnTimeout);
         if (StringUtils.isNotBlank(password)) {
             sentinelServersConfig.setPassword(password);
         }
@@ -129,12 +124,9 @@ public class RedissonConfig {
      */
     public RedissonClient getClusterRedissonClient() {
         Config config = new Config();
-        ClusterServersConfig clusterServersConfig = config.useClusterServers()
-                .setKeepAlive(true)
-                .setPingConnectionInterval(pingConnectionInterval)
-                .addNodeAddress(getNodes(nodes))
-                .setTimeout(timeout)
-                .setConnectTimeout(poolConnTimeout);
+        ClusterServersConfig clusterServersConfig =
+                config.useClusterServers().setKeepAlive(true).setPingConnectionInterval(pingConnectionInterval)
+                      .addNodeAddress(getNodes(nodes)).setTimeout(timeout).setConnectTimeout(poolConnTimeout);
         if (StringUtils.isNotBlank(password)) {
             clusterServersConfig.setPassword(password);
         }

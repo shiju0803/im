@@ -10,9 +10,10 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 用户状态变更通知消息封装类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户状态变更通知消息封装类
  */
 @Data
 public class UserStatusChangeNotifyPack {

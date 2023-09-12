@@ -13,11 +13,6 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 获取用户加入的群组请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("获取用户加入的群组请求")

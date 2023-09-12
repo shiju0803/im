@@ -4,6 +4,12 @@
 
 package com.sj.im.common.enums.exception;
 
+/**
+ * 公共异常枚举接口
+ *
+ * @author ShiJu
+ * @version 1.0
+ */
 public interface BaseExceptionEnum {
     /**
      * 错误代码

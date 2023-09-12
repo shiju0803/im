@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.group;
 import lombok.Data;
 
 /**
+ * 修改群成员通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 修改群成员通知报文
  */
 @Data
 public class UpdateGroupMemberPack {

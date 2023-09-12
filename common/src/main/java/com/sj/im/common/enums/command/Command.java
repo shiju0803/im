@@ -5,9 +5,10 @@
 package com.sj.im.common.enums.command;
 
 /**
+ * 指令接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 指令接口
  */
 public interface Command {
     int getCommand();

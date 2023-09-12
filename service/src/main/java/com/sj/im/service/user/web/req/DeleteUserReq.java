@@ -13,11 +13,6 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 删除用户接口入参
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("删除用户接口入参")

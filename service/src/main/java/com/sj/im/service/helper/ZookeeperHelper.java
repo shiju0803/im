@@ -14,9 +14,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * Zookeeper工具类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: Zookeeper工具类
  */
 @Component
 public class ZookeeperHelper {

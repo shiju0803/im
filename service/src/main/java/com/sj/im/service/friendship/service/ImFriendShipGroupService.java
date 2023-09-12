@@ -10,9 +10,10 @@ import com.sj.im.service.friendship.web.req.AddFriendShipGroupReq;
 import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupReq;
 
 /**
+ * 好友分组业务接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友分组业务接口
  */
 public interface ImFriendShipGroupService extends IMppService<ImFriendShipGroupEntity> {
 

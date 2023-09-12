@@ -7,24 +7,25 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 用户禁言状态枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户禁言状态枚举类
  */
 @Getter
 public enum UserSilentFlagEnum {
-    /**
-     * 0 正常；1 禁言。
-     */
-    NORMAL(0),
 
-    MUTE(1),
+    NORMAL(0, "正常"),
+
+    MUTE(1, "禁言"),
 
     ;
 
     private final int code;
+    private final String desc;
 
-    UserSilentFlagEnum(int code) {
+    UserSilentFlagEnum(int code, String desc) {
         this.code = code;
+        this.desc = desc;
     }
 }

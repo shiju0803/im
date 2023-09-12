@@ -12,6 +12,12 @@ import com.sj.im.service.group.web.resp.GetRoleInGroupResp;
 
 import java.util.List;
 
+/**
+ * 群成员服务类
+ *
+ * @author ShiJu
+ * @version 1.0
+ */
 public interface ImGroupMemberService extends IMppService<ImGroupMemberEntity> {
     /**
      * 导入群组成员

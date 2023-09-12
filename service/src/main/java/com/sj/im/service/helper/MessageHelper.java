@@ -22,9 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 用户行为消息发送
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户行为消息发送
  */
 @Slf4j
 @Component
@@ -119,7 +120,8 @@ public class MessageHelper {
      * @param clientInfo 客户端信息
      */
     public void sendToUser(String toId, Command command, Object data, ClientInfo clientInfo) {
-        UserSession session = userSessionHelper.getUserSession(clientInfo.getAppId(), toId, clientInfo.getClientType(), clientInfo.getImei());
+        UserSession session = userSessionHelper.getUserSession(clientInfo.getAppId(), toId, clientInfo.getClientType(),
+                                                               clientInfo.getImei());
         sendPack(toId, command, data, session);
     }
 
@@ -171,8 +173,8 @@ public class MessageHelper {
      * @return 匹配返回 true，不匹配返回 false
      */
     private boolean isMatch(UserSession sessionDto, ClientInfo clientInfo) {
-        return ObjectUtil.equal(sessionDto.getAppId(), clientInfo.getAppId())
-                && ObjectUtil.equal(sessionDto.getImei(), clientInfo.getImei())
+        return ObjectUtil.equal(sessionDto.getAppId(), clientInfo.getAppId()) && ObjectUtil.equal(sessionDto.getImei(),
+                                                                                                  clientInfo.getImei())
                 && ObjectUtil.equal(sessionDto.getClientType(), clientInfo.getClientType());
     }
 }

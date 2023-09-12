@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
+ * 群组接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群组接口
  */
 @Api(tags = "V1/群组接口")
 @RestController

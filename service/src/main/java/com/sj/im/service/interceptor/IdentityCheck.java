@@ -22,9 +22,10 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 操作人校验器
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 操作人校验器
  */
 @Slf4j
 @Component
@@ -40,7 +41,8 @@ public class IdentityCheck {
         // 从redis中取出密钥，判断时效
         String key = appId + ":" + RedisConstants.USER_SIGN + ":" + identifier + ":" + userSign;
         String cacheUserSig = stringRedisTemplate.opsForValue().get(key);
-        if (CharSequenceUtil.isNotBlank(cacheUserSig) && Long.parseLong(cacheUserSig) > System.currentTimeMillis() / 1000) {
+        if (CharSequenceUtil.isNotBlank(cacheUserSig)
+                && Long.parseLong(cacheUserSig) > System.currentTimeMillis() / 1000) {
             return BaseErrorCode.SUCCESS;
         }
 

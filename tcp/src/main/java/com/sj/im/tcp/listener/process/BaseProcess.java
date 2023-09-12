@@ -10,9 +10,10 @@ import com.sj.im.tcp.util.SessionSocketHolder;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 /**
+ * 抽象基础处理类，定义了消息处理的基本流程
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 抽象基础处理类，定义了消息处理的基本流程
  */
 public abstract class BaseProcess {
 

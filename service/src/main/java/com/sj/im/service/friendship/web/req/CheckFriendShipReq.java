@@ -15,11 +15,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 检查好友关系请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("检查好友关系请求")

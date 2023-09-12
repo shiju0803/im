@@ -9,9 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
+ * TCP网关启动类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: TCP网关启动类
  */
 @EnableFeignClients(basePackages = {"com.sj.im.tcp.feign"})
 @SpringBootApplication(scanBasePackages = {"com.sj.im.tcp", "com.sj.im.common"})

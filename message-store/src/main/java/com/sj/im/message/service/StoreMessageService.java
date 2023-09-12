@@ -25,6 +25,9 @@ import java.util.List;
 
 /**
  * 存储消息的服务类
+ *
+ * @author ShiJu
+ * @version 1.0
  */
 @Service
 public class StoreMessageService {
@@ -47,7 +50,9 @@ public class StoreMessageService {
         imMessageBodyMapper.insert(doStoreP2PMessageDto.getImMessageBodyEntity());
 
         // 提取消息内容并转换为点对点消息历史记录实体列表
-        List<ImMessageHistoryEntity> imMessageHistoryEntities = extractToP2PMessageHistory(doStoreP2PMessageDto.getMessageContent(), doStoreP2PMessageDto.getImMessageBodyEntity());
+        List<ImMessageHistoryEntity> imMessageHistoryEntities =
+                extractToP2PMessageHistory(doStoreP2PMessageDto.getMessageContent(),
+                                           doStoreP2PMessageDto.getImMessageBodyEntity());
 
         // 批量插入点对点消息历史记录
         imMessageHistoryMapper.insertBatchSomeColumn(imMessageHistoryEntities);
@@ -60,7 +65,8 @@ public class StoreMessageService {
      * @param imMessageBodyEntity 消息体实体
      * @return 点对点消息历史记录实体列表
      */
-    public List<ImMessageHistoryEntity> extractToP2PMessageHistory(MessageContent messageContent, ImMessageBodyEntity imMessageBodyEntity) {
+    public List<ImMessageHistoryEntity> extractToP2PMessageHistory(MessageContent messageContent,
+                                                                   ImMessageBodyEntity imMessageBodyEntity) {
         List<ImMessageHistoryEntity> list = new ArrayList<>();
 
         Date now = new Date();
@@ -94,7 +100,9 @@ public class StoreMessageService {
         imMessageBodyMapper.insert(doStoreGroupMessageDto.getImMessageBodyEntity());
 
         // 提取消息内容并转换为群组消息历史记录实体
-        ImGroupMessageHistoryEntity imGroupMessageHistoryEntity = extractToGroupMessageHistory(doStoreGroupMessageDto.getGroupChatMessageContent(), doStoreGroupMessageDto.getImMessageBodyEntity());
+        ImGroupMessageHistoryEntity imGroupMessageHistoryEntity =
+                extractToGroupMessageHistory(doStoreGroupMessageDto.getGroupChatMessageContent(),
+                                             doStoreGroupMessageDto.getImMessageBodyEntity());
 
         // 插入群组消息历史记录
         imGroupMessageHistoryMapper.insert(imGroupMessageHistoryEntity);
@@ -107,7 +115,8 @@ public class StoreMessageService {
      * @param messageBodyEntity 消息体实体
      * @return 群组消息历史记录实体
      */
-    private ImGroupMessageHistoryEntity extractToGroupMessageHistory(GroupChatMessageContent messageContent, ImMessageBodyEntity messageBodyEntity) {
+    private ImGroupMessageHistoryEntity extractToGroupMessageHistory(GroupChatMessageContent messageContent,
+                                                                     ImMessageBodyEntity messageBodyEntity) {
         ImGroupMessageHistoryEntity result = BeanUtil.toBean(messageContent, ImGroupMessageHistoryEntity.class);
         result.setGroupId(messageContent.getGroupId());
         result.setMessageKey(messageBodyEntity.getMessageKey());

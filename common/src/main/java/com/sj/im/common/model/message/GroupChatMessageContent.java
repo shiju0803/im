@@ -10,9 +10,10 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 /**
+ * 群聊消息内容类，继承自消息内容类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群聊消息内容类，继承自消息内容类
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

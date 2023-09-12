@@ -12,11 +12,6 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 退群请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("退群请求")

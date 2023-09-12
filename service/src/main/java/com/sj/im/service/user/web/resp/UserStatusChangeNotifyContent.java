@@ -8,8 +8,10 @@ import com.sj.im.common.model.ClientInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(description = "用户状态变更通知内容")
 public class UserStatusChangeNotifyContent extends ClientInfo {
 
@@ -18,5 +20,4 @@ public class UserStatusChangeNotifyContent extends ClientInfo {
 
     @ApiModelProperty(value = "用户状态，1表示上线，2表示离线")
     private Integer status;
-
 }

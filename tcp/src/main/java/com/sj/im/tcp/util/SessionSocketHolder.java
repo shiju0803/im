@@ -28,9 +28,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 用于管理用户连接的工具类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用于管理用户连接的工具类
  */
 public class SessionSocketHolder {
 
@@ -67,7 +68,7 @@ public class SessionSocketHolder {
      * @param clientType 客户端类型
      * @return 对应的 NioSocketChannel 对象，如果不存在则返回 null
      */
-    public static NioSocketChannel get(Integer appId, String userId, Integer clientType, String imei){
+    public static NioSocketChannel get(Integer appId, String userId, Integer clientType, String imei) {
         UserClientDto userClientDto = new UserClientDto();
         userClientDto.setAppId(appId);
         userClientDto.setUserId(userId);
@@ -81,7 +82,6 @@ public class SessionSocketHolder {
      *
      * @param appId  应用ID
      * @param userId 用户ID
-     * @return
      */
     public static List<NioSocketChannel> getAll(Integer appId, String userId) {
         Set<UserClientDto> channelInfos = CHANNELS.keySet();
@@ -117,8 +117,7 @@ public class SessionSocketHolder {
      * @param channel NioSocketChannel 对象
      */
     public static void remove(NioSocketChannel channel) {
-        CHANNELS.entrySet().stream()
-                .filter(entry -> ObjectUtil.equal(entry.getValue(), channel))
+        CHANNELS.entrySet().stream().filter(entry -> ObjectUtil.equal(entry.getValue(), channel))
                 .forEach(entry -> CHANNELS.remove(entry.getKey()));
     }
 
@@ -155,7 +154,8 @@ public class SessionSocketHolder {
         pack.setStatus(ImConnectStatusEnum.OFFLINE_STATUS.getCode());
 
         // 发送用户状态更改通知
-        MqMessageProducer mqMessageProducer = (MqMessageProducer) ApplicationContextHelper.getBean(MqMessageProducer.class);
+        MqMessageProducer mqMessageProducer =
+                (MqMessageProducer) ApplicationContextHelper.getBean(MqMessageProducer.class);
         mqMessageProducer.sendMessage(pack, messageHeader, UserEventCommand.USER_ONLINE_STATUS_CHANGE.getCommand());
 
         // 关闭通道
@@ -200,7 +200,8 @@ public class SessionSocketHolder {
         pack.setStatus(ImConnectStatusEnum.OFFLINE_STATUS.getCode());
 
         // 发送用户状态变更消息
-        MqMessageProducer mqMessageProducer = (MqMessageProducer) ApplicationContextHelper.getBean(MqMessageProducer.class);
+        MqMessageProducer mqMessageProducer =
+                (MqMessageProducer) ApplicationContextHelper.getBean(MqMessageProducer.class);
         mqMessageProducer.sendMessage(pack, messageHeader, UserEventCommand.USER_ONLINE_STATUS_CHANGE.getCommand());
 
         // 关闭通道

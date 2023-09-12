@@ -16,9 +16,10 @@ import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 心跳处理器，用于处理客户端连接的空闲状态事件
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 心跳处理器，用于处理客户端连接的空闲状态事件
  */
 @Slf4j
 public class HeartBeatHandler extends ChannelInboundHandlerAdapter {

@@ -7,9 +7,10 @@ package com.sj.im.common;
 import lombok.Getter;
 
 /**
+ * 客户端类型枚举
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 客户端类型枚举
  */
 @Getter
 public enum ClientType {

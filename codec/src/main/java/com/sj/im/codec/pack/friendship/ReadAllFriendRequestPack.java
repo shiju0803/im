@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.friendship;
 import lombok.Data;
 
 /**
+ * 已读好友申请通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 已读好友申请通知报文
  */
 @Data
 public class ReadAllFriendRequestPack {

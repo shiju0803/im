@@ -13,9 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.annotation.Resource;
 
 /**
+ * 拦截器配置类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 拦截器配置类
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

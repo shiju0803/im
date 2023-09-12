@@ -19,9 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
+ * 用户数据处理
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户数据处理
  */
 @Api(tags = "V1/用户数据控制器")
 @RestController

@@ -7,9 +7,10 @@ package com.sj.im.common.route;
 import lombok.Data;
 
 /**
+ * RouteInfo类表示服务器路由信息，包括服务器的IP地址和端口号
+ *
  * @author ShiJu
  * @version 1.0
- * @description: RouteInfo类表示服务器路由信息，包括服务器的IP地址和端口号
  */
 @Data
 public final class RouteInfo {

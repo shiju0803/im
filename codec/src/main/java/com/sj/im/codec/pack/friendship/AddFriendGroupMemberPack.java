@@ -9,14 +9,15 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 好友分组添加成员通知包
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友分组添加成员通知包
  */
 @Data
 public class AddFriendGroupMemberPack {
 
-    public String fromId;
+    private String fromId;
 
     private String groupName;
 

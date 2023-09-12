@@ -7,9 +7,10 @@ package com.sj.im.common.enums.command;
 import lombok.Getter;
 
 /**
+ * 命令类型枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 命令类型枚举类
  */
 @Getter
 public enum CommandType {

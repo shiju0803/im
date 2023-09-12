@@ -10,11 +10,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 导入用户接口响应类
- */
 @Data
 @ApiModel("导入用户接口响应类")
 public class ImportUserResp {

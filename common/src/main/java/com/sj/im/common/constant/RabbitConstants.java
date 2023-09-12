@@ -5,9 +5,10 @@
 package com.sj.im.common.constant;
 
 /**
+ * RabbitMQ公共常量
+ *
  * @author ShiJu
  * @version 1.0
- * @description: RabbitMQ公共常量
  */
 public class RabbitConstants {
     /**

@@ -14,11 +14,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 删除好友分组请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("删除好友分组请求")

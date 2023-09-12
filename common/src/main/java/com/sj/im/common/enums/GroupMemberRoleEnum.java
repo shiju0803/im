@@ -7,36 +7,27 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 群成员角色枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群成员角色枚举类
  */
 @Getter
 public enum GroupMemberRoleEnum {
-    /**
-     * 普通成员
-     */
-    ORDINARY(0),
 
-    /**
-     * 管理员
-     */
-    MANAGER(1),
+    ORDINARY(0, "普通成员"),
 
-    /**
-     * 群主
-     */
-    OWNER(2),
+    MANAGER(1, "管理员"),
 
-    /**
-     * 离开
-     */
-    LEAVE(3),
+    OWNER(2, "群主"),
+
+    LEAVE(3, "离开"),
 
     ;
 
 
     private final int code;
+    private final String desc;
 
     /**
      * 不能用 默认的 enumType b= enumType.values()[i]; 因为本枚举是类形式封装
@@ -50,7 +41,8 @@ public enum GroupMemberRoleEnum {
         return null;
     }
 
-    GroupMemberRoleEnum(int code) {
+    GroupMemberRoleEnum(int code, String desc) {
         this.code = code;
+        this.desc = desc;
     }
 }

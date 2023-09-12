@@ -36,9 +36,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * 用户在线状态相关接口实现类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户在线状态相关接口实现类
  */
 @Service
 public class ImUserStatusServiceImpl implements ImUserStatusService {
@@ -59,13 +60,15 @@ public class ImUserStatusServiceImpl implements ImUserStatusService {
      */
     @Override
     public void processUserOnlineStatusNotify(UserStatusChangeNotifyContent content) {
-        List<UserSession> userSessionList = userSessionHelper.getUserSessionList(content.getAppId(), content.getUserId());
+        List<UserSession> userSessionList =
+                userSessionHelper.getUserSessionList(content.getAppId(), content.getUserId());
         UserStatusChangeNotifyPack notifyPack = BeanUtil.toBean(content, UserStatusChangeNotifyPack.class);
         notifyPack.setClient(userSessionList);
         // 发送给自己的同步端
         syncSender(notifyPack, content.getUserId(), content, UserEventCommand.USER_ONLINE_STATUS_CHANGE_NOTIFY_SYNC);
         // 通知好友和订阅了自己的人
-        dispatchSender(notifyPack, content.getUserId(), content.getAppId(), UserEventCommand.USER_ONLINE_STATUS_CHANGE_NOTIFY);
+        dispatchSender(notifyPack, content.getUserId(), content.getAppId(),
+                       UserEventCommand.USER_ONLINE_STATUS_CHANGE_NOTIFY);
     }
 
     private void syncSender(Object pack, String userId, ClientInfo clientInfo, Command command) {
@@ -125,10 +128,12 @@ public class ImUserStatusServiceImpl implements ImUserStatusService {
         stringRedisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(notifyPack));
 
         // 发送用户状态变更通知给其他端
-        syncSender(notifyPack, req.getUserId(), new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()), UserEventCommand.USER_ONLINE_STATUS_SET_CHANGE_NOTIFY_SYNC);
+        syncSender(notifyPack, req.getUserId(), new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()),
+                   UserEventCommand.USER_ONLINE_STATUS_SET_CHANGE_NOTIFY_SYNC);
 
         // 分发用户状态变更通知给好友
-        dispatchSender(notifyPack, req.getUserId(), req.getAppId(), UserEventCommand.USER_ONLINE_STATUS_SET_CHANGE_NOTIFY);
+        dispatchSender(notifyPack, req.getUserId(), req.getAppId(),
+                       UserEventCommand.USER_ONLINE_STATUS_SET_CHANGE_NOTIFY);
     }
 
     /**

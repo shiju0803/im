@@ -12,9 +12,10 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
+ * MybatisPlus配置类（修复createTime、updateTime不自动更新）
+ *
  * @author ShiJu
  * @version 1.0
- * @description: MybatisPlus配置类（修复createTime、updateTime不自动更新）
  */
 @Component
 public class MybatisMetaObjectHandler implements MetaObjectHandler {

@@ -5,9 +5,10 @@
 package com.sj.im.common.enums.exception;
 
 /**
+ * 好友错误枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友错误枚举类
  */
 public enum FriendShipErrorCode implements BaseExceptionEnum {
 

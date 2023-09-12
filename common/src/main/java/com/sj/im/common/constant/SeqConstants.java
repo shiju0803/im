@@ -5,9 +5,10 @@
 package com.sj.im.common.constant;
 
 /**
+ * 序列常量配置类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 序列常量配置类
  */
 public class SeqConstants {
     /**

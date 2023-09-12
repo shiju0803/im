@@ -11,11 +11,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 获取群信息接口响应类
- */
 @Data
 @ApiModel("获取群信息接口响应类")
 public class GetGroupResp {

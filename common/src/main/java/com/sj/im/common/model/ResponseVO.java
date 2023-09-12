@@ -12,9 +12,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
+ * 公共返回实体类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 公共返回实体类
  */
 @Data
 @ApiModel("公共返回实体类")

@@ -9,9 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 /**
+ * Bean 配置类，用于定义应用程序中的 Bean
+ *
  * @author ShiJu
  * @version 1.0
- * @description: Bean 配置类，用于定义应用程序中的 Bean
  */
 @Configuration
 public class BeanConfig {

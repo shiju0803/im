@@ -7,9 +7,10 @@ package com.sj.im.codec.pack;
 import lombok.Data;
 
 /**
+ * 登录数据包
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 登录数据包
  */
 @Data
 public class LoginPack {

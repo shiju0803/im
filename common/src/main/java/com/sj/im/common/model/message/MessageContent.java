@@ -9,9 +9,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * 消息内容类，继承自客户端信息类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 消息内容类，继承自客户端信息类
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

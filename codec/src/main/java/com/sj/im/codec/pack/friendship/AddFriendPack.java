@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.friendship;
 import lombok.Data;
 
 /**
+ * 添加好友通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 添加好友通知报文
  */
 @Data
 public class AddFriendPack {
@@ -19,11 +20,14 @@ public class AddFriendPack {
      * 备注
      */
     private String remark;
+
     private String toId;
+
     /**
      * 好友来源
      */
     private String addSource;
+
     /**
      * 添加好友时的描述信息（用于打招呼）
      */

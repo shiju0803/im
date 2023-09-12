@@ -20,9 +20,10 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
+ * 处理用户数据
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 处理用户数据
  */
 @Api(tags = "V1/处理用户数据")
 @RestController
@@ -53,7 +54,7 @@ public class ImUserController {
         RouteInfo login = imUserService.login(req);
         return ResponseVO.successResponse(login);
     }
-    
+
     @ApiOperation(value = "获取用户序列号", notes = "用于客户端判断是否需要进行数据同步")
     @PostMapping("/getUserSequence")
     public ResponseVO<Map<Object, Object>> getUserSequence(@RequestBody @Validated GetUserSequenceReq req) {
@@ -77,13 +78,15 @@ public class ImUserController {
 
     @ApiOperation("查询好友在线状态")
     @PostMapping("/queryFriendOnlineStatus")
-    public ResponseVO<Map<String, UserOnlineStatusResp>> queryFriendOnlineStatus(@RequestBody @Validated PullFriendOnlineStatusReq req) {
+    public ResponseVO<Map<String, UserOnlineStatusResp>> queryFriendOnlineStatus(
+            @RequestBody @Validated PullFriendOnlineStatusReq req) {
         return ResponseVO.successResponse(imUserStatusService.queryFriendOnlineStatus(req));
     }
 
     @ApiOperation("查询用户在线状态")
     @PostMapping("/queryUserOnlineStatus")
-    public ResponseVO<Map<String, UserOnlineStatusResp>> queryUserOnlineStatus(@RequestBody @Validated PullUserOnlineStatusReq req) {
+    public ResponseVO<Map<String, UserOnlineStatusResp>> queryUserOnlineStatus(
+            @RequestBody @Validated PullUserOnlineStatusReq req) {
         return ResponseVO.successResponse(imUserStatusService.queryUserOnlineStatus(req));
     }
 }

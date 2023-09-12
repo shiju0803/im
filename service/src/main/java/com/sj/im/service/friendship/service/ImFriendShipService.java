@@ -16,9 +16,10 @@ import com.sj.im.service.friendship.web.resp.ImportFriendShipResp;
 import java.util.List;
 
 /**
+ * 好友业务接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友业务接口
  */
 public interface ImFriendShipService extends IMppService<ImFriendShipEntity> {
     /**

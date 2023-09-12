@@ -7,9 +7,10 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 一致性hash实现类枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 一致性hash实现类枚举类
  */
 @Getter
 public enum RouteHashMethodEnum {

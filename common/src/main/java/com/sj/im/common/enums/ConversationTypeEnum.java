@@ -6,6 +6,12 @@ package com.sj.im.common.enums;
 
 import lombok.Getter;
 
+/**
+ * 会话类型枚举类
+ *
+ * @author ShiJu
+ * @version 1.0
+ */
 @Getter
 public enum ConversationTypeEnum {
 

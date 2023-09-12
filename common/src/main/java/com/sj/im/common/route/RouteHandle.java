@@ -7,9 +7,10 @@ package com.sj.im.common.route;
 import java.util.List;
 
 /**
+ * 服务器路由接口，定义了路由服务器的方法。
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 服务器路由接口，定义了路由服务器的方法。
  */
 public interface RouteHandle {
 

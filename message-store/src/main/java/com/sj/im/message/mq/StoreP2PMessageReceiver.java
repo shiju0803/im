@@ -28,6 +28,9 @@ import java.util.Map;
 
 /**
  * 接收和处理存储点对点消息的消息接收器类
+ *
+ * @author ShiJu
+ * @version 1.0
  */
 @Slf4j
 @Service
@@ -44,12 +47,13 @@ public class StoreP2PMessageReceiver {
      * @throws Exception 处理消息异常
      */
     @RabbitListener(
-            bindings = @QueueBinding(
-                    value = @Queue(value = RabbitConstants.STORE_P2P_MESSAGE_QUEUE, durable = "true"), // 定义队列名称及持久化
-                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE), // 定义交换机名称
-                    key = RabbitConstants.STORE_P2P_MESSAGE_QUEUE), // 指定key
+            bindings = @QueueBinding(value = @Queue(value = RabbitConstants.STORE_P2P_MESSAGE_QUEUE, durable = "true"),
+                                     // 定义队列名称及持久化
+                                     exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE), // 定义交换机名称
+                                     key = RabbitConstants.STORE_P2P_MESSAGE_QUEUE), // 指定key
             concurrency = "1") // 设置并发数为1
-    public void onChatMessage(@Payload Message message, @Headers Map<String,Object> headers, Channel channel) throws Exception {
+    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel)
+            throws Exception {
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);
         log.info("CHAT MSG FORM QUEUE ::: {}", msg);
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
@@ -57,7 +61,8 @@ public class StoreP2PMessageReceiver {
             // 解析消息内容
             JSONObject jsonObject = JSONUtil.parseObj(msg);
             DoStoreP2PMessageDto p2PMessageDto = jsonObject.toBean(DoStoreP2PMessageDto.class);
-            ImMessageBodyEntity messageBody = JSONUtil.toBean(jsonObject.getStr("messageBody"), ImMessageBodyEntity.class);
+            ImMessageBodyEntity messageBody =
+                    JSONUtil.toBean(jsonObject.getStr("messageBody"), ImMessageBodyEntity.class);
             p2PMessageDto.setImMessageBodyEntity(messageBody);
             storeMessageService.doStoreP2PMessage(p2PMessageDto);
             // 手动确认消息已处理

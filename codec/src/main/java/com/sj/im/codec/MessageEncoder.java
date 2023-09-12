@@ -11,10 +11,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
+ * 消息编码类，私有协议规则，前4位表示长度，接着command4位，后面是数据。 MessageEncoder 类继承自 Netty 的 MessageToByteEncoder
+ * 类，用于将消息编码成字节流。
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 消息编码类，私有协议规则，前4位表示长度，接着command4位，后面是数据。
- * MessageEncoder 类继承自 Netty 的 MessageToByteEncoder 类，用于将消息编码成字节流。
  */
 public class MessageEncoder extends MessageToByteEncoder<MessagePack<Object>> {
 

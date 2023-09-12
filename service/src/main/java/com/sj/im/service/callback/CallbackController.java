@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 回调接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 回调接口
  */
 @Api(tags = "回调控制器")
 @Slf4j

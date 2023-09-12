@@ -20,9 +20,10 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
+ * Bean 配置类，用于定义应用程序中的 Bean
+ *
  * @author ShiJu
  * @version 1.0
- * @description: Bean 配置类，用于定义应用程序中的 Bean
  */
 @Slf4j
 @Configuration

@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.group;
 import lombok.Data;
 
 /**
+ * 创建群组通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 创建群组通知报文
  */
 @Data
 public class CreateGroupPack {

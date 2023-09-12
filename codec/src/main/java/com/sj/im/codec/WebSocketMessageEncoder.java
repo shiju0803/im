@@ -16,9 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 /**
+ * WebSocket 消息编码器，将自定义的 MessagePack 对象转换为二进制 WebSocketFrame
+ *
  * @author ShiJu
  * @version 1.0
- * @description: WebSocket 消息编码器，将自定义的 MessagePack 对象转换为二进制 WebSocketFrame
  */
 @Slf4j
 public class WebSocketMessageEncoder extends MessageToMessageEncoder<MessagePack<Object>> {

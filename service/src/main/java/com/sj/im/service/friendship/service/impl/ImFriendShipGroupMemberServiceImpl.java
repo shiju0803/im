@@ -31,13 +31,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 好友分组成员业务类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友分组成员业务类
  */
 @Service
 @Slf4j
-public class ImFriendShipGroupMemberServiceImpl extends MppServiceImpl<ImFriendShipGroupMemberMapper, ImFriendShipGroupMemberEntity> implements ImFriendShipGroupMemberService {
+public class ImFriendShipGroupMemberServiceImpl
+        extends MppServiceImpl<ImFriendShipGroupMemberMapper, ImFriendShipGroupMemberEntity>
+        implements ImFriendShipGroupMemberService {
     @Resource
     private ImFriendShipGroupMemberMapper imFriendShipGroupMemberMapper;
     @Resource
@@ -55,7 +58,8 @@ public class ImFriendShipGroupMemberServiceImpl extends MppServiceImpl<ImFriendS
     @Override
     public List<String> addGroupMember(AddFriendShipGroupMemberReq req) {
         // 判断该组是否合法
-        ImFriendShipGroupEntity group = imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
+        ImFriendShipGroupEntity group =
+                imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
         if (ObjectUtil.isNull(group)) {
             throw new BusinessException(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
         }
@@ -79,8 +83,8 @@ public class ImFriendShipGroupMemberServiceImpl extends MppServiceImpl<ImFriendS
         pack.setGroupName(req.getGroupName());
         pack.setToIds(successId);
         pack.setSequence(seq);
-        messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_MEMBER_ADD,
-                pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+        messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_MEMBER_ADD, pack,
+                                             new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
 
         return successId;
     }
@@ -90,7 +94,8 @@ public class ImFriendShipGroupMemberServiceImpl extends MppServiceImpl<ImFriendS
      */
     @Override
     public List<String> delGroupMember(DeleteFriendShipGroupMemberReq req) {
-        ImFriendShipGroupEntity group = imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
+        ImFriendShipGroupEntity group =
+                imFriendShipGroupService.getGroup(req.getFromId(), req.getGroupName(), req.getAppId());
         if (ObjectUtil.isNull(group)) {
             throw new BusinessException(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
         }
@@ -111,8 +116,8 @@ public class ImFriendShipGroupMemberServiceImpl extends MppServiceImpl<ImFriendS
         pack.setFromId(req.getFromId());
         pack.setGroupName(req.getGroupName());
         pack.setToIds(successId);
-        messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_MEMBER_DELETE,
-                pack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+        messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_MEMBER_DELETE, pack,
+                                             new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
         return successId;
     }
 

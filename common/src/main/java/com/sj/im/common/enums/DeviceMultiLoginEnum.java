@@ -7,9 +7,10 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 多设备登录枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 多设备登录枚举类
  */
 @Getter
 public enum DeviceMultiLoginEnum {

@@ -8,7 +8,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
-import com.sj.im.codec.pack.friendship.ApproverFriendRequestPack;
+import com.sj.im.codec.pack.friendship.ApproveFriendRequestPack;
 import com.sj.im.codec.pack.friendship.ReadAllFriendRequestPack;
 import com.sj.im.common.constant.SeqConstants;
 import com.sj.im.common.enums.ApproveFriendRequestStatusEnum;
@@ -34,13 +34,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 好友申请业务类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友申请业务类
  */
 @Service
 @Slf4j
-public class ImFriendShipRequestServiceImpl extends MppServiceImpl<ImFriendShipRequestMapper, ImFriendShipRequestEntity> implements ImFriendShipRequestService {
+public class ImFriendShipRequestServiceImpl extends MppServiceImpl<ImFriendShipRequestMapper, ImFriendShipRequestEntity>
+        implements ImFriendShipRequestService {
     @Resource
     private ImFriendShipRequestMapper imFriendShipRequestMapper;
     @Resource
@@ -139,12 +141,13 @@ public class ImFriendShipRequestServiceImpl extends MppServiceImpl<ImFriendShipR
         }
 
         // 通知审批人的其他端
-        ApproverFriendRequestPack approverFriendRequestPack = new ApproverFriendRequestPack();
+        ApproveFriendRequestPack approverFriendRequestPack = new ApproveFriendRequestPack();
         approverFriendRequestPack.setStatus(req.getStatus());
         approverFriendRequestPack.setSequence(seq);
         approverFriendRequestPack.setId(req.getId());
         messageHelper.sendToUser(imFriendShipRequestEntity.getToId(), req.getClientType(), req.getImei(),
-                FriendshipEventCommand.FRIEND_REQUEST_APPROVE, approverFriendRequestPack, req.getAppId());
+                                 FriendshipEventCommand.FRIEND_REQUEST_APPROVE, approverFriendRequestPack,
+                                 req.getAppId());
     }
 
     /**
@@ -170,7 +173,7 @@ public class ImFriendShipRequestServiceImpl extends MppServiceImpl<ImFriendShipR
         readAllFriendRequestPack.setFromId(req.getFromId());
         readAllFriendRequestPack.setSequence(seq);
         messageHelper.sendToUser(req.getFromId(), req.getClientType(), req.getImei(),
-                FriendshipEventCommand.FRIEND_REQUEST_READ, readAllFriendRequestPack, req.getAppId());
+                                 FriendshipEventCommand.FRIEND_REQUEST_READ, readAllFriendRequestPack, req.getAppId());
     }
 
     @Override

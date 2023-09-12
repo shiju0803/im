@@ -7,13 +7,14 @@ package com.sj.im.codec.pack.friendship;
 import lombok.Data;
 
 /**
+ * 用户创建好友分组通知包
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户创建好友分组通知包
  */
 @Data
 public class AddFriendGroupPack {
-    public String fromId;
+    private String fromId;
 
     private String groupName;
 

@@ -7,9 +7,10 @@ package com.sj.im.common.model;
 import lombok.Data;
 
 /**
+ * 用户网络信息
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用户网络信息
  */
 @Data
 public class UserSession {

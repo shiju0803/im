@@ -7,25 +7,25 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 管道链接状态枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 管道链接状态枚举类
  */
 @Getter
 public enum ImConnectStatusEnum {
 
-    /**
-     * 管道链接状态,1=在线，2=离线。
-     */
-    ONLINE_STATUS(1),
+    ONLINE_STATUS(1, "在线"),
 
-    OFFLINE_STATUS(2),
+    OFFLINE_STATUS(2, "离线"),
 
     ;
 
     private final Integer code;
+    private final String desc;
 
-    ImConnectStatusEnum(Integer code) {
+    ImConnectStatusEnum(int code, String desc) {
         this.code = code;
+        this.desc = desc;
     }
 }

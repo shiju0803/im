@@ -14,11 +14,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 添加好友分组成员请求
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("添加好友分组成员请求")

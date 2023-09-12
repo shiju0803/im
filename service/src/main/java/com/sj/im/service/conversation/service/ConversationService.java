@@ -14,6 +14,9 @@ import com.sj.im.service.conversation.web.req.UpdateConversationReq;
 
 /**
  * 会话服务接口
+ *
+ * @author ShiJu
+ * @version 1.0
  */
 public interface ConversationService extends IMppService<ImConversationSetEntity> {
 

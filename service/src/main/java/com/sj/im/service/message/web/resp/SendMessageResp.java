@@ -7,9 +7,10 @@ package com.sj.im.service.message.web.resp;
 import lombok.Data;
 
 /**
+ * 发送消息响应类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 发送消息响应类
  */
 @Data
 public class SendMessageResp {

@@ -35,13 +35,15 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
+ * 好友分组业务类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 好友分组业务类
  */
 @Service
 @Slf4j
-public class ImFriendShipGroupServiceImpl extends MppServiceImpl<ImFriendShipGroupMapper, ImFriendShipGroupEntity> implements ImFriendShipGroupService {
+public class ImFriendShipGroupServiceImpl extends MppServiceImpl<ImFriendShipGroupMapper, ImFriendShipGroupEntity>
+        implements ImFriendShipGroupService {
     @Resource
     private ImFriendShipGroupMapper imFriendShipGroupMapper;
     @Resource
@@ -103,7 +105,8 @@ public class ImFriendShipGroupServiceImpl extends MppServiceImpl<ImFriendShipGro
         addFriendGropPack.setGroupName(req.getGroupName());
         addFriendGropPack.setSequence(seq);
         messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_ADD,
-                addFriendGropPack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+                                             addFriendGropPack,
+                                             new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
         //写入seq
         writeUserSeq.writeUserSeq(req.getAppId(), req.getFromId(), SeqConstants.FRIENDSHIP_GROUP_SEQ, seq);
     }
@@ -140,7 +143,9 @@ public class ImFriendShipGroupServiceImpl extends MppServiceImpl<ImFriendShipGro
                 deleteFriendGroupPack.setGroupName(groupName);
                 deleteFriendGroupPack.setSequence(seq);
                 messageHelper.sendToUserExceptClient(req.getFromId(), FriendshipEventCommand.FRIEND_GROUP_DELETE,
-                        deleteFriendGroupPack, new ClientInfo(req.getAppId(), req.getClientType(), req.getImei()));
+                                                     deleteFriendGroupPack,
+                                                     new ClientInfo(req.getAppId(), req.getClientType(),
+                                                                    req.getImei()));
 
                 //写入seq
                 writeUserSeq.writeUserSeq(req.getAppId(), req.getFromId(), SeqConstants.FRIENDSHIP_GROUP_SEQ, seq);

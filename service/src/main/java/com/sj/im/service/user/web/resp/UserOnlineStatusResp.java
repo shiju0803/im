@@ -7,11 +7,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @author ShiJu
- * @version 1.0
- * @description: 用户在线状态响应类
- */
 @Data
 @ApiModel("用户在线状态响应类")
 public class UserOnlineStatusResp {

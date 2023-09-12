@@ -23,9 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
+ * 网关拦截器
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 网关拦截器
  */
 @Slf4j
 @Component
@@ -37,7 +38,8 @@ public class GateWayInterceptor implements HandlerInterceptor {
     private String debug;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull Object handler)
+            throws Exception {
         String dev = request.getParameter("debug");
         if (ObjectUtil.equal(debug, dev)) {
             return true;

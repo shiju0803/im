@@ -9,9 +9,10 @@ import com.sj.im.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 雪花算法生成分布式唯一ID的工具类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 雪花算法生成分布式唯一ID的工具类
  */
 @Slf4j
 public class SnowflakeIdWorker {
@@ -83,7 +84,8 @@ public class SnowflakeIdWorker {
      */
     public SnowflakeIdWorker(long workerId) {
         if (workerId < 0 || workerId > WORKER_ID_MAX) {
-            throw new IllegalArgumentException(String.format("cmallshop.workerId范围: 0 ~ %d 目前: %d", WORKER_ID_MAX, workerId));
+            throw new IllegalArgumentException(
+                    String.format("cmallshop.workerId范围: 0 ~ %d 目前: %d", WORKER_ID_MAX, workerId));
         }
         WORKER_ID = workerId;
     }
@@ -151,7 +153,8 @@ public class SnowflakeIdWorker {
             if (lastTimestampBak - SystemClock.now() / 1000 <= BACK_TIME_MAX) {
                 timestamp = lastTimestampBak;
             } else {
-                throw new BusinessException(String.format("时钟回拨: now: [%d] last: [%d]", timestamp, lastTimestampBak));
+                throw new BusinessException(
+                        String.format("时钟回拨: now: [%d] last: [%d]", timestamp, lastTimestampBak));
             }
         }
 
@@ -167,7 +170,8 @@ public class SnowflakeIdWorker {
         }
 
         // 生成唯一ID
-        return ((timestamp - OFFSET) << OFFSET_SHIFT_BITS) | ((WORKER_ID ^ BACK_WORKER_ID_BEGIN) << WORKER_SHIFT_BITS) | sequenceBak;
+        return ((timestamp - OFFSET) << OFFSET_SHIFT_BITS) | ((WORKER_ID ^ BACK_WORKER_ID_BEGIN) << WORKER_SHIFT_BITS)
+                | sequenceBak;
     }
 
     /**

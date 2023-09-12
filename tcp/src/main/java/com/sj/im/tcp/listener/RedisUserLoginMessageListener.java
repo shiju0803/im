@@ -24,9 +24,10 @@ import org.redisson.api.RedissonClient;
 import java.util.List;
 
 /**
+ * 监听redis消息，处理用户登录的多端同步功能
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 监听redis消息，处理用户登录的多端同步功能
  * <p>
  * 实现逻辑：
  * 1. 单端登录：如果用户只在一个端口登录，踢掉除本clinetType + imei外的其他设备。
@@ -79,12 +80,14 @@ public class RedisUserLoginMessageListener {
                     }
                 } else {
                     // web端直接跳过不处理
-                    if (ObjectUtil.equal(dto.getClientType(), ClientType.WEB.getCode()) || ObjectUtil.equal(clientType, ClientType.WEB.getCode())) {
+                    if (ObjectUtil.equal(dto.getClientType(), ClientType.WEB.getCode()) || ObjectUtil.equal(clientType,
+                                                                                                            ClientType.WEB.getCode())) {
                         continue;
                     }
 
                     // 双端登录（允许手机/电脑的一台设备 + web在线）：踢掉除了本client+imei的非web端设备
-                    if (ObjectUtil.equal(loginModel, DeviceMultiLoginEnum.TWO.getLoginMode()) && (ObjectUtil.notEqual(loginClientImei, targetClientImei))) {
+                    if (ObjectUtil.equal(loginModel, DeviceMultiLoginEnum.TWO.getLoginMode()) && (ObjectUtil.notEqual(
+                            loginClientImei, targetClientImei))) {
                         // 踢掉除了本client+imei的非web端设备
                         mutualLogin(channel);
                     }
@@ -92,12 +95,17 @@ public class RedisUserLoginMessageListener {
                     // 三端登录（允许手机和电脑单设备 + web 同时在线）：踢掉非本client+imei的同端设备
                     if (ObjectUtil.equal(loginModel, DeviceMultiLoginEnum.THREE.getLoginMode())) {
                         // 是否都是手机端
-                        boolean isSameClient = (ObjectUtil.equal(clientType, ClientType.IOS.getCode()) || ObjectUtil.equal(clientType, ClientType.ANDROID.getCode()))
-                                && (ObjectUtil.equal(dto.getClientType(), ClientType.IOS.getCode()) || ObjectUtil.equal(dto.getClientType(), ClientType.ANDROID.getCode()));
+                        boolean isSameClient =
+                                (ObjectUtil.equal(clientType, ClientType.IOS.getCode()) || ObjectUtil.equal(clientType,
+                                                                                                            ClientType.ANDROID.getCode()))
+                                        && (ObjectUtil.equal(dto.getClientType(), ClientType.IOS.getCode())
+                                        || ObjectUtil.equal(dto.getClientType(), ClientType.ANDROID.getCode()));
 
                         // 是否都是电脑端
-                        if ((ObjectUtil.equal(clientType, ClientType.MAC.getCode()) || ObjectUtil.equal(clientType, ClientType.WINDOWS.getCode()))
-                                && (ObjectUtil.equal(dto.getClientType(), ClientType.MAC.getCode()) || ObjectUtil.equal(dto.getClientType(), ClientType.WINDOWS.getCode()))) {
+                        if ((ObjectUtil.equal(clientType, ClientType.MAC.getCode()) || ObjectUtil.equal(clientType,
+                                                                                                        ClientType.WINDOWS.getCode()))
+                                && (ObjectUtil.equal(dto.getClientType(), ClientType.MAC.getCode()) || ObjectUtil.equal(
+                                dto.getClientType(), ClientType.WINDOWS.getCode()))) {
                             isSameClient = true;
                         }
 

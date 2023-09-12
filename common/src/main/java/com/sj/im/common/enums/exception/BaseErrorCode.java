@@ -5,9 +5,10 @@
 package com.sj.im.common.enums.exception;
 
 /**
+ * 公共返回错误码
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 公共返回错误码
  */
 public enum BaseErrorCode implements BaseExceptionEnum {
 

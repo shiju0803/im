@@ -9,9 +9,10 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * 群内添加群成员通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群内添加群成员通知报文
  */
 @Data
 public class AddGroupMemberPack {

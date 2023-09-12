@@ -11,9 +11,10 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
+ * TreeMapConsistentHash类继承了AbstractConsistentHash抽象类，实现了基于TreeMap的一致性哈希算法
+ *
  * @author ShiJu
  * @version 1.0
- * @description: TreeMapConsistentHash类继承了AbstractConsistentHash抽象类，实现了基于TreeMap的一致性哈希算法。
  */
 public class TreeMapConsistentHash extends AbstractConsistentHash {
 

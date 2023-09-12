@@ -26,9 +26,10 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
+ * Http请求工具类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: Http请求工具类
  */
 @Slf4j
 @Component
@@ -62,7 +63,8 @@ public class HttpRequestUtil {
      * @param charset 字符集
      * @return 响应体的字符串形式
      */
-    public String doGet(String url, Map<String, Object> params, Map<String, Object> header, String charset) throws Exception {
+    public String doGet(String url, Map<String, Object> params, Map<String, Object> header, String charset)
+            throws Exception {
         if (CharSequenceUtil.isBlank(charset)) {
             charset = CharsetUtil.UTF_8;
         }
@@ -146,7 +148,8 @@ public class HttpRequestUtil {
      * @param charset  字符集
      * @return 响应体的字符串形式
      */
-    public String doPost(String url, Map<String, Object> params, Map<String, Object> header, String jsonBody, String charset) throws Exception {
+    public String doPost(String url, Map<String, Object> params, Map<String, Object> header, String jsonBody,
+                         String charset) throws Exception {
 
         if (StringUtils.isEmpty(charset)) {
             charset = CharsetUtil.UTF_8;
@@ -239,7 +242,8 @@ public class HttpRequestUtil {
      * @param <T>     响应体的类型
      * @return 响应体的对象形式
      */
-    public <T> T doGet(String url, Class<T> tClass, Map<String, Object> map, Map<String, Object> header, String charSet) throws Exception {
+    public <T> T doGet(String url, Class<T> tClass, Map<String, Object> map, Map<String, Object> header, String charSet)
+            throws Exception {
         String result = doGet(url, map, header, charSet);
         if (StringUtils.isNotEmpty(result)) {
             return JSON.parseObject(result, tClass);
@@ -258,7 +262,8 @@ public class HttpRequestUtil {
      * @param <T>      响应体的类型
      * @return 响应体的对象形式
      */
-    public <T> T doPost(String url, Class<T> tClass, Map<String, Object> map, String jsonBody, String charSet) throws Exception {
+    public <T> T doPost(String url, Class<T> tClass, Map<String, Object> map, String jsonBody, String charSet)
+            throws Exception {
         String result = doPost(url, map, jsonBody, charSet);
         if (StringUtils.isNotEmpty(result)) {
             return JSON.parseObject(result, tClass);
@@ -278,7 +283,8 @@ public class HttpRequestUtil {
      * @param <T>      响应体的类型
      * @return 响应体的对象形式
      */
-    public <T> T doPost(String url, Class<T> tClass, Map<String, Object> map, Map<String, Object> header, String jsonBody, String charSet) throws Exception {
+    public <T> T doPost(String url, Class<T> tClass, Map<String, Object> map, Map<String, Object> header,
+                        String jsonBody, String charSet) throws Exception {
         String result = doPost(url, map, header, jsonBody, charSet);
         if (StringUtils.isNotEmpty(result)) {
             return JSON.parseObject(result, tClass);
@@ -309,7 +315,8 @@ public class HttpRequestUtil {
      * @param charSet  字符集
      * @return 响应体的字符串形式
      */
-    public String doPostString(String url, Map<String, Object> map, Map<String, Object> header, String jsonBody, String charSet) throws Exception {
+    public String doPostString(String url, Map<String, Object> map, Map<String, Object> header, String jsonBody,
+                               String charSet) throws Exception {
         return doPost(url, map, header, jsonBody, charSet);
     }
 }

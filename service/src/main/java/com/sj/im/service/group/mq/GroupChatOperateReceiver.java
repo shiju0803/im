@@ -30,9 +30,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
+ * 群聊消息接收器
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群聊消息接收器
  */
 @Slf4j
 @Component
@@ -43,15 +44,15 @@ public class GroupChatOperateReceiver {
     private MessageSyncServiceImpl messageSyncService;
 
     // 监听RabbitMQ队列，接收消息
-    @RabbitListener(bindings = @QueueBinding(
-                    value = @Queue(value = RabbitConstants.IM_2_GROUP_SERVICE_QUEUE, durable = "true"),
-                    exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE),
-                    key = RabbitConstants.IM_2_GROUP_SERVICE_QUEUE
-            ), concurrency = "1")
-    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel) throws Exception {
+    @RabbitListener(
+            bindings = @QueueBinding(value = @Queue(value = RabbitConstants.IM_2_GROUP_SERVICE_QUEUE, durable = "true"),
+                                     exchange = @Exchange(value = RabbitConstants.IM_EXCHANGE),
+                                     key = RabbitConstants.IM_2_GROUP_SERVICE_QUEUE), concurrency = "1")
+    public void onChatMessage(@Payload Message message, @Headers Map<String, Object> headers, Channel channel)
+            throws Exception {
         // 将消息体转换为字符串
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);
-        log.info("CHAT MSG FORM QUEUE ::: {}", msg);
+        log.info("GROUP CHAT MSG FORM QUEUE ::: {}", msg);
         // 获取消息的deliveryTag
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
         try {
@@ -70,7 +71,7 @@ public class GroupChatOperateReceiver {
             }
             channel.basicAck(deliveryTag, false); // 手动确认消息已被消费
         } catch (Exception e) {
-            log.error("处理消息出现异常：{}", e.getMessage()); // 打印异常信息
+            log.error("处理群组消息出现异常：{}", e.getMessage()); // 打印异常信息
             log.error("RMQ_CHAT_TRAN_ERROR", e); // 打印异常堆栈信息
             log.error("NACK_MSG:{}", msg); // 打印未被消费的消息
             // 第一个false表示不批量拒绝，第二个false表示不重回队列

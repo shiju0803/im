@@ -7,19 +7,17 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 群禁言类型枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 群禁言类型枚举类
  */
 @Getter
 public enum GroupMuteTypeEnum {
 
-    /**
-     * 是否全员禁言，0 不禁言；1 全员禁言。
-     */
-    NOT_MUTE(0),
+    NOT_MUTE(0, "不禁言"),
 
-    MUTE(1),
+    MUTE(1, "全员禁言"),
 
     ;
 
@@ -40,8 +38,10 @@ public enum GroupMuteTypeEnum {
     }
 
     private final int code;
+    private final String desc;
 
-    GroupMuteTypeEnum(int code) {
+    GroupMuteTypeEnum(int code, String desc) {
         this.code = code;
+        this.desc = desc;
     }
 }

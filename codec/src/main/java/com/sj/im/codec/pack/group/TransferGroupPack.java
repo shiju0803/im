@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.group;
 import lombok.Data;
 
 /**
+ * 转让群主通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 转让群主通知报文
  */
 @Data
 public class TransferGroupPack {
@@ -17,5 +18,4 @@ public class TransferGroupPack {
     private String groupId;
 
     private String ownerId;
-
 }

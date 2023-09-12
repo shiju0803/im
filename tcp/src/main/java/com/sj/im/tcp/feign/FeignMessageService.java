@@ -11,9 +11,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
+ * Feign 客户端接口，用于调用消息服务中心的 checkSend 接口
+ *
  * @author ShiJu
  * @version 1.0
- * @description: Feign 客户端接口，用于调用消息服务中心的 checkSend 接口
  */
 @FeignClient(name = "serviceClient", url = "${netty.logicUrl}")
 public interface FeignMessageService {

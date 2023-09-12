@@ -21,9 +21,10 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 /**
+ * 用于生成和解密IM服务中必须使用的UserSig鉴权票据的类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 用于生成和解密IM服务中必须使用的UserSig鉴权票据的类
  */
 @Slf4j
 public class SigAPI {
@@ -39,7 +40,7 @@ public class SigAPI {
     public static void main(String[] args) {
         SigAPI asd = new SigAPI(10000, "ShiJu");
         String sign = asd.genUserSign("sj001", 1000000);
-//        Thread.sleep(2000L);
+        //        Thread.sleep(2000L);
         JSONObject jsonObject = decodeUserSign(sign);
         System.out.println("sign:" + sign);
         System.out.println("decoder:" + jsonObject.toString());
@@ -138,8 +139,9 @@ public class SigAPI {
         byte[] compressedBytes = new byte[2048];
         int compressedBytesLength = compressor.deflate(compressedBytes);
         compressor.end();
-        return (new String(Base64URL.base64EncodeUrl(Arrays.copyOfRange(compressedBytes,
-                0, compressedBytesLength)))).replaceAll("\\s*", "");
+        return (new String(
+                Base64URL.base64EncodeUrl(Arrays.copyOfRange(compressedBytes, 0, compressedBytesLength)))).replaceAll(
+                "\\s*", "");
     }
 
     /**
@@ -174,8 +176,9 @@ public class SigAPI {
         byte[] compressedBytes = new byte[2048];
         int compressedBytesLength = compressor.deflate(compressedBytes);
         compressor.end();
-        return (new String(Base64URL.base64EncodeUrl(Arrays.copyOfRange(compressedBytes,
-                0, compressedBytesLength)))).replaceAll("\\s*", "");
+        return (new String(
+                Base64URL.base64EncodeUrl(Arrays.copyOfRange(compressedBytes, 0, compressedBytesLength)))).replaceAll(
+                "\\s*", "");
     }
 
     /**
@@ -188,10 +191,9 @@ public class SigAPI {
      * @return 加密后的字符串
      */
     private String hmacSHA256(String identifier, long currTime, long expire, String base64UserBuf) {
-        String contentToBeSigned = "TLS.identifier:" + identifier + "\n"
-                + "TLS.appId:" + appId + "\n"
-                + "TLS.expireTime:" + currTime + "\n"
-                + "TLS.expire:" + expire + "\n";
+        String contentToBeSigned =
+                "TLS.identifier:" + identifier + "\n" + "TLS.appId:" + appId + "\n" + "TLS.expireTime:" + currTime
+                        + "\n" + "TLS.expire:" + expire + "\n";
         if (null != base64UserBuf) {
             contentToBeSigned += "TLS.userBuf:" + base64UserBuf + "\n";
         }

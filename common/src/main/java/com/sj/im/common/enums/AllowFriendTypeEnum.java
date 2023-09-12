@@ -7,22 +7,25 @@ package com.sj.im.common.enums;
 import lombok.Getter;
 
 /**
+ * 同意好友枚举类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 同意好友枚举类
  */
 @Getter
 public enum AllowFriendTypeEnum {
 
-    NEED(2),
+    NEED(2, "需要验证"),
 
-    NOT_NEED(1),
+    NOT_NEED(1, "不需要验证"),
 
     ;
 
     private final int code;
+    private final String desc;
 
-    AllowFriendTypeEnum(int code) {
+    AllowFriendTypeEnum(int code, String desc) {
         this.code = code;
+        this.desc = desc;
     }
 }

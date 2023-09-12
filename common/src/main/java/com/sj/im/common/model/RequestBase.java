@@ -9,9 +9,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
+ * 公共基础请求参数类
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 公共基础请求参数类
  */
 @Data
 @ApiModel("请求基础信息")

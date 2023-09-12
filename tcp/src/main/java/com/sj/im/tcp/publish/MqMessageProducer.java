@@ -17,9 +17,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
+ * Mq消息发送器，用于向RabbitMQ发送消息
+ *
  * @author ShiJu
  * @version 1.0
- * @description: Mq消息发送器，用于向RabbitMQ发送消息
  */
 @Slf4j
 @Component

@@ -7,9 +7,10 @@ package com.sj.im.codec.pack.friendship;
 import lombok.Data;
 
 /**
+ * 删除所有好友通知报文
+ *
  * @author ShiJu
  * @version 1.0
- * @description: 删除所有好友通知报文
  */
 @Data
 public class DeleteAllFriendPack {
