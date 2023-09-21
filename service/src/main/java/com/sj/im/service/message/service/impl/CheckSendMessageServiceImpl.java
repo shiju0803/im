@@ -5,13 +5,13 @@
 package com.sj.im.service.message.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.sj.im.common.config.AppConfig;
 import com.sj.im.common.enums.*;
 import com.sj.im.common.enums.exception.FriendShipErrorCode;
 import com.sj.im.common.enums.exception.GroupErrorCode;
 import com.sj.im.common.enums.exception.MessageErrorCode;
 import com.sj.im.common.enums.exception.UserErrorCode;
 import com.sj.im.common.exception.BusinessException;
+import com.sj.im.service.config.AppConfig;
 import com.sj.im.service.friendship.entry.ImFriendShipEntity;
 import com.sj.im.service.friendship.service.ImFriendShipService;
 import com.sj.im.service.friendship.web.req.GetRelationReq;

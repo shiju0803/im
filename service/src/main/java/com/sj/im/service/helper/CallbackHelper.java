@@ -4,9 +4,9 @@
 
 package com.sj.im.service.helper;
 
-import com.sj.im.common.config.AppConfig;
 import com.sj.im.common.model.ResponseVO;
 import com.sj.im.common.util.HttpRequestUtil;
+import com.sj.im.service.config.AppConfig;
 import com.sj.im.service.util.ShareThreadPool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
