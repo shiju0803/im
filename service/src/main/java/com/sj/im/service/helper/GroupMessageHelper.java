@@ -11,12 +11,12 @@ import cn.hutool.json.JSONUtil;
 import com.sj.im.codec.pack.group.AddGroupMemberPack;
 import com.sj.im.codec.pack.group.RemoveGroupMemberPack;
 import com.sj.im.codec.pack.group.UpdateGroupMemberPack;
-import com.sj.im.common.ClientType;
+import com.sj.im.common.enums.ClientType;
 import com.sj.im.common.enums.command.Command;
 import com.sj.im.common.enums.command.GroupEventCommand;
 import com.sj.im.common.model.ClientInfo;
-import com.sj.im.service.group.web.req.GroupMemberDto;
 import com.sj.im.service.group.service.ImGroupMemberService;
+import com.sj.im.service.group.web.req.GroupMemberDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

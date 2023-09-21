@@ -6,8 +6,8 @@ package com.sj.im.service.helper;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.github.zkclient.ZkClient;
-import com.sj.im.common.ClientType;
 import com.sj.im.common.constant.TcpConstants;
+import com.sj.im.common.enums.ClientType;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

@@ -6,6 +6,7 @@ package com.sj.im.service.config;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.github.zkclient.ZkClient;
+import com.sj.im.common.config.AppConfig;
 import com.sj.im.common.enums.ImUrlRouteWayEnum;
 import com.sj.im.common.enums.RouteHashMethodEnum;
 import com.sj.im.common.route.RouteHandle;

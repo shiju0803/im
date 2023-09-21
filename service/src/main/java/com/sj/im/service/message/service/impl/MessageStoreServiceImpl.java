@@ -6,12 +6,12 @@ package com.sj.im.service.message.service.impl;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.json.JSONUtil;
+import com.sj.im.common.config.AppConfig;
 import com.sj.im.common.constant.RabbitConstants;
 import com.sj.im.common.constant.RedisConstants;
 import com.sj.im.common.enums.ConversationTypeEnum;
 import com.sj.im.common.enums.DelFlagEnum;
 import com.sj.im.common.model.message.*;
-import com.sj.im.service.config.AppConfig;
 import com.sj.im.service.conversation.service.ConversationService;
 import com.sj.im.service.message.service.MessageStoreService;
 import com.sj.im.service.util.SnowflakeIdWorker;

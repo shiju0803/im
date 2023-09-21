@@ -18,7 +18,6 @@
         <module>tcp</module>
         <module>codec</module>
         <module>message-store</module>
-        <module>app-service</module>
     </modules>
 
     <properties>
