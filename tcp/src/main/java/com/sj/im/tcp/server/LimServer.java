@@ -19,6 +19,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,6 @@ import javax.annotation.Resource;
 @Slf4j
 @Component
 public class LimServer {
-
     @Resource
     private TcpConfig tcpConfig;
     @Resource
@@ -67,7 +67,7 @@ public class LimServer {
                       pipeline.addLast(new MessageDecoder()); // 解码器，用于解码收到的消息
                       pipeline.addLast(new MessageEncoder()); // 编码器，用于编码发送的消息
                       // 用于触发空闲事件的Handler，参数分别为读空闲时间、写空闲时间、读写空闲时间
-                      //                        pipeline.addLast(new IdleStateHandler(0, 0, 10));
+                      pipeline.addLast(new IdleStateHandler(0, 0, 10));
                       // 心跳处理器，用于处理客户端发来的心跳消息
                       pipeline.addLast(new HeartBeatHandler(tcpConfig.getHeartBeatTime()));
                       // 业务逻辑处理器
