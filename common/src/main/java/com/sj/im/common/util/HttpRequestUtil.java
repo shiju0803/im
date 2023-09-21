@@ -7,7 +7,7 @@ package com.sj.im.common.util;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import com.sj.im.common.config.GlobalHttpClientConfig;
 import com.sj.im.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
@@ -226,7 +226,7 @@ public class HttpRequestUtil {
     public <T> T doGet(String url, Class<T> tClass, Map<String, Object> map, String charSet) throws Exception {
         String result = doGet(url, map, charSet);
         if (StringUtils.isNotEmpty(result)) {
-            return JSON.parseObject(result, tClass);
+            return JSONUtil.toBean(result, tClass);
         }
         return null;
     }
@@ -246,7 +246,7 @@ public class HttpRequestUtil {
             throws Exception {
         String result = doGet(url, map, header, charSet);
         if (StringUtils.isNotEmpty(result)) {
-            return JSON.parseObject(result, tClass);
+            return JSONUtil.toBean(result, tClass);
         }
         return null;
     }
@@ -266,7 +266,7 @@ public class HttpRequestUtil {
             throws Exception {
         String result = doPost(url, map, jsonBody, charSet);
         if (StringUtils.isNotEmpty(result)) {
-            return JSON.parseObject(result, tClass);
+            return JSONUtil.toBean(result, tClass);
         }
         return null;
     }
@@ -287,7 +287,7 @@ public class HttpRequestUtil {
                         String jsonBody, String charSet) throws Exception {
         String result = doPost(url, map, header, jsonBody, charSet);
         if (StringUtils.isNotEmpty(result)) {
-            return JSON.parseObject(result, tClass);
+            return JSONUtil.toBean(result, tClass);
         }
         return null;
     }

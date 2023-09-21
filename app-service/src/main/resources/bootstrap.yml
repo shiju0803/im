@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: app-service
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: 106.52.219.98:8848
+        namespace: ${spring.profiles.active}
+        group: ${spring.profiles.active}
+        file-extension: yaml
+        refresh-enabled: true
+        prefix: ${spring.application.name}
+        shared-configs:
+          - data-id: config.yaml
+            refresh: true
+            group: ${spring.profiles.active}

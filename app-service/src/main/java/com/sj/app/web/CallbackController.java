@@ -2,7 +2,7 @@
  * Copyright (c) ShiJu  2023 - 2023. 适度编码益脑，沉迷编码伤身，合理安排时间，享受快乐生活。
  */
 
-package com.sj.im.service.callback;
+package com.sj.app.web;
 
 import com.sj.im.common.model.ResponseVO;
 import io.swagger.annotations.Api;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author ShiJu
  * @version 1.0
  */
-@Api(tags = "回调控制器")
+@Api(tags = "V1/回调控制器")
 @Slf4j
 @RequestMapping("v1")
 @RestController

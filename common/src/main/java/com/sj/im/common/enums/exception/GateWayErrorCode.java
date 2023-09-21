@@ -19,7 +19,7 @@ public enum GateWayErrorCode implements BaseExceptionEnum {
 
     APPID_NOT_EXIST(60001,"appId不存在"),
 
-    OPERATOR_NOT_EXIST(60002,""),
+    OPERATOR_NOT_EXIST(60002, "操作人信息不存在"),
 
     USER_SIGN_IS_ERROR(60003,"用户签名不正确"),
 

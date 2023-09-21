@@ -35,7 +35,7 @@ public class ImUserController {
     private ImUserStatusService imUserStatusService;
 
     @ApiOperation(value = "导入用户的方法")
-    @PutMapping("/importUser")
+    @PostMapping("/importUser")
     public ResponseVO<ImportUserResp> importUser(@RequestBody @Validated ImportUserReq req) {
         ImportUserResp importUserResp = imUserService.importUser(req);
         return ResponseVO.successResponse(importUserResp);

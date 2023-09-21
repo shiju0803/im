@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -89,7 +88,6 @@ public class ImUserServiceImpl extends ServiceImpl<ImUserDataMapper, ImUserDataE
         for (ImUserDataEntity user : req.getUserData()) {
             try {
                 user.setAppId(req.getAppId());
-                user.setCreateTime(new Date());
                 boolean insert = save(user);
                 if (insert) {
                     successId.add(user.getUserId());
