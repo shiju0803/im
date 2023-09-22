@@ -36,42 +36,53 @@ public class ImUserController {
 
     @ApiOperation(value = "导入用户的方法")
     @PostMapping("/importUser")
-    public ResponseVO<ImportUserResp> importUser(@RequestBody @Validated ImportUserReq req) {
+    public ResponseVO<ImportUserResp> importUser(@RequestBody @Validated ImportUserReq req, Integer appId) {
+        req.setAppId(appId);
         ImportUserResp importUserResp = imUserService.importUser(req);
         return ResponseVO.successResponse(importUserResp);
     }
 
     @ApiOperation(value = "删除用户的方法")
     @DeleteMapping("/deleteUser")
-    public ResponseVO<ImportUserResp> deleteUser(@RequestBody @Validated DeleteUserReq req) {
+    public ResponseVO<ImportUserResp> deleteUser(@RequestBody @Validated DeleteUserReq req, Integer appId) {
+        req.setAppId(appId);
         ImportUserResp deletedUser = imUserService.deleteUser(req);
         return ResponseVO.successResponse(deletedUser);
     }
 
     @ApiOperation(value = "获取登录地址")
     @GetMapping("/login")
-    public ResponseVO<RouteInfo> login(@RequestBody @Validated LoginReq req) {
+    public ResponseVO<RouteInfo> login(@RequestBody @Validated LoginReq req, Integer appId) {
+        req.setAppId(appId);
         RouteInfo login = imUserService.login(req);
         return ResponseVO.successResponse(login);
     }
 
     @ApiOperation(value = "获取用户序列号", notes = "用于客户端判断是否需要进行数据同步")
     @PostMapping("/getUserSequence")
-    public ResponseVO<Map<Object, Object>> getUserSequence(@RequestBody @Validated GetUserSequenceReq req) {
+    public ResponseVO<Map<Object, Object>> getUserSequence(@RequestBody @Validated GetUserSequenceReq req,
+                                                           Integer appId) {
+        req.setAppId(appId);
         Map<Object, Object> map = imUserService.getUserSequence(req);
         return ResponseVO.successResponse(map);
     }
 
     @ApiOperation("订阅用户在线状态")
     @PostMapping("/subscribeUserOnlineStatus")
-    public ResponseVO<String> subscribeUserOnlineStatus(@RequestBody @Validated SubscribeUserOnlineStatusReq req) {
+    public ResponseVO<String> subscribeUserOnlineStatus(@RequestBody @Validated SubscribeUserOnlineStatusReq req,
+                                                        Integer appId, String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         imUserStatusService.subscribeUserOnlineStatus(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("设置用户自定义状态")
     @PostMapping("/setUserCustomerStatus")
-    public ResponseVO<String> setUserCustomerStatus(@RequestBody @Validated SetUserCustomerStatusReq req) {
+    public ResponseVO<String> setUserCustomerStatus(@RequestBody @Validated SetUserCustomerStatusReq req, Integer appId,
+                                                    String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         imUserStatusService.setUserCustomerStatus(req);
         return ResponseVO.successResponse();
     }
@@ -79,14 +90,18 @@ public class ImUserController {
     @ApiOperation("查询好友在线状态")
     @PostMapping("/queryFriendOnlineStatus")
     public ResponseVO<Map<String, UserOnlineStatusResp>> queryFriendOnlineStatus(
-            @RequestBody @Validated PullFriendOnlineStatusReq req) {
+            @RequestBody @Validated PullFriendOnlineStatusReq req, Integer appId, String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         return ResponseVO.successResponse(imUserStatusService.queryFriendOnlineStatus(req));
     }
 
     @ApiOperation("查询用户在线状态")
     @PostMapping("/queryUserOnlineStatus")
     public ResponseVO<Map<String, UserOnlineStatusResp>> queryUserOnlineStatus(
-            @RequestBody @Validated PullUserOnlineStatusReq req) {
+            @RequestBody @Validated PullUserOnlineStatusReq req, Integer appId, String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         return ResponseVO.successResponse(imUserStatusService.queryUserOnlineStatus(req));
     }
 }

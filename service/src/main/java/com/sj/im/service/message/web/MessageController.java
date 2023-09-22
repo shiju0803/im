@@ -41,7 +41,8 @@ public class MessageController {
 
     @ApiOperation(value = "发送消息")
     @PostMapping("/send")
-    public ResponseVO<SendMessageResp> send(@RequestBody @Validated SendMessageReq req) {
+    public ResponseVO<SendMessageResp> send(@RequestBody @Validated SendMessageReq req, Integer appId) {
+        req.setAppId(appId);
         return ResponseVO.successResponse(p2PMessageService.send(req));
     }
 
@@ -54,13 +55,16 @@ public class MessageController {
 
     @ApiOperation(value = "同步离线消息")
     @PostMapping("/syncOfflineMessage")
-    public ResponseVO<SyncResp<OfflineMessageContent>> syncOfflineMessage(@RequestBody @Validated SyncReq req) {
+    public ResponseVO<SyncResp<OfflineMessageContent>> syncOfflineMessage(@RequestBody @Validated SyncReq req,
+                                                                          Integer appId) {
+        req.setAppId(appId);
         return ResponseVO.successResponse(messageSyncService.syncOfflineMessage(req));
     }
 
     @ApiOperation(value = "消息撤回")
     @PostMapping("/recallMessage")
-    public ResponseVO<String> recallMessage(@RequestBody @Validated RecallMessageContent req) {
+    public ResponseVO<String> recallMessage(@RequestBody @Validated RecallMessageContent req, Integer appId) {
+        req.setAppId(appId);
         messageSyncService.recallMessage(req);
         return ResponseVO.successResponse();
     }

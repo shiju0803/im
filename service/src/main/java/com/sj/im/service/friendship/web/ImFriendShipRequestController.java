@@ -32,14 +32,19 @@ public class ImFriendShipRequestController {
 
     @ApiOperation("审批好友请求")
     @PutMapping("/approveFriendRequest")
-    public ResponseVO<String> approveFriendRequest(@RequestBody @Validated ApproveFriendRequestReq req) {
+    public ResponseVO<String> approveFriendRequest(@RequestBody @Validated ApproveFriendRequestReq req, Integer appId,
+                                                   String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         imFriendShipRequestService.approveFriendRequest(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("已读请求")
     @PutMapping("/readFriendShipRequestReq")
-    public ResponseVO<String> readFriendShipRequestReq(@RequestBody @Validated ReadFriendShipRequestReq req) {
+    public ResponseVO<String> readFriendShipRequestReq(@RequestBody @Validated ReadFriendShipRequestReq req,
+                                                       Integer appId) {
+        req.setAppId(appId);
         imFriendShipRequestService.readFriendShipRequestReq(req);
         return ResponseVO.successResponse();
     }

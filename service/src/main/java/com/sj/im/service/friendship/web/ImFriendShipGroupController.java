@@ -6,12 +6,12 @@ package com.sj.im.service.friendship.web;
 
 import com.sj.im.common.model.ResponseVO;
 import com.sj.im.service.friendship.entry.ImFriendShipGroupEntity;
+import com.sj.im.service.friendship.service.ImFriendShipGroupMemberService;
+import com.sj.im.service.friendship.service.ImFriendShipGroupService;
 import com.sj.im.service.friendship.web.req.AddFriendShipGroupMemberReq;
 import com.sj.im.service.friendship.web.req.AddFriendShipGroupReq;
 import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupMemberReq;
 import com.sj.im.service.friendship.web.req.DeleteFriendShipGroupReq;
-import com.sj.im.service.friendship.service.ImFriendShipGroupMemberService;
-import com.sj.im.service.friendship.service.ImFriendShipGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
@@ -37,14 +37,16 @@ public class ImFriendShipGroupController {
 
     @ApiOperation("新增好友分组")
     @PostMapping("/add")
-    public ResponseVO<String> add(@RequestBody @Validated AddFriendShipGroupReq req) {
+    public ResponseVO<String> add(@RequestBody @Validated AddFriendShipGroupReq req, Integer appId) {
+        req.setAppId(appId);
         imFriendShipGroupService.addGroup(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("删除好友分组")
     @DeleteMapping("/del")
-    public ResponseVO<String> del(@RequestBody @Validated DeleteFriendShipGroupReq req) {
+    public ResponseVO<String> del(@RequestBody @Validated DeleteFriendShipGroupReq req, Integer appId) {
+        req.setAppId(appId);
         imFriendShipGroupService.deleteGroup(req);
         return ResponseVO.successResponse();
     }
@@ -58,14 +60,17 @@ public class ImFriendShipGroupController {
 
     @ApiOperation("添加组内成员")
     @PostMapping("/member/add")
-    public ResponseVO<List<String>> addMember(@RequestBody @Validated AddFriendShipGroupMemberReq req) {
+    public ResponseVO<List<String>> addMember(@RequestBody @Validated AddFriendShipGroupMemberReq req, Integer appId) {
+        req.setAppId(appId);
         List<String> list = imFriendShipGroupMemberService.addGroupMember(req);
         return ResponseVO.successResponse(list);
     }
 
     @ApiOperation("删除组内成员")
     @DeleteMapping("/member/del")
-    public ResponseVO<List<String>> delMember(@RequestBody @Validated DeleteFriendShipGroupMemberReq req) {
+    public ResponseVO<List<String>> delMember(@RequestBody @Validated DeleteFriendShipGroupMemberReq req,
+                                              Integer appId) {
+        req.setAppId(appId);
         List<String> list = imFriendShipGroupMemberService.delGroupMember(req);
         return ResponseVO.successResponse(list);
     }

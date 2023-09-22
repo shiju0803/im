@@ -31,7 +31,10 @@ public class ImGroupMemberController {
 
     @ApiOperation("导入群组成员")
     @PostMapping("/importGroupMember")
-    public ResponseVO<List<AddMemberResp>> importGroupMember(@RequestBody @Validated ImportGroupMemberReq req) {
+    public ResponseVO<List<AddMemberResp>> importGroupMember(@RequestBody @Validated ImportGroupMemberReq req,
+                                                             Integer appId, String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         List<AddMemberResp> addMember = imGroupMemberService.importGroupMember(req);
         return ResponseVO.successResponse(addMember);
     }
@@ -52,35 +55,48 @@ public class ImGroupMemberController {
 
     @ApiOperation("拉人入群")
     @RequestMapping("/addMember")
-    public ResponseVO<List<AddMemberResp>> addMember(@RequestBody @Validated AddGroupMemberReq req) {
+    public ResponseVO<List<AddMemberResp>> addMember(@RequestBody @Validated AddGroupMemberReq req, Integer appId,
+                                                     String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         List<AddMemberResp> respList = imGroupMemberService.addMember(req);
         return ResponseVO.successResponse(respList);
     }
 
     @ApiOperation("踢人")
     @RequestMapping("/removeMember")
-    public ResponseVO<String> removeMember(@RequestBody @Validated RemoveGroupMemberReq req) {
+    public ResponseVO<String> removeMember(@RequestBody @Validated RemoveGroupMemberReq req, Integer appId,
+                                           String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         imGroupMemberService.removeMember(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("退出群聊")
     @RequestMapping("/exitGroup")
-    public ResponseVO<String> exitGroup(@RequestBody @Validated ExitGroupReq req) {
+    public ResponseVO<String> exitGroup(@RequestBody @Validated ExitGroupReq req, Integer appId, String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         imGroupMemberService.exitGroup(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("修改群成员信息")
     @RequestMapping("/updateGroupMember")
-    public ResponseVO<String> updateGroupMember(@RequestBody @Validated UpdateGroupMemberReq req) {
+    public ResponseVO<String> updateGroupMember(@RequestBody @Validated UpdateGroupMemberReq req, Integer appId,
+                                                String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         imGroupMemberService.updateGroupMember(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("禁言群组成员")
     @RequestMapping("/speak")
-    public ResponseVO<String> speak(@RequestBody @Validated SpeakMemberReq req) {
+    public ResponseVO<String> speak(@RequestBody @Validated SpeakMemberReq req, Integer appId, String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         imGroupMemberService.speak(req);
         return ResponseVO.successResponse();
     }

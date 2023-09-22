@@ -28,21 +28,25 @@ public class ConversationController {
 
     @DeleteMapping(value = "/delete")
     @ApiOperation(value = "删除会话", notes = "根据会话 ID 删除会话")
-    public ResponseVO<String> deleteConversation(@RequestBody @Validated DeleteConversationReq req) {
+    public ResponseVO<String> deleteConversation(@RequestBody @Validated DeleteConversationReq req, Integer appId) {
+        req.setAppId(appId);
         conversationService.deleteConversation(req);
         return ResponseVO.successResponse();
     }
 
     @PutMapping(value = "/update")
     @ApiOperation(value = "更新会话", notes = "根据会话 ID 更新会话")
-    public ResponseVO<String> updateConversation(@RequestBody @Validated UpdateConversationReq req) {
+    public ResponseVO<String> updateConversation(@RequestBody @Validated UpdateConversationReq req, Integer appId) {
+        req.setAppId(appId);
         conversationService.updateConversation(req);
         return ResponseVO.successResponse();
     }
 
     @PostMapping(value = "/sync")
     @ApiOperation(value = "同步会话列表", notes = "同步会话列表")
-    public ResponseVO<SyncResp<ImConversationSetEntity>> syncFriendShipList(@RequestBody @Validated SyncReq req) {
+    public ResponseVO<SyncResp<ImConversationSetEntity>> syncFriendShipList(@RequestBody @Validated SyncReq req,
+                                                                            Integer appId) {
+        req.setAppId(appId);
         SyncResp<ImConversationSetEntity> syncResp = conversationService.syncConversationSet(req);
         return ResponseVO.successResponse(syncResp);
     }

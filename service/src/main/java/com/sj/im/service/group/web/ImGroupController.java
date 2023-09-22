@@ -39,70 +39,98 @@ public class ImGroupController {
 
     @ApiOperation("导入群组")
     @PostMapping("/importGroup")
-    public ResponseVO<String> importGroup(@RequestBody @Validated ImportGroupReq req) {
+    public ResponseVO<String> importGroup(@RequestBody @Validated ImportGroupReq req, Integer appId,
+                                          String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         groupService.importGroup(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("新建群组")
     @PostMapping("/createGroup")
-    public ResponseVO<String> createGroup(@RequestBody @Validated CreateGroupReq req) {
+    public ResponseVO<String> createGroup(@RequestBody @Validated CreateGroupReq req, Integer appId,
+                                          String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         groupService.createGroup(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("修改群消息")
     @PutMapping("/updateGroupInfo")
-    public ResponseVO<String> updateGroupInfo(@RequestBody @Validated UpdateGroupReq req) {
+    public ResponseVO<String> updateGroupInfo(@RequestBody @Validated UpdateGroupReq req, Integer appId,
+                                              String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         groupService.updateBaseGroupInfo(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("获取群组的具体信息")
     @GetMapping("/getGroupInfo")
-    public ResponseVO<GetGroupResp> getGroupInfo(@RequestBody @Validated GetGroupInfoReq req) {
+    public ResponseVO<GetGroupResp> getGroupInfo(@RequestBody @Validated GetGroupInfoReq req, Integer appId) {
+        req.setAppId(appId);
         GetGroupResp groupInfo = groupService.getGroupInfo(req);
         return ResponseVO.successResponse(groupInfo);
     }
 
     @ApiOperation("获取用户加入的群组列表")
     @GetMapping("/getJoinedGroup")
-    public ResponseVO<GetJoinedGroupResp> getJoinedGroup(@RequestBody @Validated GetJoinedGroupReq req) {
+    public ResponseVO<GetJoinedGroupResp> getJoinedGroup(@RequestBody @Validated GetJoinedGroupReq req, Integer appId,
+                                                         String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         GetJoinedGroupResp joinedGroup = groupService.getJoinedGroup(req);
         return ResponseVO.successResponse(joinedGroup);
     }
 
     @ApiOperation("解散群组")
     @PutMapping("/destroyGroup")
-    public ResponseVO<String> destroyGroup(@RequestBody @Validated DestroyGroupReq req) {
+    public ResponseVO<String> destroyGroup(@RequestBody @Validated DestroyGroupReq req, Integer appId,
+                                           String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         groupService.destroyGroup(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("转让群主")
     @PutMapping("/transferGroup")
-    public ResponseVO<String> transferGroup(@RequestBody @Validated TransferGroupReq req) {
+    public ResponseVO<String> transferGroup(@RequestBody @Validated TransferGroupReq req, Integer appId,
+                                            String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         groupService.transferGroup(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("群组禁言")
     @PutMapping("/forbidSendMessage")
-    public ResponseVO<String> forbidSendMessage(@RequestBody @Validated MuteGroupReq req) {
+    public ResponseVO<String> forbidSendMessage(@RequestBody @Validated MuteGroupReq req, Integer appId,
+                                                String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         groupService.muteGroup(req);
         return ResponseVO.successResponse();
     }
 
     @ApiOperation("同步加入的群组列表（增量拉取）")
     @PostMapping("/syncJoinedGroup")
-    public ResponseVO<SyncResp<ImGroupEntity>> syncJoinedGroup(@RequestBody @Validated SyncReq req) {
+    public ResponseVO<SyncResp<ImGroupEntity>> syncJoinedGroup(@RequestBody @Validated SyncReq req, Integer appId,
+                                                               String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         SyncResp<ImGroupEntity> syncResp = groupService.syncJoinedGroupList(req);
         return ResponseVO.successResponse(syncResp);
     }
 
     @ApiOperation(value = "发送群聊消息")
     @PostMapping("/send")
-    public ResponseVO<SendMessageResp> send(@RequestBody @Validated SendGroupMessageReq req) {
+    public ResponseVO<SendMessageResp> send(@RequestBody @Validated SendGroupMessageReq req, Integer appId,
+                                            String identifier) {
+        req.setAppId(appId);
+        req.setOperator(identifier);
         return ResponseVO.successResponse(groupMessageService.send(req));
     }
 }
