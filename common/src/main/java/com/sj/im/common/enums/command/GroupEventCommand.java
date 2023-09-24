@@ -39,6 +39,8 @@ public enum GroupEventCommand implements Command {
 
     MSG_GROUP(0x838, "群聊消息收发 2104"),
 
+    MSG_GROUP_SYNC(0x839, "群聊消息收发同步消息 2105"),
+
     MSG_GROUP_READ(0x83A, "发送消息已读 2106"),
 
     MSG_GROUP_READ_NOTIFY(0x805, "消息已读通知给同步端 2053"),

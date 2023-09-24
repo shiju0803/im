@@ -19,7 +19,9 @@ public enum MessageCommand implements Command {
 
     MSG_READ(0x452, "发送消息已读 1106"),
 
-    MSG_RECEIVE_ACK(1107, "消息收到ack 1107"),
+    MSG_RECEIVE_ACK(0x453, "消息收到ack 1107"),
+
+    MSG_P2P_SYNC(0x454, "单聊消息同步 1108"),
 
     MSG_ACK(0x416, "单聊消息ack 1046"),
 
@@ -34,6 +36,10 @@ public enum MessageCommand implements Command {
     MSG_READ_RECEIPT(0x41E, "消息已读回执，给原消息发送方 1054"),
 
     ;
+
+    public static void main(String[] args) {
+        System.out.println(Integer.toHexString(1107));
+    }
 
     private final int command;
     private final String desc;
